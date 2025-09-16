@@ -1,21 +1,24 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "next-themes";
+
+import { Inter } from "next/font/google";
 import "./globals.css";
+import { Header } from "@/components/Header";
+import { SessionProvider } from "@/components/SessionProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "AI Gateway Demo",
-  description: "A demo of the Vercel AI Gateway with the AI SDK by Vercel",
+  title: "Testis - Asistente SIU Guaraní USAL",
+  description:
+    "Tu compañero virtual para navegar el SIU Guaraní de la Universidad del Salvador. Inscripciones, horarios, notas, parciales y más, todo en un solo lugar.",
+  openGraph: {
+    title: "Testis - Asistente SIU Guaraní USAL",
+    description:
+      "Tu compañero virtual para navegar el SIU Guaraní de la Universidad del Salvador. Inscripciones, horarios, notas, parciales y más, todo en un solo lugar.",
+    images: ["/usal-logo.jpg"],
+  },
 };
 
 export default function RootLayout({
@@ -24,18 +27,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+    <html lang="es">
+      <body className={`${inter.className} antialiased`}>
+        <SessionProvider>
+          <Header />
+          <main className="pt-16">
+            {children}
+          </main>
+        </SessionProvider>
       </body>
     </html>
   );

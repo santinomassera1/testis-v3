@@ -1,0 +1,65 @@
+{
+  "period": "2024-1",
+  "student": {
+    "name": "Juan Pérez",
+    "legajo": "12345",
+    "career": "Ingeniería en Sistemas"
+  },
+  "grades": [
+    {
+      "subject": "Matemática I",
+      "grade": 8,
+      "status": "Aprobado",
+      "date": "2024-03-15",
+      "type": "Parcial",
+      "attempt": 1
+    },
+    {
+      "subject": "Programación I",
+      "grade": 7,
+      "status": "Aprobado",
+      "date": "2024-03-20",
+      "type": "Parcial",
+      "attempt": 1
+    },
+    {
+      "subject": "Inglés Técnico",
+      "grade": 9,
+      "status": "Aprobado",
+      "date": "2024-03-18",
+      "type": "Final",
+      "attempt": 1
+    },
+    {
+      "subject": "Sistemas Operativos",
+      "grade": 6,
+      "status": "Aprobado",
+      "date": "2024-03-22",
+      "type": "Parcial",
+      "attempt": 1
+    },
+    {
+      "subject": "Base de Datos",
+      "grade": 0,
+      "status": "Pendiente",
+      "date": "2024-04-10",
+      "type": "Parcial",
+      "attempt": 1
+    },
+    {
+      "subject": "Matemática II",
+      "grade": 0,
+      "status": "Pendiente",
+      "date": "2024-04-15",
+      "type": "Parcial",
+      "attempt": 1
+    }
+  ],
+  "summary": {
+    "totalSubjects": 6,
+    "approved": 4,
+    "pending": 2,
+    "average": 7.5,
+    "regularity": "Regular"
+  }
+}

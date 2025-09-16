@@ -1,32 +1,100 @@
-A simple [Next.js](https://nextjs.org) chatbot app to demonstrate the use of the Vercel AI Gateway with the [AI SDK](https://sdk.vercel.ai).
+# Neon x Aceternity Chatbot Template
+
+A modern, interactive chatbot template built with Next.js, AI SDK, Aceternity UI, and Neon's serverless Postgres.
+
+![Banner](https://neon-chatbot.vercel.app/banner.png)
+
+## Features
+
+- 🤖 Real-time streaming responses
+- 💾 Persistent chat history storage with Neon serverless Postgres
+- ✨ Beautiful UI components from Aceternity UI
+- 🎨 Fully customizable with Tailwind CSS
+- 📱 Responsive design for all devices
+- ⚡ Built on Next.js 14 with App Router
+
+## Prerequisites
+
+- Node.js 18+ 
+- A [Neon](https://neon.tech/) account to create a Postgres database
+- An [OpenAI](https://openai.com/) API key
 
 ## Getting Started
 
-### One-time setup
+1. Clone the repository:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fai-sdk-gateway-demo)
+```bash
+git clone https://github.com/neondatabase/neon-chatbot.git
+cd neon-chatbot-template
+```
 
-1. Clone this repository with the Deploy button above
-1. Install the [Vercel CLI](https://vercel.com/docs/cli) if you don't already have it
-1. Clone the repository you created above: `git clone <repo-url>`
-1. Link it to a Vercel project: `vc link` or `vc deploy`
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
 
-### Usage
-1. Install packages with `pnpm i` (or `npm i` or `yarn i`) and run the development server with `vc dev`
-1. Open http://localhost:3000 to try the chatbot
+3. Create a `.env.local` file in the root directory with the following variables:
+```bash
+DATABASE_URL="your-neon-database-url"
+OPENAI_API_KEY="your-openai-api-key"
+```
 
-### FAQ
+4. Set up the database schema:
+```sql
+CREATE TABLE chat_history (
+  id SERIAL PRIMARY KEY,
+  user_message TEXT NOT NULL,
+  assistant_message TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+```
 
-1. If you prefer running your local development server directly rather than using `vc dev`, you'll need to run `vc env pull` to fetch the project's OIDC authentication token locally
-   1. the token expires every 12h, so you'll need to re-run this command periodically.
-   1. if you use `vc dev` it will auto-refresh the token for you, so you don't need to fetch it manually
-1. If you're linking to an existing, older project, you may need to enable the OIDC token feature in your project settings.
-   1. visit the project settings page (rightmost tab in your project's dashboard)
-   1. search for 'OIDC' in settings
-   1. toggle the button under "Secure Backend Access with OIDC Federation" to Enabled and click the "Save" button
+5. Run the development server:
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
 
-## Authors
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-This repository is maintained by the [Vercel](https://vercel.com) team and community contributors. 
+## Project Structure
 
-Contributions are welcome! Feel free to open issues or submit pull requests to enhance functionality or fix bugs.
+- `/app` - Next.js 14 app directory containing routes and layouts
+- `/components` - Reusable UI components
+- `/lib` - Utility functions and shared code
+- `/public` - Static assets
+- `/styles` - Global styles and Tailwind CSS configuration
+
+## Key Technologies
+
+- [Next.js](https://nextjs.org/) - React framework
+- [Neon](https://neon.tech/) - Serverless Postgres database
+- [OpenAI](https://openai.com/) - GPT-4 language model
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [Framer Motion](https://www.framer.com/motion/) - Animation library
+- [Aceternity UI](https://ui.aceternity.com/) - UI components
+
+## Deployment
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new).
+
+1. Push your code to a GitHub repository
+2. Import your repository to Vercel
+3. Add your environment variables in the Vercel dashboard
+4. Deploy!
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Acknowledgments
+
+- [Aceternity UI](https://ui.aceternity.com/) for the beautiful UI components
+- [Neon.tech](https://neon.tech/) for the serverless Postgres database
