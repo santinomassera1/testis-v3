@@ -122,5 +122,8 @@ export function loadDemoData(): void {
     saveUserData(dataType, data);
   });
   
-  console.log('Datos de ejemplo cargados en localStorage');
+  // Solo mostrar en modo desarrollo
+  if (process.env.NODE_ENV === 'development') {
+    console.debug('✅ Datos de ejemplo cargados en localStorage');
+  }
 }

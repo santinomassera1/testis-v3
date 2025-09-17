@@ -6,8 +6,7 @@ import {
   IconMapPin, 
   IconBrandLinkedin, 
   IconBrandTwitter,
-  IconBrandGithub,
-  IconHelp
+  IconBrandGithub
 } from "@tabler/icons-react";
 import Link from "next/link";
 
@@ -69,8 +68,12 @@ export const Footer = () => {
               viewport={{ once: true }}
             >
               <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-gradient-to-r from-usal-green-500 to-usal-green-600 rounded-xl flex items-center justify-center mr-4">
-                  <IconHelp className="h-6 w-6 text-white" />
+                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mr-4 p-2">
+                  <img 
+                    src="/usal-logo.jpg" 
+                    alt="Universidad del Salvador" 
+                    className="w-full h-full object-contain"
+                  />
                 </div>
                 <div>
                   <div className="text-2xl font-bold">Testis</div>
@@ -169,7 +172,7 @@ export const Footer = () => {
         >
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-usal-navy-300 mb-4 md:mb-0">
-              © 2024 Testis. Todos los derechos reservados. Desarrollado con ❤️ para la comunidad universitaria.
+              © 2025 Testis. Todos los derechos reservados. Desarrollado con ❤️ para la comunidad universitaria.
             </div>
             
             {/* Social Links */}
@@ -197,24 +200,34 @@ export const Footer = () => {
         </motion.div>
 
         {/* USAL Partnership */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          viewport={{ once: true }}
-          className="mt-8 pt-6 border-t border-usal-navy-700 text-center"
-        >
+        <div className="mt-8 pt-6 border-t border-usal-navy-700 text-center">
           <div className="flex items-center justify-center space-x-4">
-            <img 
-              src="/usal-logo.jpg" 
-              alt="Universidad del Salvador" 
-              className="h-8 w-auto object-contain opacity-70"
-            />
+            <div style={{
+              width: '36px', 
+              height: '36px', 
+              backgroundColor: 'rgba(255,255,255,0.9)', 
+              borderRadius: '4px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <img 
+                src="/usal-logo.jpg" 
+                alt="Universidad del Salvador" 
+                style={{
+                  width: '28px',
+                  height: 'auto',
+                  maxHeight: '28px',
+                  objectFit: 'contain'
+                }}
+              />
+            </div>
             <span className="text-usal-navy-400 text-sm">
               En colaboración con la Universidad del Salvador
             </span>
           </div>
-        </motion.div>
+        </div>
       </div>
     </footer>
   );

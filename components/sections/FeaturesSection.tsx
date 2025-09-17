@@ -12,6 +12,7 @@ import {
   IconUsers,
   IconBolt
 } from "@tabler/icons-react";
+import UniversalBackground from "../UniversalBackground";
 
 export const FeaturesSection = () => {
   const features = [
@@ -63,8 +64,9 @@ export const FeaturesSection = () => {
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-br from-usal-navy-50 to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-gradient-to-br from-usal-navy-50 to-white relative overflow-hidden">
+      <UniversalBackground intensity="medium" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

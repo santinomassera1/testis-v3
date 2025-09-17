@@ -68,11 +68,24 @@ export class MockProvider implements LLMProvider {
     };
   }
 
+  private normalizeText(text: string): string {
+    return text.toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remove accents
+      .replace(/[¿¡]/g, ''); // Remove question marks
+  }
+
   private generateMockResponse(prompt: string): string {
-    const lowerPrompt = prompt.toLowerCase();
+    const normalizedPrompt = this.normalizeText(prompt);
+    
+    // Debug: mostrar el prompt normalizado
+    console.log('🤖 Mock Provider - Prompt normalizado:', normalizedPrompt);
     
     // Respuestas específicas para Testis
-    if (lowerPrompt.includes('inscripción') || lowerPrompt.includes('inscribir')) {
+    if (normalizedPrompt.includes('inscripcion') || normalizedPrompt.includes('inscribir') || 
+        normalizedPrompt.includes('inscribo') || normalizedPrompt.includes('materia') ||
+        normalizedPrompt.includes('como me inscribo')) {
+      console.log('✅ Activado: Respuesta de Inscripción');
       return `Para inscribirte en las materias del SIU Guaraní, sigue estos pasos:
 
 1. **Accede al SIU Guaraní** desde el portal de la USAL
@@ -86,7 +99,10 @@ export class MockProvider implements LLMProvider {
 ¿Necesitas ayuda con algún paso específico? También puedo ayudarte a verificar tus correlatividades o generar un correo para consultar con Secretaría.`;
     }
 
-    if (lowerPrompt.includes('horario') || lowerPrompt.includes('horarios')) {
+    if (normalizedPrompt.includes('horario') || normalizedPrompt.includes('horarios') || 
+        normalizedPrompt.includes('cursada') || normalizedPrompt.includes('clase') ||
+        normalizedPrompt.includes('ver mis horarios')) {
+      console.log('✅ Activado: Respuesta de Horarios');
       return `Para consultar tus horarios en el SIU Guaraní:
 
 1. **Ingresa al SIU** con tus credenciales
@@ -102,7 +118,10 @@ También puedes:
 ¿Te gustaría que revise tus horarios actuales o necesitas ayuda con algo específico?`;
     }
 
-    if (lowerPrompt.includes('nota') || lowerPrompt.includes('calificación')) {
+    if (normalizedPrompt.includes('nota') || normalizedPrompt.includes('notas') || 
+        normalizedPrompt.includes('calificacion') || normalizedPrompt.includes('calificaciones') ||
+        normalizedPrompt.includes('consultar mis') || normalizedPrompt.includes('consultar mis calificaciones')) {
+      console.log('✅ Activado: Respuesta de Notas');
       return `Para consultar tus notas en el SIU Guaraní:
 
 1. **Accede al SIU** y ve a **"Mis Notas"**
@@ -117,7 +136,9 @@ También puedes ver:
 ¿Quieres que revise tus notas actuales? Puedo mostrarte un resumen de tu rendimiento académico.`;
     }
 
-    if (lowerPrompt.includes('parcial') || lowerPrompt.includes('examen')) {
+    if (normalizedPrompt.includes('parcial') || normalizedPrompt.includes('parciales') ||
+        normalizedPrompt.includes('examen') || normalizedPrompt.includes('examenes') ||
+        normalizedPrompt.includes('proximo') || normalizedPrompt.includes('ver proximos examenes')) {
       return `Para consultar información sobre parciales:
 
 1. **Ve a la sección "Exámenes"** en el SIU
@@ -132,7 +153,9 @@ También puedes:
 ¿Necesitas ver tus próximos parciales o tienes alguna consulta específica sobre exámenes?`;
     }
 
-    if (lowerPrompt.includes('certificado') || lowerPrompt.includes('constancia')) {
+    if (normalizedPrompt.includes('certificado') || normalizedPrompt.includes('certificados') ||
+        normalizedPrompt.includes('constancia') || normalizedPrompt.includes('constancias') ||
+        normalizedPrompt.includes('generar') || normalizedPrompt.includes('generar constancias y certificados')) {
       return `Para obtener certificados y constancias:
 
 1. **Accede al SIU** y busca **"Certificados"**
@@ -148,7 +171,9 @@ Los certificados suelen estar disponibles inmediatamente y son válidos con firm
 ¿Qué tipo de certificado necesitas? Puedo ayudarte a generarlo.`;
     }
 
-    if (lowerPrompt.includes('correo') || lowerPrompt.includes('mail') || lowerPrompt.includes('email')) {
+    if (normalizedPrompt.includes('correo') || normalizedPrompt.includes('mail') || 
+        normalizedPrompt.includes('email') || normalizedPrompt.includes('docente') ||
+        normalizedPrompt.includes('enviar') || normalizedPrompt.includes('enviar mail a docentes')) {
       return `Puedo ayudarte a generar correos para contactar con:
 
 - **Docentes de cátedra**: Para consultas sobre materias específicas
@@ -160,7 +185,7 @@ Solo dime qué necesitas consultar y a quién te quieres dirigir, y generaré el
 ¿A quién necesitas escribir y sobre qué tema?`;
     }
 
-    if (lowerPrompt.includes('error') || lowerPrompt.includes('problema') || lowerPrompt.includes('no funciona')) {
+    if (normalizedPrompt.includes('error') || normalizedPrompt.includes('problema') || normalizedPrompt.includes('no funciona')) {
       return `Si tienes problemas con el SIU Guaraní, aquí tienes algunas soluciones comunes:
 
 **Sesión expirada:**
@@ -182,6 +207,7 @@ Solo dime qué necesitas consultar y a quién te quieres dirigir, y generaré el
     }
 
     // Respuesta genérica
+    console.log('⚠️  Ninguna condición específica activada - Respuesta genérica');
     return `¡Hola! Soy Testis, tu asistente para el SIU Guaraní de la USAL. 
 
 Puedo ayudarte con:
@@ -198,12 +224,12 @@ Puedo ayudarte con:
 
   private detectToolCalls(prompt: string, response: string): ToolCall[] {
     const toolCalls: ToolCall[] = [];
-    const lowerPrompt = prompt.toLowerCase();
-    const lowerResponse = response.toLowerCase();
+    const normalizedPrompt = this.normalizeText(prompt);
+    const normalizedResponse = this.normalizeText(response);
 
     // Detectar si necesita generar un correo
-    if (lowerPrompt.includes('correo') || lowerPrompt.includes('mail') || 
-        lowerResponse.includes('generar correo') || lowerResponse.includes('mailto')) {
+    if (normalizedPrompt.includes('correo') || normalizedPrompt.includes('mail') || 
+        normalizedResponse.includes('generar correo') || normalizedResponse.includes('mailto')) {
       toolCalls.push({
         name: 'makeMailTo',
         arguments: {
@@ -216,13 +242,13 @@ Puedo ayudarte con:
     }
 
     // Detectar si necesita leer datos del usuario
-    if (lowerPrompt.includes('mis notas') || lowerPrompt.includes('ver notas') ||
-        lowerPrompt.includes('mis parciales') || lowerPrompt.includes('ver parciales') ||
-        lowerPrompt.includes('mi asistencia') || lowerPrompt.includes('ver asistencia')) {
+    if (normalizedPrompt.includes('mis notas') || normalizedPrompt.includes('ver notas') ||
+        normalizedPrompt.includes('mis parciales') || normalizedPrompt.includes('ver parciales') ||
+        normalizedPrompt.includes('mi asistencia') || normalizedPrompt.includes('ver asistencia')) {
       let dataType = 'grades';
-      if (lowerPrompt.includes('parcial') || lowerPrompt.includes('examen')) dataType = 'exams';
-      if (lowerPrompt.includes('asistencia')) dataType = 'attendance';
-      if (lowerPrompt.includes('horario')) dataType = 'schedule';
+      if (normalizedPrompt.includes('parcial') || normalizedPrompt.includes('examen')) dataType = 'exams';
+      if (normalizedPrompt.includes('asistencia')) dataType = 'attendance';
+      if (normalizedPrompt.includes('horario')) dataType = 'schedule';
 
       toolCalls.push({
         name: 'readUserData',
@@ -233,8 +259,8 @@ Puedo ayudarte con:
     }
 
     // Detectar si necesita ayuda específica del SIU
-    if (lowerPrompt.includes('ayuda') || lowerPrompt.includes('cómo') ||
-        lowerPrompt.includes('dónde') || lowerPrompt.includes('pasos')) {
+    if (normalizedPrompt.includes('ayuda') || normalizedPrompt.includes('como') ||
+        normalizedPrompt.includes('donde') || normalizedPrompt.includes('pasos')) {
       toolCalls.push({
         name: 'siuHelp',
         arguments: {

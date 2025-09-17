@@ -85,7 +85,7 @@ export const CTASection = () => {
             </button>
           </motion.div>
 
-          {/* Trust Indicators */}
+          {/* Información adicional */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -93,32 +93,23 @@ export const CTASection = () => {
             viewport={{ once: true }}
             className="mt-12 pt-8 border-t border-usal-green-400/30"
           >
-            <p className="text-usal-green-200 mb-4">
-              Confiado por más de 50 instituciones educativas
-            </p>
             <div className="flex items-center justify-center space-x-8 opacity-70">
               <img 
                 src="/usal-logo.jpg" 
                 alt="USAL" 
-                className="h-8 w-auto object-contain filter brightness-0 invert"
+                style={{
+                  height: '32px',
+                  width: 'auto',
+                  objectFit: 'contain',
+                  display: 'block'
+                }}
+                onLoad={() => console.log('✅ Logo USAL cargado en CTA')}
+                onError={() => console.error('❌ Error cargando logo USAL en CTA')}
               />
               <div className="text-white text-sm">
                 Universidad del Salvador
               </div>
             </div>
-          </motion.div>
-
-          {/* Urgency/Scarcity */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            viewport={{ once: true }}
-            className="mt-8 p-4 bg-usal-gold-500/20 rounded-lg border border-usal-gold-400/30"
-          >
-            <p className="text-usal-gold-200 text-sm">
-              🔥 <strong>Oferta de Lanzamiento:</strong> Primeros 100 usuarios obtienen 6 meses gratis del plan Facultad
-            </p>
           </motion.div>
         </motion.div>
       </div>

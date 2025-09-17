@@ -1,4 +1,3 @@
-import { openai } from '@ai-sdk/openai';
 import { generateText, streamText, generateObject } from 'ai';
 import { LLMProvider, ChatMessage, ToolCall, ToolResult } from './LLMProvider';
 import { testisTools } from './LLMProvider';
@@ -8,7 +7,11 @@ import { siuHelp } from '../skills/siuHelp';
 import { z } from 'zod';
 
 export class OpenAIProvider implements LLMProvider {
-  private model = openai('gpt-4o'); // Usando GPT-4o como base, preparado para GPT-5
+  private model = 'openai/gpt-4.1'; // Vercel AI Gateway format
+  
+  constructor() {
+    // Vercel AI Gateway maneja la autenticación automáticamente con OIDC token
+  }
 
   async generateText(prompt: string, options?: any): Promise<string> {
     const result = await generateText({

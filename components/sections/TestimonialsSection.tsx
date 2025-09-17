@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { IconQuote, IconStar } from "@tabler/icons-react";
+import UniversalBackground from "../UniversalBackground";
 
 export const TestimonialsSection = () => {
   const testimonials = [
@@ -55,8 +56,9 @@ export const TestimonialsSection = () => {
   ];
 
   return (
-    <section className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-white relative overflow-hidden">
+      <UniversalBackground intensity="full" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

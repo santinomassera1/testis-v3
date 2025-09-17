@@ -2,8 +2,9 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { IconAlertTriangle, IconArrowLeft, IconRefresh, IconMail } from "@tabler/icons-react";
+import { Suspense } from "react";
 
-export default function AuthError() {
+function AuthErrorContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
@@ -111,5 +112,20 @@ export default function AuthError() {
         </div>
       </motion.div>
     </div>
+  );
+}
+
+export default function AuthError() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-usal-green-600"></div>
+          <p className="mt-4 text-usal-navy-600">Cargando...</p>
+        </div>
+      </div>
+    }>
+      <AuthErrorContent />
+    </Suspense>
   );
 }

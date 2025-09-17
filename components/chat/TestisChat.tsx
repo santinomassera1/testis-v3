@@ -13,6 +13,11 @@ import {
   IconCertificate,
   IconSchool,
   IconRobot,
+  IconHistory,
+  IconTrash,
+  IconMessageDots,
+  IconChevronLeft,
+  IconChevronRight,
 } from "@tabler/icons-react";
 import {
   AnimatePresence,
@@ -28,6 +33,7 @@ import { useSession } from "next-auth/react";
 
 export const TestisChat = () => {
   const [open, setOpen] = useState(false);
+  const [showChatHistory, setShowChatHistory] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [autoScroll, setAutoScroll] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -45,7 +51,12 @@ export const TestisChat = () => {
     isLoading,
     stop,
     setMessages,
-    error
+    error,
+    chatSessions,
+    currentChatId,
+    createNewChat,
+    switchToChat,
+    deleteChat,
   } = useTestisChat();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -164,7 +175,7 @@ export const TestisChat = () => {
 
   return (
     <div className={cn(
-      "fixed bottom-10 right-10 flex flex-col items-end z-30 bubble-container",
+      "fixed bottom-10 right-10 flex flex-col items-end z-50 bubble-container",
       isExpanded && "bottom-0 right-0 w-screen h-screen bg-black/30 backdrop-blur-sm flex items-center justify-center"
     )}>
       <motion.div
@@ -220,37 +231,144 @@ export const TestisChat = () => {
                   >
                     <IconMaximize className="h-4 w-4 text-white" />
                   </button>
+                  <button 
+                    onClick={() => setShowChatHistory(!showChatHistory)}
+                    className="hover:bg-white/20 p-1 rounded-full transition-colors"
+                    title="Historial de chats"
+                  >
+                    <IconHistory className="h-4 w-4 text-white" />
+                  </button>
                   <span className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-usal-gold-400 rounded-full"></div>
                     Testis{session ? ` - ${session.user?.name?.split(' ')[0] || 'Usuario'}` : ' - Asistente SIU'}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  {messages.length > 0 && (
-                    <motion.button
-                      className="rounded-full bg-white/20 text-white px-2 py-0.5 text-sm flex items-center justify-center gap-1 overflow-hidden"
-                      onClick={() => setMessages()}
-                      whileHover="hover"
-                      initial="initial"
-                      animate="initial"
+                  <motion.button
+                    className="rounded-full bg-white/20 text-white px-2 py-0.5 text-sm flex items-center justify-center gap-1 overflow-hidden"
+                    onClick={() => createNewChat()}
+                    whileHover="hover"
+                    initial="initial"
+                    animate="initial"
+                    variants={{
+                      initial: { width: "4rem" },
+                      hover: { width: "4rem" },
+                    }}
+                  >
+                    <motion.div
                       variants={{
-                        initial: { width: "4rem" },
-                        hover: { width: "4rem" },
+                        initial: { opacity: 0, width: 0 },
+                        hover: { opacity: 1, width: "3.5rem" },
                       }}
                     >
-                      <motion.div
-                        variants={{
-                          initial: { opacity: 0, width: 0 },
-                          hover: { opacity: 1, width: "3.5rem" },
-                        }}
-                      >
-                        <IconPlus className="h-4 w-4 flex-shrink-0" />
-                      </motion.div>
-                      <motion.span>New</motion.span>
-                    </motion.button>
-                  )}
+                      <IconPlus className="h-4 w-4 flex-shrink-0" />
+                    </motion.div>
+                    <motion.span>New</motion.span>
+                  </motion.button>
                 </div>
               </div>
+
+              {/* Chat History Sidebar */}
+              <AnimatePresence>
+                {showChatHistory && (
+                  <motion.div
+                    initial={{ x: -300, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: -300, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute top-10 left-0 w-80 h-[calc(100%-2.5rem)] bg-white border-r border-usal-green-200 z-30 flex flex-col"
+                  >
+                    {/* Sidebar Header */}
+                    <div className="p-4 border-b border-usal-green-200 flex items-center justify-between">
+                      <h3 className="font-semibold text-usal-navy-900 flex items-center gap-2">
+                        <IconHistory className="h-4 w-4" />
+                        Historial
+                      </h3>
+                      <button
+                        onClick={() => setShowChatHistory(false)}
+                        className="p-1 hover:bg-usal-green-100 rounded transition-colors"
+                      >
+                        <IconChevronLeft className="h-4 w-4" />
+                      </button>
+                    </div>
+
+                    {/* Chat List */}
+                    <div className="flex-1 overflow-y-auto">
+                      {chatSessions.length === 0 ? (
+                        <div className="p-4 text-center text-usal-navy-500">
+                          <IconMessageDots className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                          <p className="text-sm">No hay conversaciones aún</p>
+                        </div>
+                      ) : (
+                        <div className="p-2 space-y-1">
+                          {chatSessions.map((chat) => (
+                            <motion.button
+                              key={chat.id}
+                              onClick={() => {
+                                switchToChat(chat.id);
+                                setShowChatHistory(false);
+                              }}
+                              className={cn(
+                                "w-full text-left p-3 rounded-lg transition-colors group relative",
+                                currentChatId === chat.id
+                                  ? "bg-usal-green-100 border border-usal-green-200"
+                                  : "hover:bg-usal-green-50"
+                              )}
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
+                            >
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="text-sm font-medium text-usal-navy-900 truncate">
+                                    {chat.title}
+                                  </h4>
+                                  <p className="text-xs text-usal-navy-500 mt-1">
+                                    {chat.messages.length} mensajes
+                                  </p>
+                                  <p className="text-xs text-usal-navy-400 mt-0.5">
+                                    {new Intl.DateTimeFormat('es-AR', {
+                                      day: 'numeric',
+                                      month: 'short',
+                                      hour: '2-digit',
+                                      minute: '2-digit'
+                                    }).format(new Date(chat.updatedAt))}
+                                  </p>
+                                </div>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (chatSessions.length > 1) {
+                                      deleteChat(chat.id);
+                                    }
+                                  }}
+                                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-100 rounded transition-all"
+                                  disabled={chatSessions.length <= 1}
+                                >
+                                  <IconTrash className="h-3 w-3 text-red-500" />
+                                </button>
+                              </div>
+                            </motion.button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Sidebar Footer */}
+                    <div className="p-4 border-t border-usal-green-200">
+                      <button
+                        onClick={() => {
+                          createNewChat();
+                          setShowChatHistory(false);
+                        }}
+                        className="w-full bg-usal-green-500 hover:bg-usal-green-600 text-white p-2 rounded-lg transition-colors flex items-center justify-center gap-2"
+                      >
+                        <IconPlus className="h-4 w-4" />
+                        Nueva conversación
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               {/* Quick Access Blocks */}
               {!messages.length && (
@@ -361,17 +479,99 @@ export const TestisChat = () => {
         </AnimatePresence>
       </motion.div>
       
-      {/* Chat Toggle Button */}
-      <button
+      {/* Chat Toggle Button 3D */}
+      <motion.button
         onClick={() => setOpen(!open)}
-        className={cn(
-          "h-14 w-14 relative z-10 group bg-gradient-to-r from-usal-green-600 to-usal-green-500 flex hover:from-usal-green-700 hover:to-usal-green-600 cursor-pointer items-center justify-center rounded-full shadow-lg transition duration-200",
-          open ? "z-10" : "z-30",
-          isExpanded && "hidden"
-        )}
+          className={cn(
+            "h-14 w-14 relative z-10 group bg-gradient-to-r from-usal-green-600 to-usal-green-500 flex hover:from-usal-green-700 hover:to-usal-green-600 cursor-pointer items-center justify-center rounded-full shadow-xl transition duration-200",
+            open ? "z-10" : "z-50",
+            isExpanded && "hidden"
+          )}
+        style={{
+          transform: 'perspective(1000px)',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)',
+        }}
+        animate={{
+          rotateY: [0, 15, -15, 0],
+          rotateX: [0, -5, 5, 0],
+          z: [0, 20, -20, 0],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          repeatType: "loop",
+          ease: "easeInOut",
+        }}
+        whileHover={{
+          scale: 1.1,
+          rotateY: 25,
+          rotateX: -10,
+          z: 30,
+          boxShadow: '0 35px 60px -12px rgba(34, 197, 94, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+          transition: { duration: 0.2 }
+        }}
+        whileTap={{
+          scale: 0.95,
+          rotateY: -15,
+          rotateX: 10,
+          transition: { duration: 0.1 }
+        }}
       >
-        <IconRobot className="h-6 w-6 text-white group-hover:scale-110 transition-transform" />
-      </button>
+        {/* Glow effect */}
+        <div 
+          className="absolute inset-0 rounded-full bg-gradient-to-r from-usal-green-400 to-usal-green-300 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
+          style={{
+            filter: 'blur(8px)',
+            transform: 'scale(1.2)',
+          }}
+        />
+        
+        {/* Inner glow */}
+        <div 
+          className="absolute inset-1 rounded-full bg-gradient-to-r from-white/20 to-white/10"
+          style={{
+            background: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), transparent 50%)',
+          }}
+        />
+        
+        <motion.div
+          animate={{
+            rotateZ: [0, 360],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        >
+          <IconRobot className="h-6 w-6 text-white relative z-10 drop-shadow-sm" />
+        </motion.div>
+        
+        {/* Floating particles around button */}
+        {[...Array(3)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-usal-green-300 rounded-full opacity-60"
+            style={{
+              top: `${20 + i * 15}%`,
+              left: `${15 + i * 20}%`,
+            }}
+            animate={{
+              y: [-5, 5, -5],
+              x: [-3, 3, -3],
+              opacity: [0.3, 0.8, 0.3],
+              scale: [0.5, 1, 0.5],
+            }}
+            transition={{
+              duration: 2 + i * 0.5,
+              delay: i * 0.3,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </motion.button>
     </div>
   );
 };

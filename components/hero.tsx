@@ -4,6 +4,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Balancer from "react-wrap-balancer";
 import Link from "next/link";
+import FloatingElements3D from './FloatingElements3D';
+import FallingStarsEffect from './FallingStarsEffect';
+import { ThesisPresentationSection } from './sections/ThesisPresentationSection';
 import { 
   IconBook, 
   IconCalendar, 
@@ -33,6 +36,8 @@ export function Hero() {
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-20 md:px-8 md:py-32"
     >
       <BackgroundGrids />
+      <FloatingElements3D />
+      <FallingStarsEffect />
       <FloatingAcademicIcons />
       <AnimatedBeams containerRef={containerRef} parentRef={parentRef} />
 
@@ -78,13 +83,32 @@ export function Hero() {
         </Link>
       </div>
       
-      {/* Demo Container */}
+      {/* Demo Container - Now with two sections side by side */}
       <div
         ref={containerRef}
-        className="relative z-30 mx-auto mt-16 max-w-6xl rounded-[32px] border border-usal-green-200/50 bg-gradient-to-br from-usal-green-50/90 to-white/90 p-2 backdrop-blur-lg md:p-4"
+        className="relative z-30 mx-auto mt-16 max-w-7xl space-y-8 lg:space-y-0"
+      >
+        {/* Two columns layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Testis Demo Section */}
+          <div 
+            data-demo-container
+            className="rounded-[32px] border border-usal-green-200/50 bg-gradient-to-br from-usal-green-50/90 to-white/90 p-2 backdrop-blur-lg md:p-4 shadow-xl"
       >
         <div className="rounded-[24px] border border-usal-green-200 bg-white p-4">
           <ChatbotDemo />
+            </div>
+          </div>
+
+          {/* Thesis Presentation Section */}
+          <div 
+            data-demo-container
+            className="rounded-[32px] border border-usal-navy-200/50 bg-gradient-to-br from-usal-navy-50/90 to-white/90 p-2 backdrop-blur-lg md:p-4 shadow-xl"
+          >
+            <div className="rounded-[24px] border border-usal-navy-200 bg-white p-4">
+              <ThesisPresentationSection />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -377,12 +401,105 @@ const BeamEffect = ({
   );
 };
 
-// Demo del chatbot
+// Demo del chatbot mejorada
 const ChatbotDemo = () => {
-  const [messages, setMessages] = useState([
-    { role: 'user', content: '¿Cómo consulto mis notas?' },
-    { role: 'assistant', content: 'Te guío paso a paso para consultar tus notas en el SIU Guaraní...' }
-  ]);
+  const [currentConversation, setCurrentConversation] = useState(0);
+  const [currentMessage, setCurrentMessage] = useState(0);
+  const [displayedMessages, setDisplayedMessages] = useState<Array<{role: string, content: string, avatar?: string}>>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingText, setTypingText] = useState('');
+
+  // Conversaciones predefinidas más dinámicas
+  const conversations = [
+    {
+      title: "Consulta de Notas",
+      messages: [
+        { role: 'user', content: '¿Cómo consulto mis notas del parcial?', avatar: '👤' },
+        { role: 'assistant', content: '¡Por supuesto! Te ayudo con eso. Ve a "Académico" → "Notas" → selecciona el período actual.', avatar: '🤖' },
+        { role: 'user', content: '¡Genial! ¿Y si quiero ver el promedio general?', avatar: '👤' },
+        { role: 'assistant', content: 'Perfecto. En la misma sección, haz click en "Ver Historial Completo" y verás tu promedio actualizado.', avatar: '🤖' }
+      ]
+    },
+    {
+      title: "Inscripción a Materias",
+      messages: [
+        { role: 'user', content: 'Necesito inscribirme a materias para el próximo cuatrimestre', avatar: '👤' },
+        { role: 'assistant', content: 'Te guío paso a paso: Ve a "Inscripciones" → "Cursar Materias" → selecciona el período 2024-2.', avatar: '🤖' },
+        { role: 'user', content: '¿Qué hago si una materia está llena?', avatar: '👤' },
+        { role: 'assistant', content: 'Puedes anotarte en lista de espera o elegir otro horario. Te mostraré todas las opciones disponibles.', avatar: '🤖' }
+      ]
+    },
+    {
+      title: "Horarios de Cursada",
+      messages: [
+        { role: 'user', content: 'No encuentro mis horarios de clase', avatar: '👤' },
+        { role: 'assistant', content: '¡No te preocupes! Ve a "Académico" → "Mi Horario Semanal" y verás todas tus clases organizadas.', avatar: '🤖' },
+        { role: 'user', content: '¿Puedo exportar el horario al calendario?', avatar: '👤' },
+        { role: 'assistant', content: '¡Claro! Hay un botón "Exportar a Google Calendar" que sincroniza automáticamente tus horarios.', avatar: '🤖' }
+      ]
+    }
+  ];
+
+  const quickActions = [
+    { icon: '📚', text: 'Ver Notas', color: 'bg-blue-100 text-blue-700' },
+    { icon: '📝', text: 'Inscripciones', color: 'bg-green-100 text-green-700' },
+    { icon: '📅', text: 'Horarios', color: 'bg-purple-100 text-purple-700' },
+    { icon: '💰', text: 'Pagos', color: 'bg-orange-100 text-orange-700' }
+  ];
+
+  // Efecto de escritura
+  const typeMessage = (message: string, callback: () => void) => {
+    setTypingText('');
+    setIsTyping(true);
+    
+    let i = 0;
+    const typeInterval = setInterval(() => {
+      setTypingText(message.slice(0, i + 1));
+      i++;
+      
+      if (i >= message.length) {
+        clearInterval(typeInterval);
+        setTimeout(() => {
+          setIsTyping(false);
+          callback();
+        }, 500);
+      }
+    }, 30);
+  };
+
+  // Lógica para mostrar mensajes progresivamente
+  useEffect(() => {
+    const conversation = conversations[currentConversation];
+    
+    if (currentMessage < conversation.messages.length) {
+      const message = conversation.messages[currentMessage];
+      
+      const timer = setTimeout(() => {
+        if (message.role === 'assistant') {
+          typeMessage(message.content, () => {
+            setDisplayedMessages(prev => [...prev, message]);
+            setCurrentMessage(prev => prev + 1);
+          });
+        } else {
+          setDisplayedMessages(prev => [...prev, message]);
+          setCurrentMessage(prev => prev + 1);
+        }
+      }, currentMessage === 0 ? 1000 : 2000);
+      
+      return () => clearTimeout(timer);
+    } else {
+      // Cambiar a la siguiente conversación después de un pausa
+      const nextConversationTimer = setTimeout(() => {
+        setCurrentConversation((prev) => (prev + 1) % conversations.length);
+        setCurrentMessage(0);
+        setDisplayedMessages([]);
+        setTypingText('');
+        setIsTyping(false);
+      }, 4000);
+      
+      return () => clearTimeout(nextConversationTimer);
+    }
+  }, [currentMessage, currentConversation]);
 
   return (
     <div className="space-y-4">
@@ -390,30 +507,122 @@ const ChatbotDemo = () => {
         <h3 className="text-xl font-semibold text-usal-navy-900 mb-2">
           Prueba Testis en Acción
         </h3>
-        <p className="text-usal-navy-600">
-          Interactúa con nuestro asistente y descubre lo fácil que es gestionar tu vida académica
+        <p className="text-usal-navy-600 mb-4">
+          Mira cómo Testis resuelve consultas reales de estudiantes
         </p>
+        
+        {/* Indicador de conversación actual */}
+        <div className="flex justify-center space-x-2 mb-4">
+          {conversations.map((_, index) => (
+            <div
+              key={index}
+              className={`h-2 w-8 rounded-full transition-colors duration-300 ${
+                index === currentConversation ? 'bg-usal-green-500' : 'bg-gray-200'
+              }`}
+            />
+          ))}
+        </div>
+        
+        <div className="text-sm font-medium text-usal-green-600 mb-2">
+          {conversations[currentConversation].title}
+        </div>
       </div>
       
-      <div className="bg-gradient-to-br from-usal-green-50 to-white rounded-xl p-4 min-h-[300px] border border-usal-green-200">
-        <div className="space-y-3">
-          {messages.map((message, index) => (
+      {/* Chat Container - DIMENSIONES FIJAS */}
+      <div className="bg-gradient-to-br from-usal-green-50 to-white rounded-xl border border-usal-green-200 shadow-inner w-full h-[500px] flex flex-col">
+        {/* Chat Header - ALTURA FIJA */}
+        <div className="flex items-center justify-between p-4 border-b border-usal-green-100 h-[72px] flex-shrink-0">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-usal-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="text-white font-bold">T</span>
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="font-semibold text-usal-navy-900 truncate">Testis</div>
+              <div className="text-xs text-usal-green-600 truncate">
+                {isTyping ? 'Escribiendo...' : 'En línea'}
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex space-x-1 flex-shrink-0">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+            <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+          </div>
+        </div>
+        
+        {/* Messages - ALTURA FIJA CON SCROLL */}
+        <div className="p-4 h-[356px] overflow-y-auto space-y-4 flex-1">
+          {displayedMessages.map((message, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.5 }}
-              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              initial={{ opacity: 0, y: 20, scale: 0.8 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.3 }}
+              className={`flex items-start space-x-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <div className={`max-w-xs px-4 py-2 rounded-lg ${
+              {message.role === 'assistant' && (
+                <div className="w-8 h-8 bg-usal-green-100 rounded-full flex items-center justify-center text-lg flex-shrink-0">
+                  {message.avatar}
+                </div>
+              )}
+              
+              <div className={`max-w-[280px] min-w-[120px] px-4 py-3 rounded-2xl shadow-sm ${
                 message.role === 'user' 
-                  ? 'bg-usal-green-600 text-white' 
-                  : 'bg-white text-usal-navy-800 border border-usal-green-200'
+                  ? 'bg-usal-green-500 text-white rounded-br-md' 
+                  : 'bg-white text-usal-navy-800 border border-usal-green-100 rounded-bl-md'
               }`}>
-                {message.content}
+                <div className="text-sm leading-relaxed break-words">
+                  {message.content}
+                </div>
               </div>
+              
+              {message.role === 'user' && (
+                <div className="w-8 h-8 bg-usal-navy-100 rounded-full flex items-center justify-center text-lg flex-shrink-0">
+                  {message.avatar}
+                </div>
+              )}
             </motion.div>
           ))}
+          
+          {/* Typing indicator */}
+          {isTyping && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-start space-x-3"
+            >
+              <div className="w-8 h-8 bg-usal-green-100 rounded-full flex items-center justify-center text-lg">
+                🤖
+              </div>
+              <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-md border border-usal-green-100 shadow-sm max-w-[280px] min-w-[120px]">
+                <div className="text-sm text-usal-navy-800 break-words">
+                  {typingText}
+                  <span className="animate-pulse">|</span>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </div>
+        
+        {/* Quick Actions - ALTURA FIJA */}
+        <div className="p-4 border-t border-usal-green-100 bg-usal-green-25 h-[72px] flex-shrink-0 flex flex-col justify-center">
+          <div className="text-xs text-usal-navy-600 mb-2 text-center">
+            Acciones rápidas
+          </div>
+          <div className="flex flex-wrap gap-2 justify-center">
+            {quickActions.map((action, index) => (
+              <motion.button
+                key={index}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${action.color} hover:shadow-md`}
+              >
+                <span className="mr-1">{action.icon}</span>
+                {action.text}
+              </motion.button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

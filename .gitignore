@@ -50,3 +50,4 @@ bun.lockb
 
 # temporary documentation
 PROMPT.md
+.env*.local

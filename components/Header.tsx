@@ -36,8 +36,9 @@ export function Header() {
     { href: "#estadisticas", label: "Estadísticas" },
     { href: "#caracteristicas", label: "Características" },
     { href: "#testimonios", label: "Testimonios" },
-    { href: "#retorno", label: "ROI" },
+    { href: "#simulador", label: "Simulador" },
     { href: "#precios", label: "Precios" },
+    { href: "#encuesta", label: "Encuesta" },
   ];
 
   const externalLinks = [
@@ -200,7 +201,7 @@ export function Header() {
                       {link.label}
                     </motion.button>
                   ))}
-                  
+
                   <div className="my-6 border-t border-usal-green-200" />
                   
                   <div className="text-sm font-semibold text-usal-navy-400 uppercase tracking-wider mb-4">
