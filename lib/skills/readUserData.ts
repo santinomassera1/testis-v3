@@ -127,3 +127,4 @@ export function loadDemoData(): void {
     console.debug('✅ Datos de ejemplo cargados en localStorage');
   }
 }
+

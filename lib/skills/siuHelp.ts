@@ -1,22 +1,126 @@
+import { getSiuClient } from '@/lib/siu';
+
 interface SiuHelpOptions {
   topic: string;
+  action?: 'help' | 'inscribir' | 'consultar_materias';
+  legajo?: string;
+  materiaId?: string;
+  turno?: string;
 }
 
 interface HelpResponse {
-  title: string;
-  steps: string[];
+  ok: boolean;
+  title?: string;
+  steps?: string[];
   tips?: string[];
   warnings?: string[];
   relatedTopics?: string[];
+  data?: any;
+  code?: string;
+  message?: string;
+}
+
+// Helper con timeout
+function withTimeout<T>(fn: () => Promise<T>, ms: number): Promise<T> {
+  return Promise.race([
+    fn(),
+    new Promise<never>((_, reject) => 
+      setTimeout(() => reject(new Error('TIMEOUT')), ms)
+    ),
+  ]);
 }
 
 export async function siuHelp(options: SiuHelpOptions): Promise<HelpResponse> {
-  const { topic } = options;
+  const { topic, action = 'help', legajo, materiaId, turno } = options;
+  
+  // Acciones que requieren llamada al SIU
+  if (action === 'inscribir' && legajo && materiaId && turno) {
+    try {
+      const siuClient = getSiuClient();
+      const result = await withTimeout(
+        () => siuClient.inscribirMateria({ legajo, materiaId, turno }),
+        10000
+      );
+      
+      if (!result.ok) {
+        return {
+          ok: false,
+          code: result.code,
+          message: result.message
+        };
+      }
+      
+      return {
+        ok: true,
+        title: 'Inscripción Exitosa',
+        data: result.data,
+        steps: [
+          'Descarga tu comprobante de inscripción',
+          'Verifica el horario de cursada',
+          'Guarda el comprobante para futuras consultas'
+        ]
+      };
+    } catch (error: any) {
+      if (error.message === 'TIMEOUT') {
+        return {
+          ok: false,
+          code: 'TIMEOUT',
+          message: 'El sistema está tardando demasiado. Intenta nuevamente o realiza la inscripción manualmente.'
+        };
+      }
+      
+      return {
+        ok: false,
+        code: 'UNKNOWN_ERROR',
+        message: 'Hubo un problema al procesar la inscripción. Intenta nuevamente.'
+      };
+    }
+  }
+  
+  if (action === 'consultar_materias') {
+    try {
+      const siuClient = getSiuClient();
+      const result = await withTimeout(
+        () => siuClient.getMaterias('sistemas'),
+        8000
+      );
+      
+      if (!result.ok) {
+        return {
+          ok: false,
+          code: result.code,
+          message: result.message
+        };
+      }
+      
+      return {
+        ok: true,
+        data: result.data
+      };
+    } catch (error: any) {
+      if (error.message === 'TIMEOUT') {
+        return {
+          ok: false,
+          code: 'TIMEOUT',
+          message: 'No se pudo obtener la lista de materias en este momento.'
+        };
+      }
+      
+      return {
+        ok: false,
+        code: 'UNKNOWN_ERROR',
+        message: 'Error al consultar materias disponibles.'
+      };
+    }
+  }
+  
+  // Ayuda contextual (no requiere llamadas a SIU)
   const lowerTopic = topic.toLowerCase();
   
   // Guías específicas para diferentes temas del SIU
   if (lowerTopic.includes('inscripción') || lowerTopic.includes('inscribir')) {
     return {
+      ok: true,
       title: 'Guía de Inscripción a Materias',
       steps: [
         'Accede al portal de la USAL (www.usal.edu.ar)',
@@ -47,6 +151,7 @@ export async function siuHelp(options: SiuHelpOptions): Promise<HelpResponse> {
   
   if (lowerTopic.includes('horario') || lowerTopic.includes('horarios')) {
     return {
+      ok: true,
       title: 'Cómo Consultar Horarios',
       steps: [
         'Ingresa al SIU Guaraní',
@@ -67,6 +172,7 @@ export async function siuHelp(options: SiuHelpOptions): Promise<HelpResponse> {
   
   if (lowerTopic.includes('nota') || lowerTopic.includes('calificación')) {
     return {
+      ok: true,
       title: 'Consulta de Notas y Calificaciones',
       steps: [
         'Accede al SIU Guaraní',
@@ -87,6 +193,7 @@ export async function siuHelp(options: SiuHelpOptions): Promise<HelpResponse> {
   
   if (lowerTopic.includes('parcial') || lowerTopic.includes('examen')) {
     return {
+      ok: true,
       title: 'Información sobre Exámenes',
       steps: [
         'Ve a la sección "Exámenes" en el SIU',
@@ -113,6 +220,7 @@ export async function siuHelp(options: SiuHelpOptions): Promise<HelpResponse> {
   
   if (lowerTopic.includes('certificado') || lowerTopic.includes('constancia')) {
     return {
+      ok: true,
       title: 'Obtención de Certificados y Constancias',
       steps: [
         'Accede al SIU Guaraní',
@@ -135,6 +243,7 @@ export async function siuHelp(options: SiuHelpOptions): Promise<HelpResponse> {
   
   if (lowerTopic.includes('error') || lowerTopic.includes('problema')) {
     return {
+      ok: true,
       title: 'Solución de Problemas Comunes',
       steps: [
         'Identifica el tipo de error que estás viendo',
@@ -161,6 +270,7 @@ export async function siuHelp(options: SiuHelpOptions): Promise<HelpResponse> {
   
   // Respuesta genérica
   return {
+    ok: true,
     title: 'Ayuda General del SIU Guaraní',
     steps: [
       'Accede al portal de la USAL',

@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { streamText, convertToCoreMessages } from 'ai';
+import { streamText } from 'ai';
 import { testisTools } from '@/lib/llm/LLMProvider';
 import { makeMailTo } from '@/lib/skills/makeMailTo';
 import { readUserData } from '@/lib/skills/readUserData';
@@ -7,12 +7,11 @@ import { siuHelp } from '@/lib/skills/siuHelp';
 
 export const runtime = 'edge';
 
+// Nota: AI SDK v5 usa Vercel AI Gateway automáticamente con AI_GATEWAY_API_KEY
+
 export async function POST(req: NextRequest) {
   try {
     const { messages } = await req.json();
-    
-    // Convertir mensajes a formato Core
-    const coreMessages = convertToCoreMessages(messages);
 
     // System prompt para Testis
     const systemMessage = {
@@ -22,7 +21,7 @@ Tu objetivo es ayudar a los estudiantes con consultas académicas, información 
 Sé amable, conciso y útil. Si no sabes algo, admítelo en lugar de inventar información.`
     };
 
-    const allMessages = [systemMessage, ...coreMessages];
+    const allMessages = [systemMessage, ...messages];
 
     // Configurar herramientas (v5 usa inputSchema)
     const tools = {
@@ -50,12 +49,12 @@ Sé amable, conciso y útil. Si no sabes algo, admítelo en lugar de inventar in
     };
 
     const result = streamText({
-      model: 'openai/gpt-5',
+      model: 'openai/gpt-5', // Gateway se usa automáticamente con AI_GATEWAY_API_KEY
       messages: allMessages,
       tools,
     });
 
-    // Text Stream para @ai-sdk/react useChat con streamProtocol: 'data'
+    // IMPORTANTE: text stream (SSE) para streamProtocol: 'text' en el cliente
     return result.toTextStreamResponse();
   } catch (error) {
     console.error('Error en /api/chat:', error);

@@ -1,0 +1,41 @@
+{
+  "sistemas": [
+    {
+      "id": "ALG2",
+      "nombre": "Álgebra II",
+      "turno": "Mañana",
+      "horario": "Lun/Mié 8:00-10:00",
+      "cupo": 30,
+      "inscriptos": 28,
+      "correlativas": ["ALG1"]
+    },
+    {
+      "id": "ALG2_NOCHE",
+      "nombre": "Álgebra II",
+      "turno": "Noche",
+      "horario": "Mar/Jue 19:00-21:00",
+      "cupo": 25,
+      "inscriptos": 25,
+      "correlativas": ["ALG1"]
+    },
+    {
+      "id": "FIS1",
+      "nombre": "Física I",
+      "turno": "Tarde",
+      "horario": "Lun/Vie 14:00-16:00",
+      "cupo": 35,
+      "inscriptos": 20,
+      "correlativas": ["MAT1"]
+    },
+    {
+      "id": "PROG3",
+      "nombre": "Programación III",
+      "turno": "Mañana",
+      "horario": "Mar/Jue 10:00-12:00",
+      "cupo": 30,
+      "inscriptos": 15,
+      "correlativas": ["PROG2"]
+    }
+  ]
+}
+

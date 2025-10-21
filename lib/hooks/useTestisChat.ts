@@ -44,7 +44,7 @@ export function useTestisChat() {
     setMessages: apiSetMessages,
   } = useChat({
     api: '/api/chat',
-    streamProtocol: 'data',
+    streamProtocol: 'text', // ← CLAVE: alineado con server text stream
     onError: (err: Error) => {
       console.error('Error en chat:', err);
       setError('Error al procesar tu mensaje. Intenta nuevamente.');

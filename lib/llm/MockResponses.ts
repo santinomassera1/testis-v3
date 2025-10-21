@@ -1,216 +1,183 @@
-import { ToolCall } from './LLMProvider';
+/**
+ * MockResponses - Respuestas simuladas para el MockProvider
+ * Separado en su propio archivo para mejor organización y mantenibilidad
+ */
 
-export interface ResponsePattern {
-  pattern: RegExp;
-  response: string;
-  tools?: ToolCall[];
-  priority: number;
-  category?: string;
+export interface StreamingConfig {
+  baseDelay: number;
+  variability: number;
+  wordsPerChunk: number;
 }
 
-export const mockResponses: ResponsePattern[] = [
-  {
-    category: 'inscripciones',
-    pattern: /(?:inscripcion|inscribir|inscribo|materia|como me inscribo)/i,
-    priority: 10,
-    response: `Para inscribirte en las materias del SIU Guaraní, sigue estos pasos:
-
-1. **Accede al SIU Guaraní** desde el portal de la USAL
-2. **Inicia sesión** con tu usuario y contraseña
-3. Ve a la sección **"Inscripción a Cursadas"**
-4. Selecciona el período académico correspondiente
-5. Elige las materias que deseas cursar
-6. Verifica las correlatividades (si las hay)
-7. Confirma tu inscripción
-
-¿Necesitas ayuda con algún paso específico? También puedo ayudarte a verificar tus correlatividades o generar un correo para consultar con Secretaría.`
+export const streamingConfigs: Record<string, StreamingConfig> = {
+  fast: {
+    baseDelay: 10,
+    variability: 15,
+    wordsPerChunk: 3
   },
-  {
-    category: 'horarios',
-    pattern: /(?:horario|horarios|cursada|clase|ver mis horarios)/i,
-    priority: 9,
-    response: `Para consultar tus horarios en el SIU Guaraní:
-
-1. **Ingresa al SIU** con tus credenciales
-2. Busca la sección **"Horarios"** o **"Cursadas"**
-3. Selecciona el período académico
-4. Verás el listado de materias con sus horarios y aulas
-
-También puedes:
-- Descargar el horario en PDF
-- Sincronizar con tu calendario personal
-- Ver los horarios de exámenes
-
-¿Te gustaría que revise tus horarios actuales o necesitas ayuda con algo específico?`
+  normal: {
+    baseDelay: 30,
+    variability: 40,
+    wordsPerChunk: 2
   },
-  {
-    category: 'notas',
-    pattern: /(?:nota|notas|calificacion|calificaciones|consultar mis calificaciones)/i,
-    priority: 8,
-    response: `Para consultar tus notas en el SIU Guaraní:
-
-1. **Accede al SIU** y ve a **"Mis Notas"**
-2. Selecciona el período académico
-3. Verás el listado de materias con sus calificaciones
-
-También puedes ver:
-- Notas de parciales y trabajos prácticos
-- Promedio por materia
-- Estado de regularidad
-
-¿Quieres que revise tus notas actuales? Puedo mostrarte un resumen de tu rendimiento académico.`,
-    tools: [{
-      name: 'readUserData',
-      arguments: { dataType: 'grades' }
-    }]
-  },
-  {
-    category: 'examenes',
-    pattern: /(?:parcial|parciales|examen|examenes|proximo|ver proximos examenes)/i,
-    priority: 7,
-    response: `Para consultar información sobre parciales:
-
-1. **Ve a la sección "Exámenes"** en el SIU
-2. Selecciona el período académico
-3. Verás las fechas, horarios y aulas de tus exámenes
-
-También puedes:
-- Ver el cronograma completo de exámenes
-- Consultar las condiciones de regularidad
-- Acceder a las actas de examen
-
-¿Necesitas ver tus próximos parciales o tienes alguna consulta específica sobre exámenes?`,
-    tools: [{
-      name: 'readUserData',
-      arguments: { dataType: 'exams' }
-    }]
-  },
-  {
-    category: 'certificados',
-    pattern: /(?:certificado|certificados|constancia|constancias|generar constancias y certificados)/i,
-    priority: 6,
-    response: `Para obtener certificados y constancias:
-
-1. **Accede al SIU** y busca **"Certificados"**
-2. Selecciona el tipo de certificado que necesitas:
-   - Constancia de alumno regular
-   - Certificado analítico
-   - Constancia de materias aprobadas
-3. Completa los datos requeridos
-4. Descarga el documento en PDF
-
-Los certificados suelen estar disponibles inmediatamente y son válidos con firma digital.
-
-¿Qué tipo de certificado necesitas? Puedo ayudarte a generarlo.`
-  },
-  {
-    category: 'comunicacion',
-    pattern: /(?:correo|mail|email|docente|enviar|enviar mail a docentes)/i,
-    priority: 5,
-    response: `Puedo ayudarte a generar correos para contactar con:
-
-- **Docentes de cátedra**: Para consultas sobre materias específicas
-- **Secretaría Académica**: Para trámites administrativos
-- **Coordinación de carrera**: Para asuntos de plan de estudios
-
-Solo dime qué necesitas consultar y a quién te quieres dirigir, y generaré el correo con el asunto y contenido apropiados.
-
-¿A quién necesitas escribir y sobre qué tema?`,
-    tools: [{
-      name: 'makeMailTo',
-      arguments: {
-        to: 'docente@usal.edu.ar',
-        subject: 'Consulta académica',
-        body: 'Estimado/a docente,\n\nLe escribo para consultar sobre...',
-        type: 'mailto'
-      }
-    }]
-  },
-  {
-    category: 'soporte',
-    pattern: /(?:error|problema|no funciona)/i,
-    priority: 4,
-    response: `Si tienes problemas con el SIU Guaraní, aquí tienes algunas soluciones comunes:
-
-**Sesión expirada:**
-- Cierra el navegador completamente
-- Borra las cookies del sitio
-- Vuelve a ingresar con tus credenciales
-
-**Ventana cerrada inesperadamente:**
-- Verifica tu conexión a internet
-- Intenta con otro navegador
-- Desactiva extensiones que puedan interferir
-
-**No puedo ver mis materias:**
-- Verifica que estés en el período correcto
-- Confirma que tu inscripción esté activa
-- Contacta a Secretaría si persiste el problema
-
-¿Qué error específico estás viendo? Puedo darte una solución más detallada.`,
-    tools: [{
-      name: 'siuHelp',
-      arguments: { topic: 'error_troubleshooting' }
-    }]
-  },
-  // Patrones adicionales que podrían ser útiles
-  {
-    category: 'asistencia',
-    pattern: /(?:asistencia|faltas|presente|ausente)/i,
-    priority: 3,
-    response: `Para consultar tu asistencia:
-
-1. **Ingresa al SIU** y busca **"Asistencia"**
-2. Selecciona la materia
-3. Verás el registro de presentes y ausentes
-
-Recuerda que la asistencia mínima requerida es del 75% para mantener la regularidad.
-
-¿Quieres que revise tu asistencia actual?`,
-    tools: [{
-      name: 'readUserData',
-      arguments: { dataType: 'attendance' }
-    }]
-  },
-  {
-    category: 'ayuda',
-    pattern: /(?:ayuda|help|como usar|tutorial)/i,
-    priority: 2,
-    response: `¡Te ayudo a usar el SIU Guaraní! 
-
-Puedes preguntarme sobre:
-- 📝 **Inscripciones**: "¿Cómo me inscribo a materias?"
-- 📊 **Notas**: "Quiero ver mis notas"
-- 📅 **Horarios**: "¿Cuáles son mis horarios?"
-- 📋 **Exámenes**: "¿Cuándo son mis parciales?"
-- 📄 **Certificados**: "Necesito una constancia"
-- 📧 **Correos**: "Quiero escribir a un docente"
-- ❗ **Problemas**: "El SIU no funciona"
-
-Solo escribe tu consulta de forma natural y yo te guiaré paso a paso.`,
-    tools: [{
-      name: 'siuHelp',
-      arguments: { topic: 'general_help' }
-    }]
+  slow: {
+    baseDelay: 60,
+    variability: 80,
+    wordsPerChunk: 1
   }
-];
+};
 
-export const defaultResponse = `¡Hola! Soy Testis, tu asistente para el SIU Guaraní de la USAL. 
+export const mockResponses: Record<string, string[]> = {
+  inscripcion: [
+    `Para inscribirte a materias en el SIU Guaraní de la USAL, seguí estos pasos:
 
-Puedo ayudarte con:
-- 📚 **Inscripciones** a materias
-- 🕐 **Horarios** de cursada
-- 📊 **Notas** y calificaciones
-- 📝 **Parciales** y exámenes
-- 📄 **Certificados** y constancias
-- 📧 **Correos** a docentes y secretaría
-- ❓ **Errores** comunes del SIU
+1. Ingresá al portal de la USAL (www.usal.edu.ar)
+2. Hacé clic en "SIU Guaraní" en el menú principal
+3. Iniciá sesión con tu usuario y contraseña
+4. Seleccioná "Inscripción a Cursadas"
+5. Elegí el período académico correspondiente
+6. Revisá las materias disponibles y sus correlatividades
+7. Seleccioná las materias que deseas cursar
+8. Confirmá tu inscripción
 
-¿En qué puedo ayudarte hoy?`;
+¿Necesitás ayuda con algún paso en particular?`,
+    `La inscripción a materias tiene algunos requisitos importantes:
 
-// Configuraciones adicionales
-export const streamingConfigs = {
-  fast: { baseDelay: 15, variability: 25, wordsPerChunk: 2 },
-  normal: { baseDelay: 30, variability: 50, wordsPerChunk: 1 },
-  slow: { baseDelay: 60, variability: 100, wordsPerChunk: 1 }
-} as const;
+- Verificá que cumplas con las correlatividades
+- Revisá que haya cupos disponibles
+- Respetá las fechas del calendario académico
+- Elegí turnos que no se superpongan en tu horario
+
+¿Querés que revise tus materias disponibles o te ayude con las correlatividades?`
+  ],
+  
+  notas: [
+    `Para consultar tus notas en el SIU Guaraní:
+
+1. Ingresá al sistema
+2. Andá a la sección "Mis Notas" o "Calificaciones"
+3. Seleccioná el período académico
+4. Ahí vas a ver todas tus notas y el estado de regularidad
+
+También puedo consultarlas por vos si querés. ¿Te las muestro?`,
+    `Las notas se publican según el cronograma de cada materia. Podés ver:
+- Notas de parciales
+- Notas de trabajos prácticos
+- Notas de finales
+- Estado de regularidad de cada materia
+
+¿Querés que consulte tus notas actuales?`
+  ],
+  
+  inasistencias: [
+    `Respecto a las inasistencias:
+
+- Para mantener la regularidad necesitás al menos 75% de asistencia
+- Las inasistencias justificadas cuentan como presentes si presentás certificado
+- Podés consultar tu estado de asistencia en la sección "Cursadas"
+
+¿Querés que revise tu estado de asistencia actual?`,
+    `Las inasistencias se registran por materia. Si tenés muchas inasistencias:
+- Podés justificarlas con certificado médico u otro documento válido
+- Consultá con tu profesor sobre trabajos compensatorios
+- Revisá el régimen de regularidad de tu facultad
+
+¿Te consulto el detalle de inasistencias?`
+  ],
+  
+  horarios: [
+    `Para ver los horarios de cursada:
+
+1. Entrá al SIU Guaraní
+2. Andá a "Horarios" o "Cursadas"
+3. Seleccioná el período académico
+4. Vas a ver los días, horarios, aulas y profesores
+
+¿Necesitás ayuda con alguna materia en particular?`,
+    `Los horarios pueden consultarse también en:
+- Cartelera de la facultad
+- Página web de tu carrera
+- Sistema SIU Guaraní
+
+Recordá que los horarios pueden cambiar al inicio del cuatrimestre.`
+  ],
+  
+  examenes: [
+    `Para consultar fechas de exámenes:
+
+1. Ingresá al SIU
+2. Buscá la sección "Exámenes"
+3. Ahí vas a ver fechas, horarios y aulas
+
+Recordá:
+- Algunos exámenes requieren inscripción previa
+- Llevá DNI y comprobante de inscripción
+- Llegá 15 minutos antes
+
+¿Querés que consulte los próximos exámenes?`,
+    `Hay diferentes tipos de exámenes:
+- Parciales: durante la cursada
+- Finales: al terminar la cursada
+- Recuperatorios: si desaprobaste un parcial
+
+Cada uno tiene requisitos diferentes de regularidad.`
+  ],
+  
+  certificados: [
+    `Podés obtener varios certificados desde el SIU:
+
+- Certificado de alumno regular
+- Constancia de inscripción
+- Analítico académico
+- Programas de materias
+- Constancia de título en trámite
+
+La mayoría los podés descargar directamente en PDF desde el sistema.`,
+    `Para obtener certificados:
+
+1. Entrá al SIU Guaraní
+2. Andá a "Certificados" o "Constancias"
+3. Elegí el tipo de documento
+4. Descargalo en PDF
+
+Algunos certificados pueden tener costo o requerir trámite presencial.`
+  ],
+  
+  ayuda_general: [
+    `Soy Testis, tu asistente virtual de la USAL. Puedo ayudarte con:
+
+📚 Consultas sobre materias e inscripciones
+📊 Ver tus notas y estado académico
+📅 Información sobre horarios y exámenes
+📧 Redactar emails a profesores
+🎓 Guías para usar el SIU Guaraní
+
+¿En qué puedo ayudarte hoy?`,
+    `Como asistente de la USAL, puedo ayudarte con muchas consultas:
+
+- Inscripción a materias
+- Consulta de notas e inasistencias
+- Información sobre exámenes
+- Guías del SIU Guaraní
+- Trámites académicos
+
+Solo preguntame lo que necesites.`
+  ],
+  
+  saludo: [
+    `¡Hola! Soy Testis, tu asistente virtual de la Universidad del Salvador (USAL). Estoy acá para ayudarte con consultas académicas y del SIU Guaraní. ¿En qué puedo ayudarte hoy?`,
+    `¡Buen día! ¿Cómo estás? Soy Testis y puedo ayudarte con tus consultas de la USAL. Preguntame lo que necesites.`,
+    `¡Hola! ¿Cómo va? Estoy para ayudarte con lo que necesites sobre materias, notas, inscripciones o cualquier consulta académica de la USAL.`
+  ]
+};
+
+export const defaultResponse = `Entiendo tu consulta. Puedo ayudarte con:
+
+- Inscripción a materias
+- Consulta de notas
+- Información de horarios y exámenes
+- Trámites en el SIU Guaraní
+- Redacción de emails a profesores
+
+¿Podrías darme más detalles sobre lo que necesitás?`;
+

@@ -46,7 +46,7 @@ export const Bubble = () => {
     setMessages,
   } = useChat({
     api: '/api/chat',
-    streamProtocol: 'data',
+    streamProtocol: 'text', // ← CLAVE: alineado con server text stream
     keepLastMessageOnError: true,
   });
 
