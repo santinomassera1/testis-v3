@@ -19,7 +19,7 @@ import {
   animate,
 } from "framer-motion";
 
-import { useChat } from "ai/react";
+import { useChat } from "@ai-sdk/react";
 import Markdown from "react-markdown";
 import { cn } from "@/lib/utils";
 
@@ -45,8 +45,23 @@ export const Bubble = () => {
     stop,
     setMessages,
   } = useChat({
+    api: '/api/chat',
+    streamProtocol: 'data',
     keepLastMessageOnError: true,
   });
+
+  // Helper para extraer contenido del mensaje (v5)
+  const getMessageContent = (message: any): string => {
+    // Prioriza content, si no extrae de parts
+    if (message.content) return message.content;
+    if (message.parts) {
+      return message.parts
+        .filter((p: any) => p.type === 'text')
+        .map((p: any) => p.text)
+        .join('');
+    }
+    return '';
+  };
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -287,10 +302,10 @@ export const Bubble = () => {
                   {messages.map((message) => (
                     <div key={message.id}>
                       {message.role === "user" ? (
-                        <UserMessage content={message.content} />
+                        <UserMessage content={getMessageContent(message)} />
                       ) : (
                         <>
-                          <AIMessage content={message.content} />
+                          <AIMessage content={getMessageContent(message)} />
                         </>
                       )}
                     </div>

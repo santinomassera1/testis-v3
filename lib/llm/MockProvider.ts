@@ -1,42 +1,282 @@
 import { LLMProvider, ChatMessage, ToolCall, ToolResult } from './LLMProvider';
+import { mockResponses, defaultResponse, streamingConfigs } from './MockResponses';
 import { makeMailTo } from '../skills/makeMailTo';
 import { readUserData } from '../skills/readUserData';
 import { siuHelp } from '../skills/siuHelp';
 
+interface StreamingConfig {
+  baseDelay: number;
+  variability: number;
+  wordsPerChunk: number;
+}
+
 export class MockProvider implements LLMProvider {
-  private async simulateStreaming(text: string, onUpdate: (text: string) => void) {
-    const words = text.split(' ');
-    let currentText = '';
+  private textCache = new Map<string, string>();
+  private normalizedCache = new Map<string, string>();
+  private streamingConfig: StreamingConfig = streamingConfigs.normal;
+
+  private normalizeText(text: string): string {
+    if (this.normalizedCache.has(text)) {
+      return this.normalizedCache.get(text)!;
+    }
+
+    const normalized = text.toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[¿¡]/g, '');
     
-    for (let i = 0; i < words.length; i++) {
-      currentText += (i > 0 ? ' ' : '') + words[i];
+    this.normalizedCache.set(text, normalized);
+    return normalized;
+  }
+
+  private extractEmailRequest(prompt: string): { response: string; tools: ToolCall[] } | null {
+    // Patrones para detectar solicitudes de email
+    const emailPatterns = [
+      // Patrón principal: "enviar mail a X con asunto Y texto Z"
+      /(?:quiero\s+)?(?:enviar|mandar)(?:le)?\s+(?:un\s+)?mail\s+al?\s+(?:profesor\s+)?(.+?)\s*,?\s*con\s+(?:el\s+)?asunto:?\s*(.+?)\s*,?\s*(?:con\s+)?(?:el\s+)?texto:?\s*(.+)/i,
+      
+      // Patrón alternativo: "mail para X asunto Y mensaje Z"
+      /mail\s+para\s+(.+?)\s*,?\s*asunto:?\s*(.+?)\s*,?\s*(?:mensaje|texto):?\s*(.+)/i,
+      
+      // Patrón simple: "escribir a X sobre Y"
+      /(?:escribir|contactar)\s+a\s+(.+?)\s+sobre\s+(.+)/i
+    ];
+
+    for (const pattern of emailPatterns) {
+      const match = prompt.match(pattern);
+      if (match) {
+        let to = '';
+        let subject = '';
+        let bodyContent = '';
+
+        if (pattern.source.includes('sobre')) {
+          // Patrón simple: "escribir a X sobre Y"
+          const recipient = match[1].trim();
+          const topic = match[2].trim();
+          
+          to = this.extractEmail(recipient) || `${recipient.toLowerCase().replace(/\s+/g, '.')}@usal.edu.ar`;
+          subject = `Consulta sobre ${topic}`;
+          bodyContent = this.generateEmailBody(topic, 'consulta');
+        } else {
+          // Patrones completos con asunto y texto
+          const recipient = match[1].trim();
+          subject = match[2].trim();
+          bodyContent = match[3] ? match[3].trim() : '';
+          
+          to = this.extractEmail(recipient) || `${recipient.toLowerCase().replace(/\s+/g, '.')}@usal.edu.ar`;
+          
+          // Generar cuerpo profesional basado en el contenido
+          bodyContent = this.generateEmailBody(bodyContent, this.detectEmailType(subject, bodyContent));
+        }
+
+        const response = `He generado un correo profesional para enviar. El mensaje incluye:
+
+📧 **Destinatario**: ${to}
+📝 **Asunto**: ${subject}
+✍️ **Mensaje**: Redactado de forma profesional y cortés
+
+Puedes hacer clic en "Abrir Gmail" para enviar el correo o en "Abrir Correo" para usar tu cliente de correo predeterminado.`;
+
+        return {
+          response,
+          tools: [{
+            name: 'makeMailTo',
+            arguments: {
+              to,
+              subject,
+              body: bodyContent,
+              type: 'gmail'
+            }
+          }]
+        };
+      }
+    }
+
+    return null;
+  }
+
+  private extractEmail(recipient: string): string | null {
+    // Buscar email explícito en el texto
+    const emailMatch = recipient.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+    return emailMatch ? emailMatch[1] : null;
+  }
+
+  private detectEmailType(subject: string, content: string): 'ausencia' | 'consulta' | 'tramite' | 'general' {
+    const lowerSubject = subject.toLowerCase();
+    const lowerContent = content.toLowerCase();
+    
+    if (lowerSubject.includes('ausencia') || lowerContent.includes('fiebre') || lowerContent.includes('enferm') || lowerContent.includes('faltar')) {
+      return 'ausencia';
+    }
+    if (lowerSubject.includes('consulta') || lowerContent.includes('pregunta') || lowerContent.includes('duda')) {
+      return 'consulta';
+    }
+    if (lowerSubject.includes('tramite') || lowerContent.includes('certificado') || lowerContent.includes('constancia')) {
+      return 'tramite';
+    }
+    
+    return 'general';
+  }
+
+  private generateEmailBody(content: string, type: 'ausencia' | 'consulta' | 'tramite' | 'general'): string {
+    const templates = {
+      ausencia: (reason: string) => `Estimado/a Profesor/a,
+
+Espero que se encuentre bien. Le escribo para informarle que no podré asistir a la clase de hoy debido a que ${reason.toLowerCase().includes('fiebre') ? 'me encuentro con fiebre' : reason.toLowerCase()}.
+
+Quisiera saber si hay algún material o actividad que deba revisar para ponerme al día con el contenido de la clase perdida.
+
+Agradezco su comprensión y quedo atento/a a su respuesta.
+
+Saludos cordiales,
+[Su nombre]
+[Legajo]`,
+
+      consulta: (topic: string) => `Estimado/a Profesor/a,
+
+Espero que se encuentre bien. Le escribo para realizar una consulta sobre ${topic.toLowerCase()}.
+
+Me gustaría solicitar su orientación al respecto, ya que considero importante aclarar este punto para mi mejor comprensión de la materia.
+
+¿Sería posible acordar un momento para conversar sobre este tema, ya sea en horario de consulta o por este medio?
+
+Desde ya, muchas gracias por su tiempo y atención.
+
+Saludos cordiales,
+[Su nombre]
+[Legajo]`,
+
+      tramite: (topic: string) => `Estimados/as,
+
+Me dirijo a ustedes para consultar sobre ${topic.toLowerCase()}.
+
+Agradecería que me informen sobre los pasos a seguir y la documentación necesaria para completar este trámite.
+
+Quedo a la espera de su respuesta y desde ya agradezco su atención.
+
+Saludos cordiales,
+[Su nombre]
+[Legajo]`,
+
+      general: (topic: string) => `Estimado/a,
+
+Espero que se encuentre bien. Le escribo en relación a ${topic.toLowerCase()}.
+
+Agradecería mucho su orientación al respecto.
+
+Muchas gracias por su tiempo.
+
+Saludos cordiales,
+[Su nombre]
+[Legajo]`
+    };
+
+    return templates[type](content);
+  }
+
+  private findBestMatch(prompt: string): { response: string; tools?: ToolCall[] } {
+    const cacheKey = `response_${prompt}`;
+    if (this.textCache.has(cacheKey)) {
+      return JSON.parse(this.textCache.get(cacheKey)!);
+    }
+
+    const normalizedPrompt = this.normalizeText(prompt);
+    
+    // Primero verificar si es una solicitud de email específica
+    const emailMatch = this.extractEmailRequest(prompt);
+    if (emailMatch) {
+      console.log(`✅ Mock Provider - Email inteligente detectado`);
+      const result = {
+        response: emailMatch.response,
+        tools: emailMatch.tools
+      };
+      this.textCache.set(cacheKey, JSON.stringify(result));
+      return result;
+    }
+    
+    // Buscar patrones ordenados por prioridad
+    const sortedPatterns = [...mockResponses].sort((a, b) => b.priority - a.priority);
+    
+    for (const pattern of sortedPatterns) {
+      if (pattern.pattern.test(normalizedPrompt)) {
+        console.log(`✅ Mock Provider - Patrón activado: ${pattern.pattern.source}`);
+        const result = { 
+          response: pattern.response, 
+          tools: pattern.tools || []
+        };
+        this.textCache.set(cacheKey, JSON.stringify(result));
+        return result;
+      }
+    }
+
+    console.log('⚠️  Mock Provider - Respuesta genérica');
+    const result = { response: defaultResponse, tools: [] };
+    this.textCache.set(cacheKey, JSON.stringify(result));
+    return result;
+  }
+
+  private async simulateStreaming(text: string, onUpdate: (text: string) => void): Promise<void> {
+    const words = text.split(' ');
+    const chunks = [];
+    
+    // Agrupar palabras en chunks para streaming más eficiente
+    for (let i = 0; i < words.length; i += this.streamingConfig.wordsPerChunk) {
+      chunks.push(words.slice(i, i + this.streamingConfig.wordsPerChunk).join(' '));
+    }
+
+    let currentText = '';
+    for (let i = 0; i < chunks.length; i++) {
+      currentText += (i > 0 ? ' ' : '') + chunks[i];
       onUpdate(currentText);
-      await new Promise(resolve => setTimeout(resolve, 50 + Math.random() * 100));
+      
+      const delay = this.streamingConfig.baseDelay + 
+                   Math.random() * this.streamingConfig.variability;
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
 
   async generateText(prompt: string, options?: any): Promise<string> {
+    // Cache check
+    const cacheKey = `generate_${prompt}`;
+    if (this.textCache.has(cacheKey)) {
+      // Simular delay mínimo para realismo
+      await new Promise(resolve => setTimeout(resolve, 100));
+      return this.textCache.get(cacheKey)!;
+    }
+
     // Simular delay de red
-    await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 1000));
+    await new Promise(resolve => 
+      setTimeout(resolve, 300 + Math.random() * 500)
+    );
     
-    return this.generateMockResponse(prompt);
+    const { response } = this.findBestMatch(prompt);
+    this.textCache.set(cacheKey, response);
+    return response;
   }
 
   async streamText(prompt: string, options?: any) {
-    const response = this.generateMockResponse(prompt);
+    const { response } = this.findBestMatch(prompt);
     
     return {
       textStream: {
-        [Symbol.asyncIterator]: async function* () {
+        [Symbol.asyncIterator]: async function* (this: MockProvider) {
           const words = response.split(' ');
-          let currentText = '';
+          const chunks = [];
           
-          for (let i = 0; i < words.length; i++) {
-            currentText += (i > 0 ? ' ' : '') + words[i];
-            yield currentText;
-            await new Promise(resolve => setTimeout(resolve, 50 + Math.random() * 100));
+          for (let i = 0; i < words.length; i += this.streamingConfig.wordsPerChunk) {
+            chunks.push(words.slice(i, i + this.streamingConfig.wordsPerChunk).join(' '));
           }
-        }
+
+          let currentText = '';
+          for (let i = 0; i < chunks.length; i++) {
+            currentText += (i > 0 ? ' ' : '') + chunks[i];
+            yield currentText;
+            
+            const delay = this.streamingConfig.baseDelay + 
+                         Math.random() * this.streamingConfig.variability;
+            await new Promise(resolve => setTimeout(resolve, delay));
+          }
+        }.bind(this)
       },
       toolCalls: [],
       finishReason: 'stop'
@@ -44,232 +284,34 @@ export class MockProvider implements LLMProvider {
   }
 
   async generateWithTools(prompt: string, tools: any, options?: any): Promise<any> {
-    const response = this.generateMockResponse(prompt);
-    const toolCalls = this.detectToolCalls(prompt, response);
+    const match = this.findBestMatch(prompt);
+    const toolCalls = match.tools || [];
     
-    // Ejecutar herramientas si es necesario
-    const toolResults: ToolResult[] = [];
-    for (const toolCall of toolCalls) {
+    // Ejecutar herramientas de forma paralela para mejor rendimiento
+    const toolPromises = toolCalls.map(async (toolCall) => {
       try {
         const result = await this.executeTool(toolCall);
-        toolResults.push({
+        return {
           toolCallId: toolCall.name,
           result
-        });
+        };
       } catch (error) {
         console.error(`Error ejecutando herramienta ${toolCall.name}:`, error);
+        return {
+          toolCallId: toolCall.name,
+          result: null,
+          error: error instanceof Error ? error.message : 'Error desconocido'
+        };
       }
-    }
+    });
+
+    const toolResults = await Promise.all(toolPromises);
 
     return {
-      text: response,
+      text: match.response,
       toolCalls,
-      toolResults
+      toolResults: toolResults.filter(result => result.result !== null)
     };
-  }
-
-  private normalizeText(text: string): string {
-    return text.toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '') // Remove accents
-      .replace(/[¿¡]/g, ''); // Remove question marks
-  }
-
-  private generateMockResponse(prompt: string): string {
-    const normalizedPrompt = this.normalizeText(prompt);
-    
-    // Debug: mostrar el prompt normalizado
-    console.log('🤖 Mock Provider - Prompt normalizado:', normalizedPrompt);
-    
-    // Respuestas específicas para Testis
-    if (normalizedPrompt.includes('inscripcion') || normalizedPrompt.includes('inscribir') || 
-        normalizedPrompt.includes('inscribo') || normalizedPrompt.includes('materia') ||
-        normalizedPrompt.includes('como me inscribo')) {
-      console.log('✅ Activado: Respuesta de Inscripción');
-      return `Para inscribirte en las materias del SIU Guaraní, sigue estos pasos:
-
-1. **Accede al SIU Guaraní** desde el portal de la USAL
-2. **Inicia sesión** con tu usuario y contraseña
-3. Ve a la sección **"Inscripción a Cursadas"**
-4. Selecciona el período académico correspondiente
-5. Elige las materias que deseas cursar
-6. Verifica las correlatividades (si las hay)
-7. Confirma tu inscripción
-
-¿Necesitas ayuda con algún paso específico? También puedo ayudarte a verificar tus correlatividades o generar un correo para consultar con Secretaría.`;
-    }
-
-    if (normalizedPrompt.includes('horario') || normalizedPrompt.includes('horarios') || 
-        normalizedPrompt.includes('cursada') || normalizedPrompt.includes('clase') ||
-        normalizedPrompt.includes('ver mis horarios')) {
-      console.log('✅ Activado: Respuesta de Horarios');
-      return `Para consultar tus horarios en el SIU Guaraní:
-
-1. **Ingresa al SIU** con tus credenciales
-2. Busca la sección **"Horarios"** o **"Cursadas"**
-3. Selecciona el período académico
-4. Verás el listado de materias con sus horarios y aulas
-
-También puedes:
-- Descargar el horario en PDF
-- Sincronizar con tu calendario personal
-- Ver los horarios de exámenes
-
-¿Te gustaría que revise tus horarios actuales o necesitas ayuda con algo específico?`;
-    }
-
-    if (normalizedPrompt.includes('nota') || normalizedPrompt.includes('notas') || 
-        normalizedPrompt.includes('calificacion') || normalizedPrompt.includes('calificaciones') ||
-        normalizedPrompt.includes('consultar mis') || normalizedPrompt.includes('consultar mis calificaciones')) {
-      console.log('✅ Activado: Respuesta de Notas');
-      return `Para consultar tus notas en el SIU Guaraní:
-
-1. **Accede al SIU** y ve a **"Mis Notas"**
-2. Selecciona el período académico
-3. Verás el listado de materias con sus calificaciones
-
-También puedes ver:
-- Notas de parciales y trabajos prácticos
-- Promedio por materia
-- Estado de regularidad
-
-¿Quieres que revise tus notas actuales? Puedo mostrarte un resumen de tu rendimiento académico.`;
-    }
-
-    if (normalizedPrompt.includes('parcial') || normalizedPrompt.includes('parciales') ||
-        normalizedPrompt.includes('examen') || normalizedPrompt.includes('examenes') ||
-        normalizedPrompt.includes('proximo') || normalizedPrompt.includes('ver proximos examenes')) {
-      return `Para consultar información sobre parciales:
-
-1. **Ve a la sección "Exámenes"** en el SIU
-2. Selecciona el período académico
-3. Verás las fechas, horarios y aulas de tus exámenes
-
-También puedes:
-- Ver el cronograma completo de exámenes
-- Consultar las condiciones de regularidad
-- Acceder a las actas de examen
-
-¿Necesitas ver tus próximos parciales o tienes alguna consulta específica sobre exámenes?`;
-    }
-
-    if (normalizedPrompt.includes('certificado') || normalizedPrompt.includes('certificados') ||
-        normalizedPrompt.includes('constancia') || normalizedPrompt.includes('constancias') ||
-        normalizedPrompt.includes('generar') || normalizedPrompt.includes('generar constancias y certificados')) {
-      return `Para obtener certificados y constancias:
-
-1. **Accede al SIU** y busca **"Certificados"**
-2. Selecciona el tipo de certificado que necesitas:
-   - Constancia de alumno regular
-   - Certificado analítico
-   - Constancia de materias aprobadas
-3. Completa los datos requeridos
-4. Descarga el documento en PDF
-
-Los certificados suelen estar disponibles inmediatamente y son válidos con firma digital.
-
-¿Qué tipo de certificado necesitas? Puedo ayudarte a generarlo.`;
-    }
-
-    if (normalizedPrompt.includes('correo') || normalizedPrompt.includes('mail') || 
-        normalizedPrompt.includes('email') || normalizedPrompt.includes('docente') ||
-        normalizedPrompt.includes('enviar') || normalizedPrompt.includes('enviar mail a docentes')) {
-      return `Puedo ayudarte a generar correos para contactar con:
-
-- **Docentes de cátedra**: Para consultas sobre materias específicas
-- **Secretaría Académica**: Para trámites administrativos
-- **Coordinación de carrera**: Para asuntos de plan de estudios
-
-Solo dime qué necesitas consultar y a quién te quieres dirigir, y generaré el correo con el asunto y contenido apropiados.
-
-¿A quién necesitas escribir y sobre qué tema?`;
-    }
-
-    if (normalizedPrompt.includes('error') || normalizedPrompt.includes('problema') || normalizedPrompt.includes('no funciona')) {
-      return `Si tienes problemas con el SIU Guaraní, aquí tienes algunas soluciones comunes:
-
-**Sesión expirada:**
-- Cierra el navegador completamente
-- Borra las cookies del sitio
-- Vuelve a ingresar con tus credenciales
-
-**Ventana cerrada inesperadamente:**
-- Verifica tu conexión a internet
-- Intenta con otro navegador
-- Desactiva extensiones que puedan interferir
-
-**No puedo ver mis materias:**
-- Verifica que estés en el período correcto
-- Confirma que tu inscripción esté activa
-- Contacta a Secretaría si persiste el problema
-
-¿Qué error específico estás viendo? Puedo darte una solución más detallada.`;
-    }
-
-    // Respuesta genérica
-    console.log('⚠️  Ninguna condición específica activada - Respuesta genérica');
-    return `¡Hola! Soy Testis, tu asistente para el SIU Guaraní de la USAL. 
-
-Puedo ayudarte con:
-- 📚 **Inscripciones** a materias
-- 🕐 **Horarios** de cursada
-- 📊 **Notas** y calificaciones
-- 📝 **Parciales** y exámenes
-- 📄 **Certificados** y constancias
-- 📧 **Correos** a docentes y secretaría
-- ❓ **Errores** comunes del SIU
-
-¿En qué puedo ayudarte hoy?`;
-  }
-
-  private detectToolCalls(prompt: string, response: string): ToolCall[] {
-    const toolCalls: ToolCall[] = [];
-    const normalizedPrompt = this.normalizeText(prompt);
-    const normalizedResponse = this.normalizeText(response);
-
-    // Detectar si necesita generar un correo
-    if (normalizedPrompt.includes('correo') || normalizedPrompt.includes('mail') || 
-        normalizedResponse.includes('generar correo') || normalizedResponse.includes('mailto')) {
-      toolCalls.push({
-        name: 'makeMailTo',
-        arguments: {
-          to: 'docente@usal.edu.ar',
-          subject: 'Consulta académica',
-          body: 'Estimado/a docente,\n\nLe escribo para consultar sobre...',
-          type: 'mailto'
-        }
-      });
-    }
-
-    // Detectar si necesita leer datos del usuario
-    if (normalizedPrompt.includes('mis notas') || normalizedPrompt.includes('ver notas') ||
-        normalizedPrompt.includes('mis parciales') || normalizedPrompt.includes('ver parciales') ||
-        normalizedPrompt.includes('mi asistencia') || normalizedPrompt.includes('ver asistencia')) {
-      let dataType = 'grades';
-      if (normalizedPrompt.includes('parcial') || normalizedPrompt.includes('examen')) dataType = 'exams';
-      if (normalizedPrompt.includes('asistencia')) dataType = 'attendance';
-      if (normalizedPrompt.includes('horario')) dataType = 'schedule';
-
-      toolCalls.push({
-        name: 'readUserData',
-        arguments: {
-          dataType
-        }
-      });
-    }
-
-    // Detectar si necesita ayuda específica del SIU
-    if (normalizedPrompt.includes('ayuda') || normalizedPrompt.includes('como') ||
-        normalizedPrompt.includes('donde') || normalizedPrompt.includes('pasos')) {
-      toolCalls.push({
-        name: 'siuHelp',
-        arguments: {
-          topic: prompt
-        }
-      });
-    }
-
-    return toolCalls;
   }
 
   private async executeTool(toolCall: ToolCall): Promise<any> {
@@ -283,5 +325,33 @@ Puedo ayudarte con:
       default:
         throw new Error(`Herramienta desconocida: ${toolCall.name}`);
     }
+  }
+
+  // Métodos de utilidad para configuración
+  public setStreamingConfig(config: Partial<StreamingConfig>): void {
+    this.streamingConfig = { ...this.streamingConfig, ...config };
+  }
+
+  public setStreamingPreset(preset: keyof typeof streamingConfigs): void {
+    this.streamingConfig = streamingConfigs[preset];
+  }
+
+  public clearCache(): void {
+    this.textCache.clear();
+    this.normalizedCache.clear();
+  }
+
+  public getCacheStats(): { textCache: number; normalizedCache: number } {
+    return {
+      textCache: this.textCache.size,
+      normalizedCache: this.normalizedCache.size
+    };
+  }
+
+  public getAvailableCategories(): string[] {
+    return Array.from(new Set(mockResponses
+      .map(r => r.category)
+      .filter(c => c !== undefined)
+    )) as string[];
   }
 }

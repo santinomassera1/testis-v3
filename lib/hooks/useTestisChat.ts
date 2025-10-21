@@ -1,7 +1,8 @@
+'use client';
+
 import { useState, useCallback, useEffect } from 'react';
+import { useChat } from '@ai-sdk/react';
 import { MockProvider } from '../llm/MockProvider';
-import { OpenAIProvider } from '../llm/OpenAIProvider';
-import { LLMProvider } from '../llm/LLMProvider';
 
 export interface ChatMessage {
   id: string;
@@ -25,17 +26,65 @@ export interface ChatSession {
 export function useTestisChat() {
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Determinar qué provider usar basado en la variable de entorno
+  // Determinar qué modo usar basado en la variable de entorno
   const useMock = process.env.NEXT_PUBLIC_USE_MOCK !== 'false';
-  const provider: LLMProvider = useMock ? new MockProvider() : new OpenAIProvider();
+  const mockProvider = useMock ? new MockProvider() : null;
+
+  // Usar el hook useChat de AI SDK para el modo real (Gateway)
+  const {
+    messages: apiMessages,
+    input: apiInput,
+    handleInputChange: apiHandleInputChange,
+    handleSubmit: apiHandleSubmit,
+    isLoading: apiIsLoading,
+    append: apiAppend,
+    stop: apiStop,
+    setMessages: apiSetMessages,
+  } = useChat({
+    api: '/api/chat',
+    streamProtocol: 'data',
+    onError: (err: Error) => {
+      console.error('Error en chat:', err);
+      setError('Error al procesar tu mensaje. Intenta nuevamente.');
+    },
+  });
+
+  // Estado local para modo mock
+  const [mockInput, setMockInput] = useState('');
+  const [mockIsLoading, setMockIsLoading] = useState(false);
+  const [mockMessages, setMockMessages] = useState<ChatMessage[]>([]);
 
   // Obtener chat actual
   const currentChat = chatSessions.find(chat => chat.id === currentChatId);
-  const messages = currentChat?.messages || [];
+  
+  // Helper para extraer texto de parts (v5)
+  const partsToText = (parts: any[]): string => {
+    if (!parts) return '';
+    return parts
+      .filter((p: any) => p.type === 'text')
+      .map((p: any) => p.text)
+      .join('');
+  };
+
+  // Convertir mensajes del API a nuestro formato
+  const convertMessage = (m: any): ChatMessage => {
+    return {
+      id: m.id,
+      role: m.role,
+      content: m.content || partsToText(m.parts),
+      toolCalls: m.toolInvocations?.map((ti: any) => ({
+        name: ti.toolName,
+        arguments: ti.args,
+        result: ti.result
+      }))
+    };
+  };
+
+  // En modo real, convertir mensajes del API a nuestro formato
+  const convertedApiMessages = apiMessages.map(convertMessage);
+  const messages = useMock ? mockMessages : convertedApiMessages;
 
   // Persistir en localStorage
   useEffect(() => {
@@ -64,6 +113,13 @@ export function useTestisChat() {
     }
   }, [chatSessions]);
 
+  // Sincronizar mensajes actuales con el chat session
+  useEffect(() => {
+    if (currentChatId && messages.length > 0) {
+      updateCurrentChatMessages(messages);
+    }
+  }, [messages.length]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Generar título automático del chat basado en el primer mensaje
   const generateChatTitle = (firstMessage: string): string => {
     if (firstMessage.length <= 30) return firstMessage;
@@ -83,7 +139,7 @@ export function useTestisChat() {
     
     setChatSessions(prev => [newChat, ...prev]);
     setCurrentChatId(newChatId);
-    setInput('');
+    setMockInput('');
     setError(null);
     
     return newChatId;
@@ -92,7 +148,7 @@ export function useTestisChat() {
   // Cambiar chat actual
   const switchToChat = useCallback((chatId: string) => {
     setCurrentChatId(chatId);
-    setInput('');
+    setMockInput('');
     setError(null);
   }, []);
 
@@ -135,40 +191,28 @@ export function useTestisChat() {
     }));
   }, [currentChatId]);
 
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInput(e.target.value);
-  }, []);
-
-  // Función interna para procesar mensajes y generar respuestas
-  const processMessage = useCallback(async (messageContent: string) => {
-    if (!messageContent.trim() || isLoading) return;
+  // Función para procesar mensajes en modo mock
+  const processMockMessage = useCallback(async (messageContent: string) => {
+    if (!messageContent.trim() || mockIsLoading) return;
     
-    // Si no hay chat actual, crear uno nuevo
-    let chatId = currentChatId;
-    if (!chatId) {
-      chatId = createNewChat();
-    }
-
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
       role: 'user',
       content: messageContent.trim()
     };
 
-    // Agregar mensaje del usuario
-    const updatedMessages = [...messages, userMessage];
-    updateCurrentChatMessages(updatedMessages);
+    const updatedMessages = [...mockMessages, userMessage];
+    setMockMessages(updatedMessages);
     
-    setIsLoading(true);
+    setMockIsLoading(true);
     setError(null);
 
     try {
-      // Generar respuesta usando el provider
-      const response = await provider.generateWithTools(
+      const response = await mockProvider!.generateWithTools(
         userMessage.content,
-        {}, // tools se manejan internamente en el provider
+        {},
         {
-          messages: messages.map(msg => ({
+          messages: mockMessages.map(msg => ({
             role: msg.role,
             content: msg.content
           }))
@@ -186,11 +230,10 @@ export function useTestisChat() {
         }))
       };
 
-      // Agregar respuesta del asistente
       const finalMessages = [...updatedMessages, assistantMessage];
-      updateCurrentChatMessages(finalMessages);
+      setMockMessages(finalMessages);
     } catch (err) {
-      console.error('Error generando respuesta:', err);
+      console.error('Error generando respuesta mock:', err);
       setError('Error al generar respuesta. Intenta nuevamente.');
       
       const errorMessage: ChatMessage = {
@@ -200,58 +243,85 @@ export function useTestisChat() {
       };
       
       const finalMessages = [...updatedMessages, errorMessage];
-      updateCurrentChatMessages(finalMessages);
+      setMockMessages(finalMessages);
     } finally {
-      setIsLoading(false);
+      setMockIsLoading(false);
     }
-  }, [isLoading, messages, provider, currentChatId, createNewChat, updateCurrentChatMessages]);
+  }, [mockIsLoading, mockMessages, mockProvider]);
+
+  // Handlers unificados
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (useMock) {
+      setMockInput(e.target.value);
+    } else {
+      apiHandleInputChange(e);
+    }
+  }, [useMock, apiHandleInputChange]);
 
   const handleSubmit = useCallback(async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!input.trim()) return;
     
-    const messageContent = input.trim();
-    setInput('');
-    await processMessage(messageContent);
-  }, [input, processMessage]);
-
-  // Nueva función append que también genera respuesta automática
-  const append = useCallback(async (message: Omit<ChatMessage, 'id'>) => {
-    if (message.role === 'user') {
-      // Para mensajes de usuario, procesarlos automáticamente para generar respuesta
-      await processMessage(message.content);
+    if (useMock) {
+      if (!mockInput.trim()) return;
+      const messageContent = mockInput.trim();
+      setMockInput('');
+      await processMockMessage(messageContent);
     } else {
-      // Para mensajes del asistente, solo agregarlos
-      const newMessage: ChatMessage = {
-        ...message,
-        id: Date.now().toString()
-      };
-      const updatedMessages = [...messages, newMessage];
-      updateCurrentChatMessages(updatedMessages);
+      // Si no hay chat actual, crear uno nuevo
+      if (!currentChatId) {
+        createNewChat();
+      }
+      apiHandleSubmit(e as any);
     }
-  }, [messages, processMessage, updateCurrentChatMessages]);
+  }, [useMock, mockInput, processMockMessage, apiHandleSubmit, currentChatId, createNewChat]);
+
+  const append = useCallback(async (message: Omit<ChatMessage, 'id'>) => {
+    if (useMock) {
+      if (message.role === 'user') {
+        await processMockMessage(message.content);
+      } else {
+        const newMessage: ChatMessage = {
+          ...message,
+          id: Date.now().toString()
+        };
+        setMockMessages([...mockMessages, newMessage]);
+      }
+    } else {
+      // En modo real, usar el append del API
+      await apiAppend(message as any);
+    }
+  }, [useMock, processMockMessage, mockMessages, apiAppend]);
 
   const stop = useCallback(() => {
-    setIsLoading(false);
-  }, []);
+    if (useMock) {
+      setMockIsLoading(false);
+    } else {
+      apiStop();
+    }
+  }, [useMock, apiStop]);
 
   const clearCurrentChat = useCallback(() => {
+    if (useMock) {
+      setMockMessages([]);
+    } else {
+      apiSetMessages([]);
+    }
     if (currentChatId) {
       updateCurrentChatMessages([]);
     }
     setError(null);
-  }, [currentChatId, updateCurrentChatMessages]);
+  }, [useMock, apiSetMessages, currentChatId, updateCurrentChatMessages]);
 
   return {
     // Mensajes del chat actual
     messages,
     
     // Input y manejo básico
-    input,
+    input: useMock ? mockInput : apiInput,
     handleInputChange,
     handleSubmit,
     append,
-    isLoading,
+    isLoading: useMock ? mockIsLoading : apiIsLoading,
     stop,
     error,
     

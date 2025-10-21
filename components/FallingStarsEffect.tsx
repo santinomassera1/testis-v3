@@ -223,7 +223,7 @@ const FallingStarsEffect = () => {
         cancelAnimationFrame(animationId);
       }
     };
-  }, []); // Array vacío - solo se ejecuta una vez
+  }, []); 
 
   // Re-detectar contenedores periódicamente (simplificado)
   useEffect(() => {
