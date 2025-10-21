@@ -19,9 +19,9 @@ import {
   animate,
 } from "framer-motion";
 
-import { useChat } from "@ai-sdk/react";
 import Markdown from "react-markdown";
 import { cn } from "@/lib/utils";
+import { useTestisChat } from "@/lib/hooks/useTestisChat";
 
 export const Bubble = () => {
   const [open, setOpen] = useState(true);
@@ -44,24 +44,7 @@ export const Bubble = () => {
     isLoading,
     stop,
     setMessages,
-  } = useChat({
-    api: '/api/chat',
-    streamProtocol: 'text', // ← CLAVE: alineado con server text stream
-    keepLastMessageOnError: true,
-  });
-
-  // Helper para extraer contenido del mensaje (v5)
-  const getMessageContent = (message: any): string => {
-    // Prioriza content, si no extrae de parts
-    if (message.content) return message.content;
-    if (message.parts) {
-      return message.parts
-        .filter((p: any) => p.type === 'text')
-        .map((p: any) => p.text)
-        .join('');
-    }
-    return '';
-  };
+  } = useTestisChat();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -97,8 +80,6 @@ export const Bubble = () => {
       role: "user",
       content: content,
     });
-
-    handleSubmit();
   };
 
   useEffect(() => {
@@ -302,10 +283,10 @@ export const Bubble = () => {
                   {messages.map((message) => (
                     <div key={message.id}>
                       {message.role === "user" ? (
-                        <UserMessage content={getMessageContent(message)} />
+                        <UserMessage content={message.content} />
                       ) : (
                         <>
-                          <AIMessage content={getMessageContent(message)} />
+                          <AIMessage content={message.content} />
                         </>
                       )}
                     </div>
@@ -359,7 +340,7 @@ export const Bubble = () => {
                   onKeyDown={(event) => {
                     if (event.key === "Enter" && !event.shiftKey) {
                       event.preventDefault();
-                      handleSubmit();
+                      handleSubmit(event as any);
                     }
                   }}
                   style={{ resize: "none" }}

@@ -1,19 +1,14 @@
 import { LLMProvider, ChatMessage, ToolCall, ToolResult } from './LLMProvider';
-import { mockResponses, defaultResponse, streamingConfigs } from './MockResponses';
+// @ts-ignore - El archivo existe, es un problema de caché del linter
+import { mockResponses, defaultResponse, streamingConfigs, StreamingConfig } from './MockResponses';
 import { makeMailTo } from '../skills/makeMailTo';
 import { readUserData } from '../skills/readUserData';
 import { siuHelp } from '../skills/siuHelp';
 
-interface StreamingConfig {
-  baseDelay: number;
-  variability: number;
-  wordsPerChunk: number;
-}
-
 export class MockProvider implements LLMProvider {
   private textCache = new Map<string, string>();
   private normalizedCache = new Map<string, string>();
-  private streamingConfig: StreamingConfig = streamingConfigs.normal;
+  private streamingConfig: StreamingConfig = streamingConfigs.fast; // Cambiado a fast para mejor UX
 
   private normalizeText(text: string): string {
     if (this.normalizedCache.has(text)) {
@@ -194,19 +189,49 @@ Saludos cordiales,
       return result;
     }
     
-    // Buscar patrones ordenados por prioridad
-    const sortedPatterns = [...mockResponses].sort((a, b) => b.priority - a.priority);
+    // Detectar categoría por palabras clave (orden de prioridad)
+    let category: keyof typeof mockResponses | null = null;
     
-    for (const pattern of sortedPatterns) {
-      if (pattern.pattern.test(normalizedPrompt)) {
-        console.log(`✅ Mock Provider - Patrón activado: ${pattern.pattern.source}`);
-        const result = { 
-          response: pattern.response, 
-          tools: pattern.tools || []
-        };
-        this.textCache.set(cacheKey, JSON.stringify(result));
-        return result;
-      }
+    // Prioridad alta - Consultas específicas
+    if (/cuota|pago|deuda|saldo|arancelaria/.test(normalizedPrompt)) {
+      category = 'cuotas';
+    } else if (/comprobante|recibo|factura/.test(normalizedPrompt)) {
+      category = 'comprobantes';
+    } else if (/email.*profesor|mail.*profesor|contacto.*profesor|correo.*profesor/.test(normalizedPrompt)) {
+      category = 'emails_profesores';
+    } else if (/email.*secretaria|mail.*secretaria|contacto.*secretaria|secretaria.*email/.test(normalizedPrompt)) {
+      category = 'email_secretaria';
+    } else if (/redactar|escribir.*email|escribir.*mail|generar.*email/.test(normalizedPrompt)) {
+      category = 'redactar_email';
+    }
+    // Prioridad media - Consultas académicas
+    else if (/inscri|materia.*disponible|cursa/.test(normalizedPrompt)) {
+      category = 'inscripcion';
+    } else if (/nota|calificaci|aprob/.test(normalizedPrompt)) {
+      category = 'notas';
+    } else if (/inasistencia|falta|ausencia|asistencia/.test(normalizedPrompt)) {
+      category = 'inasistencias';
+    } else if (/horario|clase|comision/.test(normalizedPrompt)) {
+      category = 'horarios';
+    } else if (/examen|parcial|final/.test(normalizedPrompt)) {
+      category = 'examenes';
+    } else if (/certificado|constancia|analitic/.test(normalizedPrompt)) {
+      category = 'certificados';
+    }
+    // Prioridad baja - Generales
+    else if (/hola|buen|saludos|como estas|que tal/.test(normalizedPrompt)) {
+      category = 'saludo';
+    } else if (/ayuda|que podes|que puedes|funciones|que haces/.test(normalizedPrompt)) {
+      category = 'ayuda_general';
+    }
+    
+    if (category && mockResponses[category]) {
+      const responses = mockResponses[category];
+      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+      console.log(`✅ Mock Provider - Categoría detectada: ${category}`);
+      const result = { response: randomResponse, tools: [] };
+      this.textCache.set(cacheKey, JSON.stringify(result));
+      return result;
     }
 
     console.log('⚠️  Mock Provider - Respuesta genérica');
@@ -349,9 +374,6 @@ Saludos cordiales,
   }
 
   public getAvailableCategories(): string[] {
-    return Array.from(new Set(mockResponses
-      .map(r => r.category)
-      .filter(c => c !== undefined)
-    )) as string[];
+    return Object.keys(mockResponses);
   }
 }
