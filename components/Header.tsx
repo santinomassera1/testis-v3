@@ -39,6 +39,7 @@ export function Header() {
     { href: "#simulador", label: "Simulador" },
     { href: "#precios", label: "Precios" },
     { href: "#encuesta", label: "Encuesta" },
+    { href: "/presentacion", label: "Presentación", isRoute: true },
   ];
 
   const externalLinks = [
@@ -90,14 +91,25 @@ export function Header() {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
             {navigationLinks.map((link) => (
-              <button
-                key={link.href}
-                onClick={() => scrollToSection(link.href)}
-                className="text-sm font-medium text-usal-navy-700 hover:text-usal-green-600 transition-colors duration-200 relative group"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-usal-green-600 transition-all duration-200 group-hover:w-full" />
-              </button>
+              link.isRoute ? (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm font-medium text-usal-navy-700 hover:text-usal-green-600 transition-colors duration-200 relative group"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-usal-green-600 transition-all duration-200 group-hover:w-full" />
+                </Link>
+              ) : (
+                <button
+                  key={link.href}
+                  onClick={() => scrollToSection(link.href)}
+                  className="text-sm font-medium text-usal-navy-700 hover:text-usal-green-600 transition-colors duration-200 relative group"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-usal-green-600 transition-all duration-200 group-hover:w-full" />
+                </button>
+              )
             ))}
             
             {/* Separator */}
@@ -190,16 +202,33 @@ export function Header() {
                     Navegación
                   </div>
                   {navigationLinks.map((link, index) => (
-                    <motion.button
-                      key={link.href}
-                      initial={{ x: 20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.1 }}
-                      onClick={() => scrollToSection(link.href)}
-                      className="w-full text-left px-4 py-3 rounded-lg text-usal-navy-700 hover:bg-usal-green-50 hover:text-usal-green-600 transition-colors duration-200 flex items-center justify-between group"
-                    >
-                      {link.label}
-                    </motion.button>
+                    link.isRoute ? (
+                      <motion.div
+                        key={link.href}
+                        initial={{ x: 20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <Link
+                          href={link.href}
+                          onClick={() => setIsOpen(false)}
+                          className="w-full text-left px-4 py-3 rounded-lg text-usal-navy-700 hover:bg-usal-green-50 hover:text-usal-green-600 transition-colors duration-200 flex items-center justify-between group block"
+                        >
+                          {link.label}
+                        </Link>
+                      </motion.div>
+                    ) : (
+                      <motion.button
+                        key={link.href}
+                        initial={{ x: 20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: index * 0.1 }}
+                        onClick={() => scrollToSection(link.href)}
+                        className="w-full text-left px-4 py-3 rounded-lg text-usal-navy-700 hover:bg-usal-green-50 hover:text-usal-green-600 transition-colors duration-200 flex items-center justify-between group"
+                      >
+                        {link.label}
+                      </motion.button>
+                    )
                   ))}
 
                   <div className="my-6 border-t border-usal-green-200" />

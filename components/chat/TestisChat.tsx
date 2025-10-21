@@ -18,6 +18,7 @@ import {
   IconMessageDots,
   IconChevronLeft,
   IconChevronRight,
+  IconStarFilled,
 } from "@tabler/icons-react";
 import {
   AnimatePresence,
@@ -30,6 +31,8 @@ import { useTestisChat, ChatMessage as TestisChatMessage } from "@/lib/hooks/use
 import { openMailTo } from "@/lib/skills/makeMailTo";
 import { loadDemoData } from "@/lib/skills/readUserData";
 import { useSession } from "next-auth/react";
+import { useSatisfactionSurvey } from "@/lib/hooks/useSatisfactionSurvey";
+import { SatisfactionSurvey } from "../SatisfactionSurvey";
 
 export const TestisChat = () => {
   const [open, setOpen] = useState(false);
@@ -60,6 +63,9 @@ export const TestisChat = () => {
   } = useTestisChat();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Hook de encuesta de satisfacción
+  const survey = useSatisfactionSurvey();
 
   // Bloques de acceso rápido específicos para Testis con colores USAL
   const quickAccessBlocks = [
@@ -244,6 +250,18 @@ export const TestisChat = () => {
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
+                  {/* Botón de Encuesta de Satisfacción */}
+                  <button
+                    onClick={() => {
+                      console.log('🌟 Botón de encuesta clickeado!');
+                      survey.triggerSurvey();
+                    }}
+                    className="rounded-full bg-yellow-500 hover:bg-yellow-600 text-white p-1.5 transition-colors shadow-lg"
+                    title="Compartir feedback"
+                  >
+                    <IconStarFilled className="h-4 w-4" />
+                  </button>
+                  
                   <motion.button
                     className="rounded-full bg-white/20 text-white px-2 py-0.5 text-sm flex items-center justify-center gap-1 overflow-hidden"
                     onClick={() => createNewChat()}
@@ -411,8 +429,7 @@ export const TestisChat = () => {
                         <UserMessage content={message.content} />
                       ) : (
                         <AIMessage 
-                          content={message.content} 
-                          toolCalls={message.toolCalls}
+                          content={message.content}
                         />
                       )}
                     </div>
@@ -572,6 +589,23 @@ export const TestisChat = () => {
           />
         ))}
       </motion.button>
+
+      {/* Encuesta de Satisfacción */}
+      <SatisfactionSurvey
+        isOpen={survey.showSurvey}
+        onClose={survey.closeSurvey}
+        onSubmit={survey.submitSurvey}
+        messagesCount={survey.metrics.messagesCount}
+        sessionDuration={survey.metrics.sessionDuration}
+        categoriesUsed={survey.metrics.categoriesUsed}
+      />
+      
+      {/* DEBUG: Indicador visual */}
+      {survey.showSurvey && (
+        <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-[9999]">
+          ⚠️ Encuesta abierta!
+        </div>
+      )}
     </div>
   );
 };
@@ -587,11 +621,9 @@ const UserMessage = ({ content }: { content: string }) => {
 };
 
 const AIMessage = ({ 
-  content, 
-  toolCalls 
+  content
 }: { 
-  content: string; 
-  toolCalls?: TestisChatMessage['toolCalls'];
+  content: string;
 }) => {
   return (
     <div className="p-2 rounded-lg flex gap-2 items-start">
@@ -600,82 +632,13 @@ const AIMessage = ({
       </div>
       <div className="text-sm px-3 py-2 rounded-lg shadow-md w-fit bg-white text-usal-navy-800 border border-usal-green-100">
         <Markdown>{useAnimatedText(content)}</Markdown>
-        {toolCalls && toolCalls.length > 0 && (
-          <div className="mt-2 space-y-2">
-            {toolCalls.map((toolCall, index) => (
-              <ToolCallResult 
-                key={index} 
-                toolCall={toolCall} 
-              />
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );
 };
 
-const ToolCallResult = ({ 
-  toolCall 
-}: { 
-  toolCall: {
-    name: string;
-    arguments: Record<string, any>;
-    result?: any;
-  };
-}) => {
-  const handleMailClick = () => {
-    if (toolCall.result?.url) {
-      if (toolCall.result.type === 'gmail') {
-        window.open(toolCall.result.url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
-      } else {
-        window.location.href = toolCall.result.url;
-      }
-    }
-  };
-
-  if (toolCall.name === 'makeMailTo' && toolCall.result) {
-    return (
-      <div className="bg-usal-red-50 border border-usal-red-200 rounded-lg p-3">
-        <div className="flex items-center gap-2 mb-2">
-          <IconMail className="h-4 w-4 text-usal-red-600" />
-          <span className="text-sm font-medium text-usal-red-800">Correo generado</span>
-        </div>
-        <div className="text-xs text-usal-navy-600 mb-2">
-          <strong>Para:</strong> {toolCall.arguments.to}<br/>
-          <strong>Asunto:</strong> {toolCall.arguments.subject}
-        </div>
-        <button
-          onClick={handleMailClick}
-          className="text-xs bg-usal-red-600 text-white px-3 py-1 rounded hover:bg-usal-red-700 transition-colors"
-        >
-          {toolCall.result.type === 'gmail' ? 'Abrir en Gmail' : 'Abrir Correo'}
-        </button>
-      </div>
-    );
-  }
-
-  if (toolCall.name === 'readUserData' && toolCall.result) {
-    return (
-      <div className="bg-usal-green-50 border border-usal-green-200 rounded-lg p-3">
-        <div className="flex items-center gap-2 mb-2">
-          <IconBook className="h-4 w-4 text-usal-green-600" />
-          <span className="text-sm font-medium text-usal-green-800">
-            {toolCall.arguments.dataType === 'grades' && 'Notas cargadas'}
-            {toolCall.arguments.dataType === 'exams' && 'Parciales cargados'}
-            {toolCall.arguments.dataType === 'attendance' && 'Asistencia cargada'}
-            {toolCall.arguments.dataType === 'schedule' && 'Horarios cargados'}
-          </span>
-        </div>
-        <div className="text-xs text-usal-navy-600">
-          Datos actualizados desde localStorage
-        </div>
-      </div>
-    );
-  }
-
-  return null;
-};
+// ToolCallResult ya no es necesario porque el nuevo sistema de chat
+// resuelve todo en el servidor (2-step flow sin tool calls visibles)
 
 let delimiter = "";
 

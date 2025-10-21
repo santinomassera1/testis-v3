@@ -11,6 +11,7 @@ import {
   IconTerminal2,
   IconX,
   IconMaximize,
+  IconStarFilled,
 } from "@tabler/icons-react";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -22,6 +23,8 @@ import {
 import Markdown from "react-markdown";
 import { cn } from "@/lib/utils";
 import { useTestisChat } from "@/lib/hooks/useTestisChat";
+import { useSatisfactionSurvey } from "@/lib/hooks/useSatisfactionSurvey";
+import { SatisfactionSurvey } from "./SatisfactionSurvey";
 
 export const Bubble = () => {
   const [open, setOpen] = useState(true);
@@ -45,6 +48,8 @@ export const Bubble = () => {
     stop,
     setMessages,
   } = useTestisChat();
+
+  const survey = useSatisfactionSurvey();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -80,6 +85,45 @@ export const Bubble = () => {
       role: "user",
       content: content,
     });
+    survey.incrementMessageCount();
+  };
+
+  // Incrementar contador cuando cambian los mensajes
+  const prevMessagesLength = useRef(0);
+  
+  useEffect(() => {
+    // Solo incrementar cuando realmente aumentan los mensajes
+    if (messages.length > prevMessagesLength.current) {
+      const newMessages = messages.length - prevMessagesLength.current;
+      console.log(`📊 +${newMessages} mensaje(s) nuevo(s). Total: ${messages.length}`);
+      
+      // Incrementar por cada mensaje nuevo
+      for (let i = 0; i < newMessages; i++) {
+        survey.incrementMessageCount();
+      }
+      
+      prevMessagesLength.current = messages.length;
+    }
+    
+    // Verificar si mostrar encuesta cada ciertos mensajes
+    if (messages.length >= 3) {
+      console.log('🎯 3+ mensajes detectados. Verificando condiciones...');
+      setTimeout(() => survey.checkAndShowSurvey(), 100);
+    }
+  }, [messages.length, survey]);
+
+  // Mostrar encuesta al cerrar el chat
+  const handleCloseChat = () => {
+    if (messages.length > 0) {
+      survey.triggerSurvey();
+    }
+    setOpen(false);
+  };
+
+  // Limpiar mensajes y resetear encuesta
+  const handleClearMessages = () => {
+    setMessages([]);
+    survey.resetMetrics();
   };
 
   useEffect(() => {
@@ -170,7 +214,7 @@ export const Bubble = () => {
       >
         {open && (
           <button
-            onClick={() => setOpen(false)}
+            onClick={handleCloseChat}
             className="fixed md:hidden top-2 right-2 z-40"
           >
             <IconX />
@@ -204,10 +248,22 @@ export const Bubble = () => {
                   </button>
                 </div>
                 <div className="flex items-center gap-2">
+                  {/* DEBUGGING: Botón siempre visible */}
+                  <button
+                    onClick={() => {
+                      console.log('🌟 Botón de encuesta clickeado!');
+                      survey.triggerSurvey();
+                    }}
+                    className="rounded-full bg-yellow-500 hover:bg-yellow-600 text-white p-1.5 transition-colors shadow-lg"
+                    title="Compartir feedback (DEBUG)"
+                  >
+                    <IconStarFilled className="h-4 w-4" />
+                  </button>
+                  
                   {messages.length > 0 && (
                     <motion.button
                       className="rounded-full bg-black text-white px-2 py-0.5 text-sm flex items-center justify-center gap-1 overflow-hidden"
-                      onClick={() => setMessages([])}
+                      onClick={handleClearMessages}
                       whileHover="hover"
                       initial="initial"
                       animate="initial"
@@ -363,6 +419,23 @@ export const Bubble = () => {
       >
         <IconMessage className="h-6 w-6 text-neutral-600 group-hover:text-black" />
       </button>
+
+      {/* Encuesta de Satisfacción - DEBUG */}
+      <SatisfactionSurvey
+        isOpen={survey.showSurvey}
+        onClose={survey.closeSurvey}
+        onSubmit={survey.submitSurvey}
+        messagesCount={survey.metrics.messagesCount}
+        sessionDuration={survey.metrics.sessionDuration}
+        categoriesUsed={survey.metrics.categoriesUsed}
+      />
+      
+      {/* DEBUG: Indicador visual */}
+      {survey.showSurvey && (
+        <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-[9999]">
+          ⚠️ showSurvey = true!
+        </div>
+      )}
     </div>
   );
 };

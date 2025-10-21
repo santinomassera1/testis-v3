@@ -6,7 +6,6 @@ import Balancer from "react-wrap-balancer";
 import Link from "next/link";
 import FloatingElements3D from './FloatingElements3D';
 import FallingStarsEffect from './FallingStarsEffect';
-import { ThesisPresentationSection } from './sections/ThesisPresentationSection';
 import { 
   IconBook, 
   IconCalendar, 
@@ -83,31 +82,18 @@ export function Hero() {
         </Link>
       </div>
       
-      {/* Demo Container - Now with two sections side by side */}
+      {/* Demo Container - Centered */}
       <div
         ref={containerRef}
-        className="relative z-30 mx-auto mt-16 max-w-7xl space-y-8 lg:space-y-0"
+        className="relative z-30 mx-auto mt-16 max-w-4xl px-4"
       >
-        {/* Two columns layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Testis Demo Section */}
-          <div 
-            data-demo-container
-            className="rounded-[32px] border border-usal-green-200/50 bg-gradient-to-br from-usal-green-50/90 to-white/90 p-2 backdrop-blur-lg md:p-4 shadow-xl"
-      >
-        <div className="rounded-[24px] border border-usal-green-200 bg-white p-4">
-          <ChatbotDemo />
-            </div>
-          </div>
-
-          {/* Thesis Presentation Section */}
-          <div 
-            data-demo-container
-            className="rounded-[32px] border border-usal-navy-200/50 bg-gradient-to-br from-usal-navy-50/90 to-white/90 p-2 backdrop-blur-lg md:p-4 shadow-xl"
-          >
-            <div className="rounded-[24px] border border-usal-navy-200 bg-white p-4">
-              <ThesisPresentationSection />
-            </div>
+        {/* Centered Testis Demo Section */}
+        <div 
+          data-demo-container
+          className="rounded-[32px] border border-usal-green-200/50 bg-gradient-to-br from-usal-green-50/90 to-white/90 p-2 backdrop-blur-lg md:p-4 shadow-xl"
+        >
+          <div className="rounded-[24px] border border-usal-green-200 bg-white p-4">
+            <ChatbotDemo />
           </div>
         </div>
       </div>
