@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/google": "^2.0.23",
     "@ai-sdk/openai": "^1.0.11",
     "@ai-sdk/react": "^1.0.0",
     "@auth/prisma-adapter": "^2.10.0",
@@ -31,7 +32,9 @@
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.25.76"
   },
-  "engines": { "node": ">=18.17 <21" },
+  "engines": {
+    "node": ">=18.17 <21"
+  },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
