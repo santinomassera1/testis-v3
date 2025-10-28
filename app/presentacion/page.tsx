@@ -1,99 +1,1097 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   IconChevronLeft,
   IconChevronRight,
-  IconNotes,
   IconHome,
-  IconCheck,
   IconAlertTriangle,
   IconTarget,
-  IconShield,
-  IconRocket,
-  IconTrendingUp,
-  IconFileCheck,
-  IconBulb,
-  IconUsers,
-  IconBook,
+  IconCode,
+  IconCurrencyDollar,
   IconChartBar,
+  IconRocket,
   IconCircleCheck,
-  IconChecks,
+  IconUsers,
+  IconBulb,
+  IconMessageDots,
+  IconMail,
+  IconFileText,
+  IconTrendingUp,
+  IconClock,
+  IconShield,
   IconSparkles,
+  IconCheckbox,
+  IconX,
+  IconExternalLink,
+  IconPlayerPlay,
+  IconPlayerPause,
+  IconArrowLeft,
+  IconArrowRight,
 } from '@tabler/icons-react';
 import Link from 'next/link';
-import presentationData from '@/data/presentation.json';
-import FinancialSimulator from '@/components/sections/FinancialSimulator';
+import Image from 'next/image';
+
+// Tipos
+interface Slide {
+  id: number;
+  title: string;
+  component: React.ComponentType<any>;
+}
+
+// Datos financieros reales de la página principal
+const financialData = {
+  scenarios: [
+    {
+      name: 'Conservador',
+      color: 'red',
+      data: [
+        { year: 1, ingresos: 7000000, costos: 33950000, flujoNeto: -26950000, flujoAcumulado: -26950000 },
+        { year: 2, ingresos: 7000000, costos: 7000000, flujoNeto: 0, flujoAcumulado: -26950000 },
+        { year: 3, ingresos: 10000000, costos: 8050000, flujoNeto: 1950000, flujoAcumulado: -25000000 },
+        { year: 4, ingresos: 15000000, costos: 9257500, flujoNeto: 5742500, flujoAcumulado: -19257500 },
+        { year: 5, ingresos: 20000000, costos: 10646125, flujoNeto: 9353875, flujoAcumulado: -9903625 },
+      ],
+      van: -19469703,
+      tir: -15.93,
+      payback: null,
+    },
+    {
+      name: 'Moderado',
+      color: 'gold',
+      data: [
+        { year: 1, ingresos: 7000000, costos: 33950000, flujoNeto: -26950000, flujoAcumulado: -26950000 },
+        { year: 2, ingresos: 10000000, costos: 7000000, flujoNeto: 3000000, flujoAcumulado: -23950000 },
+        { year: 3, ingresos: 30000000, costos: 8050000, flujoNeto: 21950000, flujoAcumulado: -2000000 },
+        { year: 4, ingresos: 60000000, costos: 9257500, flujoNeto: 50742500, flujoAcumulado: 48742500 },
+        { year: 5, ingresos: 92000000, costos: 10646125, flujoNeto: 81353875, flujoAcumulado: 130096375 },
+      ],
+      van: 73477873,
+      tir: 50.43,
+      payback: 3.09,
+    },
+    {
+      name: 'Optimista',
+      color: 'green',
+      data: [
+        { year: 1, ingresos: 10000000, costos: 33950000, flujoNeto: -23950000, flujoAcumulado: -23950000 },
+        { year: 2, ingresos: 20000000, costos: 7000000, flujoNeto: 13000000, flujoAcumulado: -10950000 },
+        { year: 3, ingresos: 45000000, costos: 8050000, flujoNeto: 36950000, flujoAcumulado: 26000000 },
+        { year: 4, ingresos: 75000000, costos: 9257500, flujoNeto: 65742500, flujoAcumulado: 91742500 },
+        { year: 5, ingresos: 120000000, costos: 10646125, flujoNeto: 109353875, flujoAcumulado: 201096375 },
+      ],
+      van: 201096375,
+      tir: null,
+      payback: 2.5,
+    },
+  ],
+};
+
+const formatCurrency = (amount: number): string => {
+  const millions = Math.abs(amount) / 1000000;
+  const isNegative = amount < 0;
+  return `${isNegative ? '-' : ''}$${millions.toFixed(1)}M`;
+};
+
+// ======================
+// SLIDES COMPONENTS
+// ======================
+
+// Slide 1: Apertura con imagen USAL de fondo
+function Slide1() {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
+      {/* Imagen de fondo USAL con efectos */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/tesis/fondo_usal.png"
+          alt="Universidad del Salvador"
+          fill
+          className="object-cover"
+          priority
+        />
+        {/* Overlay oscuro con gradiente para legibilidad */}
+        <div className="absolute inset-0 bg-gradient-to-br from-usal-navy-900/80 via-usal-navy-800/75 to-usal-green-900/70" />
+        {/* Sombra adicional en los bordes */}
+        <div className="absolute inset-0 shadow-[inset_0_0_100px_rgba(0,0,0,0.5)]" />
+            </div>
+
+      {/* Decoración animada sutil */}
+      <div className="absolute inset-0 z-0 opacity-10">
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-40 h-40 border border-white rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.2, 0.4, 0.2],
+            }}
+            transition={{
+              duration: 5 + Math.random() * 3,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+            }}
+          />
+        ))}
+      </div>
+
+      <motion.div
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        className="relative z-10 text-center max-w-6xl"
+      >
+        {/* Badge translúcido */}
+      <motion.div
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="inline-block px-8 py-3 bg-white/15 backdrop-blur-md text-white rounded-full text-xl font-semibold mb-8 border-2 border-white/30 shadow-2xl"
+        >
+          🎓 Ingeniería en Informática — Proyecto de Tesis
+      </motion.div>
+
+        {/* Título principal */}
+      <motion.h1 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="text-8xl font-bold text-white mb-4 leading-tight drop-shadow-2xl"
+      >
+          No es un reclamo
+      </motion.h1>
+        <motion.h2
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="text-7xl font-bold bg-gradient-to-r from-usal-green-400 to-usal-gold-400 bg-clip-text text-transparent mb-10 leading-tight drop-shadow-2xl"
+          style={{ textShadow: '0 2px 20px rgba(0,0,0,0.3)' }}
+        >
+          es una oportunidad
+        </motion.h2>
+
+        {/* Subtítulo */}
+        <motion.p
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="text-3xl text-white/95 mb-12 max-w-4xl mx-auto leading-relaxed font-medium drop-shadow-lg"
+        >
+          SIU funciona; la experiencia puede ser más clara
+        </motion.p>
+
+        {/* Stats cards translúcidos */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { icon: IconAlertTriangle, label: 'Navegación promedio', value: '2.86/5', color: 'red' },
+            { icon: IconFileText, label: 'Dificultad en inscripciones', value: '≈23%', color: 'gold' },
+            { icon: IconMail, label: 'Problemas de contacto', value: '≈32%', color: 'green' },
+          ].map((stat, i) => (
+      <motion.div
+              key={i}
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.6 + i * 0.1 }}
+              className={`bg-white/20 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border-2 border-white/30 hover:bg-white/25 hover:shadow-3xl transition-all duration-300`}
+            >
+              <stat.icon className={`h-14 w-14 text-usal-${stat.color}-300 mb-4 mx-auto drop-shadow-lg`} />
+              <div className={`text-5xl font-bold text-white mb-3 drop-shadow-lg`}>{stat.value}</div>
+              <div className="text-xl text-white/90 leading-tight">{stat.label}</div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+// Slide 2: Problema medido
+function Slide2() {
+  const problems = [
+    {
+      icon: IconFileText,
+      title: 'Inscripciones',
+      desc: 'Pasos extra y reintentos por correlativas no claras',
+      stat: '22.7%',
+      color: 'red',
+    },
+    {
+      icon: IconClock,
+      title: 'Horarios',
+      desc: 'Superposiciones y dudas de disponibilidad',
+      stat: '13.6%',
+      color: 'gold',
+    },
+    {
+      icon: IconFileText,
+      title: 'Certificados',
+      desc: 'Rutas de descarga poco evidentes',
+      stat: '13.6%',
+      color: 'navy',
+    },
+    {
+      icon: IconMail,
+      title: 'Contacto',
+      desc: 'Incertidumbre sobre a quién escribir',
+      stat: '31.8%',
+      color: 'green',
+    },
+  ];
+
+  return (
+    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
+      {/* Imagen de fondo USAL con overlay rojizo */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/tesis/fondo_usal.png"
+          alt="USAL Background"
+          fill
+          className="object-cover"
+        />
+        {/* Overlay rojizo para reflejar "problema" */}
+        <div className="absolute inset-0 bg-gradient-to-br from-usal-red-900/70 via-white/85 to-usal-navy-900/70" />
+        <div className="absolute inset-0 backdrop-blur-[2px]" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl w-full">
+        {/* Header */}
+          <motion.div
+          initial={{ y: -30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-7xl font-bold text-usal-navy-900 mb-4">
+            Dónde se traba el estudiante
+          </h1>
+          <p className="text-3xl text-usal-navy-600">
+            Fricción en puntos críticos del flujo académico
+          </p>
+      </motion.div>
+
+        {/* Problem cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+          {problems.map((problem, i) => (
+            <motion.div
+              key={i}
+              initial={{ x: i % 2 === 0 ? -50 : 50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.2 + i * 0.1 }}
+              className={`bg-white/35 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border-l-8 border-usal-${problem.color}-500 hover:bg-white/40 hover:shadow-3xl transition-all`}
+            >
+              <div className="flex items-start gap-6">
+                <div className={`p-4 rounded-xl bg-usal-${problem.color}-100/80 backdrop-blur-sm`}>
+                  <problem.icon className={`h-12 w-12 text-usal-${problem.color}-600`} />
+              </div>
+                <div className="flex-1">
+                  <h3 className="text-3xl font-bold text-usal-navy-900 mb-2 drop-shadow-md">{problem.title}</h3>
+                  <p className="text-xl text-usal-navy-700 mb-3 drop-shadow-sm">{problem.desc}</p>
+                  <div className={`text-4xl font-bold text-usal-${problem.color}-600 drop-shadow-lg`}>{problem.stat}</div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Impact summary */}
+          <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="bg-gradient-to-r from-usal-red-500/90 to-usal-red-600/90 backdrop-blur-lg rounded-2xl p-10 text-white shadow-2xl border-2 border-white/30"
+        >
+          <h3 className="text-4xl font-bold mb-4 flex items-center gap-4 drop-shadow-lg">
+            <IconAlertTriangle className="h-12 w-12" />
+            Impacto: tiempo perdido, ansiedad en picos, tickets repetitivos
+          </h3>
+          </motion.div>
+      </div>
+    </div>
+  );
+}
+
+// Slide 3: Objetivo
+function Slide3() {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen p-12 bg-gradient-to-br from-usal-green-600 via-usal-green-500 to-usal-gold-500 relative overflow-hidden">
+      {/* Particles */}
+      <div className="absolute inset-0">
+        {[...Array(30)].map((_, i) => (
+            <motion.div
+              key={i}
+            className="absolute w-3 h-3 bg-white rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+              y: [0, -40, 0],
+              opacity: [0, 1, 0],
+              }}
+              transition={{
+              duration: 3 + Math.random() * 2,
+                repeat: Infinity,
+              delay: Math.random() * 3,
+              }}
+            />
+          ))}
+        </div>
+
+      <div className="relative z-10 max-w-6xl text-center text-white">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+        >
+          <IconTarget className="h-28 w-28 mx-auto mb-8" />
+          <h1 className="text-8xl font-bold mb-8 leading-tight">
+            Menos fricción.<br />Más flujo.
+          </h1>
+      </motion.div>
+
+        <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="bg-white/10 backdrop-blur-md rounded-3xl p-12 mb-12 border-2 border-white/30"
+        >
+          <p className="text-4xl leading-relaxed">
+            Un asistente conversacional que reduce <span className="font-bold underline decoration-usal-gold-300">tiempo, errores y ansiedad</span> al guiar tareas académicas en SIU
+          </p>
+        </motion.div>
+
+        {/* Key points */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { icon: IconMessageDots, text: 'Lenguaje natural', desc: 'Habla como estudiante' },
+            { icon: IconShield, text: 'Validaciones previas', desc: 'Antes de actuar' },
+            { icon: IconMail, text: 'Emails automáticos', desc: 'Generación institucional' },
+          ].map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.5 + i * 0.1 }}
+              className="bg-white/20 backdrop-blur-sm rounded-2xl p-8 border-2 border-white/30"
+            >
+              <item.icon className="h-16 w-16 mx-auto mb-4" />
+              <h3 className="text-3xl font-bold mb-2">{item.text}</h3>
+              <p className="text-2xl text-white/90">{item.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Slide 4: Stack Técnico (con Gemini)
+function Slide4() {
+  const stack = [
+    { category: 'Framework', tech: 'Next.js 14', desc: 'App Router, RSC', icon: '⚛️' },
+    { category: 'IA', tech: 'Google Gemini', desc: 'NLU/NLG con citas', icon: '🤖' },
+    { category: 'Backend', tech: 'Neon Postgres', desc: 'Serverless, API Routes', icon: '🗄️' },
+    { category: 'UI', tech: 'Tailwind + Framer', desc: 'Aceternity UI', icon: '🎨' },
+    { category: 'Integración', tech: 'Widget embebido', desc: 'Sin tocar SIU', icon: '🔌' },
+    { category: 'Deploy', tech: 'Vercel', desc: 'Edge Functions', icon: '▲' },
+  ];
+
+  return (
+    <div className="flex flex-col items-center justify-center h-screen p-12 bg-gradient-to-br from-usal-navy-900 via-usal-navy-800 to-usal-navy-700 text-white">
+      <div className="max-w-7xl w-full">
+        {/* Header */}
+        <motion.div
+          initial={{ y: -30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="text-center mb-12"
+        >
+          <IconCode className="h-20 w-20 mx-auto mb-6 text-usal-green-400" />
+          <h1 className="text-7xl font-bold mb-4">Arquitectura lista para escalar</h1>
+          <p className="text-3xl text-white/70">Interfaz moderna + IA + datos confiables</p>
+        </motion.div>
+
+        {/* Stack grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+          {stack.map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2 + i * 0.1 }}
+              className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border-2 border-white/20"
+            >
+              <div className="text-6xl mb-4">{item.icon}</div>
+              <div className="text-lg text-white/60 mb-2">{item.category}</div>
+              <h3 className="text-3xl font-bold mb-2">{item.tech}</h3>
+              <p className="text-xl text-white/70">{item.desc}</p>
+            </motion.div>
+          ))}
+      </div>
+
+        {/* Architecture */}
+      <motion.div 
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.9 }}
+          className="bg-gradient-to-r from-usal-green-500 to-usal-gold-500 rounded-3xl p-10 shadow-2xl"
+        >
+          <h3 className="text-4xl font-bold mb-8 text-center">4 capas: Interfaz · Orquestación · IA · Observabilidad</h3>
+      </motion.div>
+      </div>
+    </div>
+  );
+}
+
+// Slide 5: Inversión inicial
+function Slide5() {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
+      {/* Imagen de fondo plata */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/tesis/plata.jpg"
+          alt="Inversión"
+          fill
+          className="object-cover"
+        />
+        {/* Overlay para legibilidad (reducido para ver mejor la imagen) */}
+        <div className="absolute inset-0 bg-gradient-to-br from-usal-gold-900/70 via-white/65 to-usal-green-900/70" />
+      </div>
+
+      <div className="relative z-10 max-w-6xl w-full">
+            <motion.div
+          initial={{ y: -30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="text-center mb-12"
+        >
+          <IconCurrencyDollar className="h-20 w-20 mx-auto mb-6 text-usal-gold-600" />
+          <h1 className="text-7xl font-bold text-usal-navy-900 mb-4">
+            Qué se necesita para empezar
+          </h1>
+          <p className="text-3xl text-usal-navy-600">Equipo mínimo y recursos</p>
+            </motion.div>
+
+        {/* Team */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          {[
+            { role: 'Dev Full-Stack', icon: '👨‍💻' },
+            { role: 'PM/UX Research', icon: '🎨' },
+            { role: 'Content Designer', icon: '✍️' },
+          ].map((member, i) => (
+            <motion.div
+              key={i}
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 + i * 0.1 }}
+              className="bg-white/25 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border-2 border-white/40"
+            >
+              <div className="text-7xl mb-4 text-center">{member.icon}</div>
+              <h3 className="text-3xl font-bold text-usal-navy-900 text-center">{member.role}</h3>
+            </motion.div>
+          ))}
+      </div>
+
+        {/* Total */}
+      <motion.div
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="bg-gradient-to-r from-usal-green-600/90 to-usal-gold-600/90 backdrop-blur-lg rounded-3xl p-12 text-white shadow-2xl text-center border-2 border-white/30"
+        >
+          <h3 className="text-4xl font-bold mb-6">Inversión Inicial Total (Año 1)</h3>
+          <div className="text-8xl font-bold drop-shadow-lg">
+            $33.9M
+        </div>
+          <p className="text-2xl text-white/95 mt-4">Incluye setup, contenido base y salarios</p>
+      </motion.div>
+      </div>
+    </div>
+  );
+}
+
+// Slide 6: Escenarios
+function Slide6() {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden text-white">
+      {/* Imagen de fondo tres caminos */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/tesis/tres_caminos.jpg"
+          alt="Tres caminos"
+          fill
+          className="object-cover"
+          priority
+        />
+        {/* Overlay oscuro para legibilidad (reducido para ver mejor la imagen) */}
+        <div className="absolute inset-0 bg-gradient-to-br from-usal-navy-900/75 via-usal-green-900/70 to-usal-gold-900/75" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl w-full">
+        <motion.div
+          initial={{ y: -30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="text-center mb-12"
+        >
+          <IconTrendingUp className="h-20 w-20 mx-auto mb-6 text-usal-gold-400" />
+          <h1 className="text-7xl font-bold mb-4">Tres caminos posibles</h1>
+          <p className="text-3xl text-white/70">Números de la página principal</p>
+        </motion.div>
+
+        {/* Comparison */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          {financialData.scenarios.map((scenario, i) => (
+            <motion.div
+                  key={i}
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 + i * 0.15 }}
+              className={`bg-white/10 backdrop-blur-md rounded-3xl p-8 border-3 ${
+                scenario.name === 'Moderado' ? 'border-usal-gold-400' : 'border-white/20'
+              } relative`}
+            >
+              <h3 className={`text-4xl font-bold mb-8 text-center ${
+                scenario.name === 'Conservador' ? 'text-usal-red-400' :
+                scenario.name === 'Moderado' ? 'text-usal-gold-400' :
+                'text-usal-green-400'
+              }`}>
+                {scenario.name}
+              </h3>
+
+              <div className="space-y-4">
+                <div className="bg-white/5 rounded-xl p-5">
+                  <div className="text-lg text-white/60 mb-1">VAN (5 años)</div>
+                  <div className={`text-3xl font-bold ${scenario.van < 0 ? 'text-red-400' : 'text-green-400'}`}>
+                      {formatCurrency(scenario.van)}
+        </div>
+      </div>
+
+                {scenario.tir !== null && (
+                  <div className="bg-white/5 rounded-xl p-5">
+                    <div className="text-lg text-white/60 mb-1">TIR</div>
+                    <div className={`text-3xl font-bold ${scenario.tir < 0 ? 'text-red-400' : 'text-green-400'}`}>
+                      {scenario.tir > 0 ? '+' : ''}{scenario.tir.toFixed(2)}%
+        </div>
+      </div>
+                )}
+
+                {scenario.payback && (
+                  <div className="bg-white/5 rounded-xl p-5">
+                    <div className="text-lg text-white/60 mb-1">Payback</div>
+                    <div className="text-3xl font-bold text-usal-gold-400">
+                      {scenario.payback.toFixed(2)} años
+            </div>
+        </div>
+                )}
+
+                <div className="bg-white/5 rounded-xl p-5">
+                  <div className="text-lg text-white/60 mb-1">Flujo año 5</div>
+                  <div className={`text-2xl font-bold ${scenario.data[4].flujoAcumulado < 0 ? 'text-red-400' : 'text-green-400'}`}>
+                    {formatCurrency(scenario.data[4].flujoAcumulado)}
+            </div>
+        </div>
+      </div>
+            </motion.div>
+          ))}
+    </div>
+
+        {/* Recommendation */}
+            <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="bg-gradient-to-r from-usal-gold-500 to-usal-gold-600 rounded-3xl p-10 shadow-2xl text-center"
+        >
+          <p className="text-3xl font-medium">
+            Moderado como base defendible: payback ~3.09 años, TIR ~50.43%, flujo positivo acumulado ~$130.1M al año 5
+          </p>
+            </motion.div>
+        </div>
+    </div>
+  );
+}
+
+// Slide 7: Comparativa dinámica (NUEVA)
+function Slide7() {
+  const [currentView, setCurrentView] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+
+  type ViewKey = 'ingresos' | 'costos' | 'flujoNeto' | 'flujoAcumulado';
+  const views: ViewKey[] = ['ingresos', 'costos', 'flujoNeto', 'flujoAcumulado'];
+  const viewLabels: Record<ViewKey, string> = {
+    ingresos: 'Ingresos',
+    costos: 'Costos',
+    flujoNeto: 'Flujo neto',
+    flujoAcumulado: 'Flujo neto acumulado',
+  };
+
+  useEffect(() => {
+    if (isPlaying && !prefersReducedMotion) {
+      const interval = setInterval(() => {
+        setCurrentView((prev) => (prev + 1) % views.length);
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [isPlaying, prefersReducedMotion, views.length]);
+
+  const currentViewKey = views[currentView];
+
+  return (
+    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
+      {/* Imagen de fondo tres caminos */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/tesis/tres_caminos.jpg"
+          alt="Tres caminos"
+          fill
+          className="object-cover"
+          priority
+        />
+        {/* Overlay claro para legibilidad de tabla (reducido para ver mejor la imagen) */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/80 via-usal-green-50/85 to-usal-navy-50/80" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl w-full">
+        <motion.div
+          initial={{ y: -30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="text-center mb-10"
+        >
+          <h1 className="text-7xl font-bold text-usal-navy-900 mb-4">
+            Cómo cambia según el escenario
+          </h1>
+          <p className="text-3xl text-usal-navy-600">
+            Vista por variable: {viewLabels[views[currentView]]}
+          </p>
+        </motion.div>
+
+        {/* Controls */}
+        <div className="flex justify-center gap-4 mb-8">
+          <button
+            onClick={() => setCurrentView((prev) => (prev - 1 + views.length) % views.length)}
+            className="p-4 bg-usal-navy-600 text-white rounded-xl hover:bg-usal-navy-700 transition-colors"
+            aria-label="Vista anterior"
+          >
+            <IconArrowLeft className="h-6 w-6" />
+          </button>
+          <button
+            onClick={() => setIsPlaying(!isPlaying)}
+            className="px-8 py-4 bg-usal-green-600 text-white rounded-xl hover:bg-usal-green-700 transition-colors flex items-center gap-3 text-xl font-semibold"
+            aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
+          >
+            {isPlaying ? <IconPlayerPause className="h-6 w-6" /> : <IconPlayerPlay className="h-6 w-6" />}
+            {isPlaying ? 'Pausar' : 'Auto'}
+          </button>
+          <button
+            onClick={() => setCurrentView((prev) => (prev + 1) % views.length)}
+            className="p-4 bg-usal-navy-600 text-white rounded-xl hover:bg-usal-navy-700 transition-colors"
+            aria-label="Vista siguiente"
+          >
+            <IconArrowRight className="h-6 w-6" />
+          </button>
+        </div>
+
+        {/* Table */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentView}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white rounded-3xl shadow-2xl overflow-hidden border-2 border-usal-navy-200"
+          >
+        <table className="w-full">
+              <thead className="bg-gradient-to-r from-usal-navy-600 to-usal-green-600 text-white">
+                <tr>
+                  <th className="px-8 py-6 text-left text-2xl font-bold">Año</th>
+                  {financialData.scenarios.map((scenario) => (
+                    <th key={scenario.name} className="px-8 py-6 text-center text-2xl font-bold">
+                      {scenario.name}
+                    </th>
+                  ))}
+            </tr>
+          </thead>
+              <tbody>
+                {[1, 2, 3, 4, 5].map((year, i) => (
+                  <motion.tr
+                    key={year}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    className="border-b border-gray-200 hover:bg-usal-green-50 transition-colors"
+                  >
+                    <td className="px-8 py-6 text-2xl font-semibold text-usal-navy-900">Año {year}</td>
+                    {financialData.scenarios.map((scenario) => {
+                      const value = scenario.data[year - 1][currentViewKey] as number;
+                      return (
+                        <td key={scenario.name} className="px-8 py-6 text-center">
+                          <div className={`text-3xl font-bold ${
+                            value < 0 ? 'text-red-600' : 'text-green-600'
+                          }`}>
+                            {formatCurrency(value)}
+                          </div>
+                          {/* Mostrar clientes debajo del valor */}
+                          <div className="text-sm text-usal-navy-500 mt-1">
+                            {year === 1 ? '1 cliente' : 
+                             year === 2 ? '1 cliente' :
+                             year === 3 ? '2 clientes' :
+                             year === 4 ? '3 clientes' :
+                             '4 clientes'}
+                          </div>
+                </td>
+                      );
+                    })}
+                  </motion.tr>
+            ))}
+          </tbody>
+        </table>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
+// Slide 8: Demo
+function Slide8() {
+  const demos = [
+    { title: 'Inscripción guiada', image: '/images/tesis/inscripcion.jpg', desc: 'Valida correlativas' },
+    { title: 'Email generado', image: '/images/tesis/mail.jpg', desc: 'Borrador institucional' },
+    { title: 'Consulta correlativas', image: '/images/tesis/correlativas.jpg', desc: 'Con cita de norma' },
+  ];
+
+  return (
+    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
+      {/* Imagen de fondo prototipo */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/tesis/prototipo_backround.jpg"
+          alt="Prototipo background"
+          fill
+          className="object-cover"
+          priority
+        />
+        {/* Overlay mínimo para legibilidad */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/35 via-usal-green-50/40 to-white/35" />
+      </div>
+
+      <div className="relative z-10 max-w-6xl w-full">
+        <motion.div
+          initial={{ y: -30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="text-center mb-12"
+        >
+          <IconRocket className="h-20 w-20 mx-auto mb-6 text-usal-green-600" />
+          <h1 className="text-7xl font-bold text-usal-navy-900 mb-4">
+            Lo que hace el asistente
+          </h1>
+          <p className="text-3xl text-usal-navy-600">Capturas reales del chatbot</p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          {demos.map((demo, i) => (
+          <motion.div
+            key={i}
+              initial={{ scale: 0, rotate: -5 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ delay: 0.2 + i * 0.1, type: "spring" }}
+              className="bg-white rounded-2xl shadow-xl border-2 border-usal-green-200 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all"
+            >
+              {/* Image sin zoom - ajustadas al marco */}
+              <div className="relative h-80 bg-gray-100 overflow-hidden">
+                <Image
+                  src={demo.image}
+                  alt={demo.title}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              {/* Description */}
+              <div className="p-6 text-center">
+                <h3 className="text-2xl font-bold text-usal-navy-900 mb-2">{demo.title}</h3>
+                <p className="text-xl text-usal-navy-600">{demo.desc}</p>
+              </div>
+          </motion.div>
+        ))}
+      </div>
+
+        <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="bg-gradient-to-r from-usal-green-600 to-usal-green-500 rounded-3xl p-12 text-white text-center shadow-2xl"
+        >
+          <IconPlayerPlay className="h-20 w-20 mx-auto mb-6" />
+          <h3 className="text-5xl font-bold mb-6">¿Querés probarlo en vivo?</h3>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-4 bg-white text-usal-green-600 px-10 py-5 rounded-xl text-2xl font-bold hover:bg-usal-green-50 transition-colors shadow-xl"
+          >
+            <IconExternalLink className="h-8 w-8" />
+            Ver demo en vivo
+          </Link>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+// Slide 9: Resultados MVP
+function Slide9() {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
+      {/* Imagen de fondo prototipo */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/tesis/prototipo_background.jpg"
+          alt="Prototipo"
+          fill
+          className="object-cover"
+        />
+        {/* Overlay para legibilidad */}
+        <div className="absolute inset-0 bg-gradient-to-br from-usal-navy-900/75 via-white/85 to-usal-green-900/75" />
+        <div className="absolute inset-0 backdrop-blur-[2px]" />
+        </div>
+
+      <div className="relative z-10 max-w-6xl w-full">
+      <motion.div
+          initial={{ y: -30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="text-center mb-12"
+        >
+          <IconChartBar className="h-20 w-20 mx-auto mb-6 text-usal-navy-600" />
+          <h1 className="text-7xl font-bold text-usal-navy-900 mb-4">
+            Lo que medimos
+          </h1>
+          <p className="text-3xl text-usal-navy-600">Resultados del MVP con usuarios piloto</p>
+      </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+          {[
+            { label: 'Tareas completadas sin ayuda', value: '87%', target: 'Meta: >80%', icon: IconCheckbox, color: 'green' },
+            { label: 'TTR con asistente', value: '2.4 min', target: 'vs 8.5 min sin bot', icon: IconClock, color: 'gold' },
+            { label: 'Errores críticos por flujo', value: '0.3', target: 'Meta: <1', icon: IconAlertTriangle, color: 'red' },
+            { label: 'Satisfacción post-uso', value: '4.2/5', target: 'vs 2.86/5 baseline', icon: IconUsers, color: 'navy' },
+          ].map((metric, i) => (
+          <motion.div
+            key={i}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2 + i * 0.1 }}
+              className={`bg-white/30 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border-2 border-white/40`}
+            >
+              <div className="flex items-start gap-6">
+                <div className={`p-5 rounded-xl bg-usal-${metric.color}-100/80 backdrop-blur-sm`}>
+                  <metric.icon className={`h-14 w-14 text-usal-${metric.color}-600`} />
+              </div>
+                <div>
+                  <h3 className="text-2xl font-semibold text-usal-navy-900 mb-3 drop-shadow-md">{metric.label}</h3>
+                  <div className={`text-5xl font-bold text-usal-${metric.color}-600 mb-2 drop-shadow-lg`}>{metric.value}</div>
+                  <div className="text-lg text-usal-navy-700 drop-shadow-sm">{metric.target}</div>
+            </div>
+                  </div>
+          </motion.div>
+        ))}
+      </div>
+
+            <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="bg-gradient-to-r from-usal-gold-500/80 to-usal-green-500/80 backdrop-blur-lg rounded-3xl p-10 border-2 border-white/40 text-center shadow-2xl"
+        >
+          <p className="text-2xl text-white drop-shadow-lg">
+            <strong>Datos de piloto MVP</strong> (n=15 estudiantes) — a validar con cohorte mayor en producción
+          </p>
+            </motion.div>
+        </div>
+      </div>
+  );
+}
+
+// Slide 10: Conclusión
+function Slide10() {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
+      {/* Imagen de fondo chatbot - más visible */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/tesis/chatbot_ultima_slide.jpg"
+          alt="Chatbot final"
+          fill
+          className="object-cover"
+        />
+        {/* Overlay más transparente para ver mejor el robot */}
+        <div className="absolute inset-0 bg-gradient-to-br from-usal-green-900/60 via-usal-green-800/50 to-usal-gold-900/60" />
+        <div className="absolute inset-0 backdrop-blur-[1px]" />
+          </div>
+
+      {/* Particles celebratorias */}
+      <div className="absolute inset-0 z-0">
+        {[...Array(40)].map((_, i) => (
+            <motion.div
+              key={i}
+            className="absolute w-4 h-4 bg-white rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+              y: [0, -60, 0],
+              opacity: [0, 0.8, 0],
+              scale: [0, 1.5, 0],
+              }}
+              transition={{
+              duration: 3 + Math.random() * 2,
+                repeat: Infinity,
+              delay: Math.random() * 4,
+              }}
+            />
+          ))}
+        </div>
+
+      <div className="relative z-10 max-w-6xl w-full text-white text-center">
+        <motion.div
+          initial={{ scale: 0.9 }}
+          animate={{ scale: 1 }}
+        >
+          <IconSparkles className="h-28 w-28 mx-auto mb-8 drop-shadow-2xl" />
+          <h1 className="text-8xl font-bold mb-8" style={{ textShadow: '0 4px 20px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.6)' }}>
+            De idea a impacto
+          </h1>
+      </motion.div>
+
+        <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="bg-white/20 backdrop-blur-xl rounded-3xl p-12 mb-12 border-2 border-white/50 shadow-2xl"
+        >
+          <p className="text-4xl leading-relaxed font-semibold" style={{ textShadow: '0 2px 15px rgba(0,0,0,0.7)' }}>
+            Testis cumple su promesa: <span className="font-bold underline decoration-usal-gold-300">guía, explica y cita la fuente</span> antes de actuar
+          </p>
+        </motion.div>
+
+        {/* Achievements */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          {[
+            { icon: IconTarget, title: 'Prototipo', desc: 'Reduce fricción' },
+            { icon: IconCode, title: 'Stack', desc: 'Moderno, extensible' },
+            { icon: IconChartBar, title: 'Finanzas', desc: 'Moderado viable' },
+            { icon: IconUsers, title: 'Validación', desc: 'Piloto + feedback' },
+          ].map((item, i) => (
+    <motion.div
+              key={i}
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.5 + i * 0.1 }}
+              className="bg-white/25 backdrop-blur-xl rounded-2xl p-8 border-2 border-white/50 shadow-xl"
+            >
+              <item.icon className="h-14 w-14 mx-auto mb-4 drop-shadow-2xl" />
+              <h3 className="font-bold text-2xl mb-2" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>{item.title}</h3>
+              <p className="text-xl" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.7)' }}>{item.desc}</p>
+            </motion.div>
+          ))}
+          </div>
+
+        {/* Next steps */}
+        <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.9 }}
+          className="bg-white/30 backdrop-blur-xl rounded-3xl p-10 border-2 border-white/50 shadow-2xl"
+        >
+          <h3 className="text-4xl font-bold mb-6 flex items-center justify-center gap-4 text-white" style={{ textShadow: '0 3px 15px rgba(0,0,0,0.8)' }}>
+            <IconRocket className="h-10 w-10 text-usal-gold-300 drop-shadow-2xl" />
+            Próximos pasos
+          </h3>
+          <p className="text-2xl leading-relaxed text-white font-semibold" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}>
+            Ampliar cobertura · Integración formal con SIU · Analíticas sin PII para Académica
+          </p>
+        </motion.div>
+          </div>
+        </div>
+  );
+}
+
+// ======================
+// MAIN COMPONENT
+// ======================
 
 export default function PresentacionPage() {
-  const [showNotes, setShowNotes] = useState(false);
-  const [activeSection, setActiveSection] = useState('abstract');
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [direction, setDirection] = useState(0);
 
-  // Navegación con teclado
+  const slides: Slide[] = [
+    { id: 1, title: 'Apertura', component: Slide1 },
+    { id: 2, title: 'Problema', component: Slide2 },
+    { id: 3, title: 'Objetivo', component: Slide3 },
+    { id: 4, title: 'Stack Técnico', component: Slide4 },
+    { id: 5, title: 'Inversión', component: Slide5 },
+    { id: 6, title: 'Escenarios', component: Slide6 },
+    { id: 7, title: 'Comparativa', component: Slide7 },
+    { id: 8, title: 'Demo', component: Slide8 },
+    { id: 9, title: 'Resultados', component: Slide9 },
+    { id: 10, title: 'Conclusión', component: Slide10 },
+  ];
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const sections = presentationData.meta.toc.map(t => t.id);
-      const currentIndex = sections.indexOf(activeSection);
-
-      if ((e.key === 'ArrowRight' || e.key === 'j') && currentIndex < sections.length - 1) {
-        const nextSection = sections[currentIndex + 1];
-        document.getElementById(nextSection)?.scrollIntoView({ behavior: 'smooth' });
-      } else if ((e.key === 'ArrowLeft' || e.key === 'k') && currentIndex > 0) {
-        const prevSection = sections[currentIndex - 1];
-        document.getElementById(prevSection)?.scrollIntoView({ behavior: 'smooth' });
-      } else if (e.key === 'n') {
-        setShowNotes(prev => !prev);
-      }
+      if (e.key === 'ArrowRight') nextSlide();
+      else if (e.key === 'ArrowLeft') prevSlide();
+      else if (e.key === 'Home') goToSlide(0);
+      else if (e.key === 'End') goToSlide(slides.length - 1);
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeSection]);
+  }, [currentSlide]);
 
-  // Scroll spy
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = presentationData.meta.toc.map(t => t.id);
-      let current = sections[0];
+  const nextSlide = () => {
+    if (currentSlide < slides.length - 1) {
+      setDirection(1);
+      setCurrentSlide(currentSlide + 1);
+    }
+  };
 
-      for (const id of sections) {
-        const element = document.getElementById(id);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 100 && rect.bottom >= 100) {
-            current = id;
-            break;
-          }
-        }
-      }
+  const prevSlide = () => {
+    if (currentSlide > 0) {
+      setDirection(-1);
+      setCurrentSlide(currentSlide - 1);
+    }
+  };
 
-      setActiveSection(current);
-    };
+  const goToSlide = (index: number) => {
+    setDirection(index > currentSlide ? 1 : -1);
+    setCurrentSlide(index);
+  };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const CurrentSlideComponent = slides[currentSlide].component;
+
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: number) => ({
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0,
+    }),
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-usal-green-50 via-white to-cream-50">
-      {/* Progress Bar */}
-      <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-usal-green-600 origin-left z-[60]"
-        style={{ scaleX }}
-      />
-
+    <div className="relative h-screen overflow-hidden bg-white">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-lg shadow-lg border-b border-usal-green-200/50 z-50">
-        <div className="container mx-auto px-6 py-3 flex items-center justify-between">
-          {/* Logo y título */}
+      <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-lg shadow-md border-b border-gray-200 z-50">
+        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="bg-gradient-to-r from-usal-green-600 to-usal-green-500 rounded-lg p-2 transition-transform group-hover:scale-105">
               <img 
@@ -101,1164 +1099,86 @@ export default function PresentacionPage() {
                 alt="USAL" 
                 className="h-8 w-8 object-contain"
               />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-bold bg-gradient-to-r from-usal-green-600 to-usal-green-500 bg-clip-text text-transparent">
+      </div>
+            <div>
+              <span className="text-2xl font-bold bg-gradient-to-r from-usal-green-600 to-usal-green-500 bg-clip-text text-transparent">
                 Testis
               </span>
-              <span className="text-xs text-usal-navy-600 -mt-1">
+              <span className="text-sm text-usal-navy-600 block -mt-1">
                 Presentación de Tesis
               </span>
-            </div>
+    </div>
           </Link>
-          
-          {/* Botones de acción */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setShowNotes(!showNotes)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 font-medium text-sm ${
-                showNotes
-                  ? 'bg-usal-green-600 text-white shadow-lg'
-                  : 'bg-usal-green-100 text-usal-green-700 hover:bg-usal-green-200'
-              }`}
-              title="Notas del orador (N)"
-            >
-              <IconNotes className="h-4 w-4" />
-              <span className="hidden sm:inline">Notas</span>
-            </button>
+
+          <div className="flex items-center gap-4">
+            <div className="text-xl text-usal-navy-600 font-medium">
+              Slide {currentSlide + 1} de {slides.length}
+          </div>
             <Link
               href="/"
-              className="flex items-center gap-2 px-4 py-2 bg-usal-navy-100 text-usal-navy-700 rounded-lg hover:bg-usal-navy-200 transition-all duration-200 font-medium text-sm"
+              className="flex items-center gap-2 px-5 py-3 bg-usal-navy-100 text-usal-navy-700 rounded-lg hover:bg-usal-navy-200 transition-all text-lg font-medium"
             >
-              <IconHome className="h-4 w-4" />
-              <span className="hidden sm:inline">Inicio</span>
+              <IconHome className="h-5 w-5" />
+              Inicio
             </Link>
-          </div>
         </div>
+      </div>
       </header>
 
-      {/* TOC Sidebar */}
-      <nav className="fixed left-6 top-24 hidden xl:block w-64 max-h-[calc(100vh-150px)] overflow-y-auto">
-        <div className="bg-white rounded-xl border border-usal-green-200 p-4 shadow-sm">
-          <h2 className="text-sm font-bold text-usal-navy-900 mb-3 flex items-center gap-2">
-            <IconBook className="h-4 w-4" />
-            Contenido
-          </h2>
-          <ul className="space-y-1">
-            {presentationData.meta.toc.map((item, index) => (
-              <li key={item.id}>
-                <a
-                  href={`#${item.id}`}
-                  className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
-                    activeSection === item.id
-                      ? 'bg-usal-green-100 text-usal-green-700 font-medium'
-                      : 'text-usal-navy-600 hover:bg-usal-green-50'
-                  }`}
-                >
-                  <span className="text-xs text-usal-navy-400 mr-2">{String(index + 1).padStart(2, '0')}</span>
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-        {/* Keyboard shortcuts */}
-        <div className="mt-4 bg-usal-navy-50 rounded-xl p-3 text-xs text-usal-navy-600">
-          <p className="font-semibold mb-2">Atajos de teclado:</p>
-          <ul className="space-y-1">
-            <li>→ / J: Siguiente</li>
-            <li>← / K: Anterior</li>
-            <li>N: Notas del orador</li>
-          </ul>
-        </div>
-      </nav>
-
-      {/* Main Content */}
-      <main className="container mx-auto px-6 xl:px-80 pt-20 pb-20">
-        {/* Hero */}
-        <HeroSection />
-
-        {/* Sections */}
-        {presentationData.sections.map((section, index) => (
-          <Section
-            key={section.id}
-            section={section}
-            showNotes={showNotes}
-            index={index}
-          />
-        ))}
-      </main>
-
-      {/* Navigation Arrows */}
-      <NavigationArrows activeSection={activeSection} />
-    </div>
-  );
-}
-
-// Hero Section
-function HeroSection() {
-  return (
-    <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="min-h-[80vh] flex flex-col items-center justify-center text-center mb-20 relative overflow-hidden pt-16"
-    >
-      {/* Animated background stripes */}
-      <div className="absolute inset-0 -z-10">
-        {[...Array(5)].map((_, i) => (
+      {/* Slides */}
+      <div className="h-screen">
+        <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
-            key={i}
-            className="absolute h-px bg-gradient-to-r from-transparent via-usal-green-200 to-transparent"
-            style={{
-              top: `${20 + i * 15}%`,
-              left: 0,
-              right: 0,
-            }}
-            animate={{
-              opacity: [0.2, 0.5, 0.2],
-              scaleX: [0.8, 1, 0.8],
-            }}
+            key={currentSlide}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             transition={{
-              duration: 3 + i * 0.5,
-              repeat: Infinity,
-              delay: i * 0.2,
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 },
             }}
+            className="h-full"
+          >
+            <CurrentSlideComponent />
+          </motion.div>
+        </AnimatePresence>
+    </div>
+
+      {/* Navigation */}
+      {currentSlide > 0 && (
+        <button
+          onClick={prevSlide}
+          className="fixed left-6 top-1/2 -translate-y-1/2 p-5 bg-usal-green-600 text-white rounded-full shadow-2xl hover:bg-usal-green-700 transition-colors z-40"
+        >
+          <IconChevronLeft className="h-10 w-10" />
+        </button>
+      )}
+
+      {currentSlide < slides.length - 1 && (
+        <button
+          onClick={nextSlide}
+          className="fixed right-6 top-1/2 -translate-y-1/2 p-5 bg-usal-green-600 text-white rounded-full shadow-2xl hover:bg-usal-green-700 transition-colors z-40"
+        >
+          <IconChevronRight className="h-10 w-10" />
+        </button>
+      )}
+
+      {/* Dots */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex gap-3 bg-white/90 backdrop-blur-sm px-8 py-4 rounded-full shadow-lg z-40">
+        {slides.map((slide, index) => (
+          <button
+            key={slide.id}
+            onClick={() => goToSlide(index)}
+            className={`transition-all duration-300 rounded-full ${
+              index === currentSlide
+                ? 'w-16 h-4 bg-usal-green-600'
+                : 'w-4 h-4 bg-gray-300 hover:bg-gray-400'
+            }`}
           />
         ))}
       </div>
-
-      {/* Logo USAL Grande */}
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.1, duration: 0.5, type: "spring" }}
-        className="mb-8"
-      >
-        <div className="relative">
-          <div className="absolute inset-0 bg-usal-green-600 rounded-full blur-xl opacity-20 animate-pulse"></div>
-          <div className="relative bg-gradient-to-br from-usal-green-600 to-usal-green-500 rounded-2xl p-6 shadow-2xl">
-            <img 
-              src="/usal-logo.jpg" 
-              alt="Universidad del Salvador" 
-              className="h-32 w-32 md:h-40 md:w-40 object-contain"
-            />
-          </div>
-        </div>
-      </motion.div>
-
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
-        className="inline-block px-4 py-2 bg-usal-green-100 text-usal-green-700 rounded-full text-sm font-medium mb-6"
-      >
-        Ingeniería en Informática — USAL
-      </motion.div>
-
-      <motion.h1 
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.4, duration: 0.5 }}
-        className="text-6xl md:text-7xl font-bold text-usal-navy-900 mb-6 tracking-tight"
-      >
-        Testis
-      </motion.h1>
-      <p className="text-2xl md:text-3xl text-usal-navy-600 mb-8 max-w-3xl">
-        Asistente conversacional para SIU Guaraní
-      </p>
-      <p className="text-lg text-usal-navy-500 mb-12 max-w-2xl">
-        Reduciendo fricción en tareas académicas frecuentes a través de guía contextual, validaciones inteligentes y explicaciones claras
-      </p>
-
-      <div className="flex flex-wrap gap-4 justify-center">
-        <a
-          href="#abstract"
-          className="px-6 py-3 bg-usal-green-600 text-white rounded-lg hover:bg-usal-green-700 transition-colors font-medium shadow-lg hover:shadow-xl"
-        >
-          Ver presentación
-        </a>
-        <Link
-          href="/"
-          className="px-6 py-3 bg-white text-usal-green-600 border-2 border-usal-green-600 rounded-lg hover:bg-usal-green-50 transition-colors font-medium"
-        >
-          Probar chatbot
-        </Link>
-      </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-10"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 1.5, repeat: Infinity }}
-      >
-        <div className="w-6 h-10 border-2 border-usal-green-600 rounded-full flex items-start justify-center p-2">
-          <motion.div
-            className="w-1.5 h-1.5 bg-usal-green-600 rounded-full"
-            animate={{ y: [0, 16, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          />
-        </div>
-      </motion.div>
-    </motion.section>
-  );
-}
-
-// Section Component
-function Section({ section, showNotes, index }: any) {
-  const ref = useRef<HTMLElement>(null);
-
-  return (
-    <motion.section
-      ref={ref}
-      id={section.id}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.5 }}
-      className="mb-32 scroll-mt-32"
-    >
-      {/* Section Header */}
-      <div className="flex items-center gap-4 mb-8">
-        <span className="text-sm font-mono text-usal-green-600 font-bold">
-          {String(index + 1).padStart(2, '0')}
-        </span>
-        <h2 className="text-4xl font-bold text-usal-navy-900 tracking-tight">
-          {section.title}
-        </h2>
-      </div>
-
-      {/* Content based on section type */}
-      {section.id === 'abstract' && <AbstractContent section={section} />}
-      {section.id === 'introduccion' && <IntroduccionContent section={section} />}
-      {section.id === 'objetivo_barreras_relevancia' && <ObjetivoBarrerasContent section={section} />}
-      {section.id === 'hipotesis_enfoque_metricas' && <HipotesisEnfoqueContent section={section} />}
-      {section.id === 'estado_del_arte_marco_teorico' && <EstadoArteContent section={section} />}
-      {section.id === 'requisitos' && <RequisitosContent section={section} />}
-      {section.id === 'diseno_mvp' && <DisenoMVPContent section={section} />}
-      {section.id === 'encuesta_hallazgos' && <EncuestaContent section={section} />}
-      {section.id === 'riesgos_mitigacion' && <RiesgosContent section={section} />}
-      {section.id === 'supuestos_restricciones' && <SupuestosContent section={section} />}
-      {section.id === 'qa_roadmap' && <QARoadmapContent section={section} />}
-      {section.id === 'finanzas' && <FinanzasContent section={section} />}
-      {section.id === 'implicancias_conclusiones' && <ImplicanciasContent section={section} />}
-
-      {/* Speaker Notes */}
-      <AnimatePresence>
-        {showNotes && section.notes && section.notes.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="mt-8 bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-r-lg"
-          >
-            <div className="flex items-start gap-3">
-              <IconNotes className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-              <div>
-                <h3 className="font-semibold text-yellow-900 mb-2">Notas del orador:</h3>
-                <ul className="space-y-2 text-sm text-yellow-800">
-                  {section.notes.map((note: string, i: number) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="text-yellow-600">•</span>
-                      <span>{note}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.section>
-  );
-}
-
-// Content Components
-function AbstractContent({ section }: any) {
-  return (
-    <div className="space-y-8">
-      <div className="bg-white rounded-xl p-8 shadow-sm border border-usal-green-200">
-        <p className="text-lg text-usal-navy-700 leading-relaxed mb-6">
-          {section.summary}
-        </p>
-        <div className="grid md:grid-cols-3 gap-4">
-          {section.highlights.map((highlight: string, i: number) => (
-            <div key={i} className="flex items-start gap-3 p-4 bg-usal-green-50 rounded-lg">
-              <IconCheck className="h-5 w-5 text-usal-green-600 flex-shrink-0 mt-0.5" />
-              <span className="text-sm text-usal-navy-700 font-medium">{highlight}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-      {section.figure && <FigurePlaceholder figure={section.figure} />}
     </div>
   );
 }
-
-function IntroduccionContent({ section }: any) {
-  const frictions = [
-    { title: 'Inscripciones', desc: '¿Dónde veo si hay cupo? ¿Puedo inscribirme si debo una correlativa?' },
-    { title: 'Horarios', desc: '¿Cómo sé qué comisión me conviene? ¿Hay superposición?' },
-    { title: 'Certificados', desc: '¿Cómo descargo una constancia de alumno regular?' },
-    { title: 'Contacto', desc: '¿A quién le escribo para consultar sobre mi situación académica?' },
-  ];
-
-  return (
-    <div className="space-y-8">
-      <div className="grid md:grid-cols-2 gap-8 items-start">
-        <div>
-          <p className="text-lg text-usal-navy-700 leading-relaxed mb-6">{section.copy}</p>
-          <ul className="space-y-3">
-            {section.bullets.map((bullet: string, i: number) => (
-              <li key={i} className="flex items-start gap-3">
-                <IconAlertTriangle className="h-5 w-5 text-usal-red-600 flex-shrink-0 mt-0.5" />
-                <span className="text-usal-navy-700">{bullet}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-usal-navy-900 mb-4">Puntos de fricción identificados:</h3>
-          {frictions.map((friction, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="p-4 bg-usal-red-50 border-l-4 border-usal-red-400 rounded-r-lg"
-            >
-              <h4 className="font-semibold text-usal-red-900 mb-1">{friction.title}</h4>
-              <p className="text-sm text-usal-red-700">{friction.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-      {section.figure && <FigurePlaceholder figure={section.figure} />}
-    </div>
-  );
-}
-
-function ObjetivoBarrerasContent({ section }: any) {
-  return (
-    <div className="space-y-8">
-      <p className="text-lg text-usal-navy-700 leading-relaxed">{section.copy}</p>
-      <div className="grid md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-xl border border-usal-green-200">
-          <IconTarget className="h-8 w-8 text-usal-green-600 mb-4" />
-          <h3 className="font-semibold text-usal-navy-900 mb-3">Objetivo</h3>
-          <p className="text-sm text-usal-navy-600">Guía accionable y verificable para tareas frecuentes</p>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-usal-green-200">
-          <IconShield className="h-8 w-8 text-usal-gold-600 mb-4" />
-          <h3 className="font-semibold text-usal-navy-900 mb-3">Barreras</h3>
-          <p className="text-sm text-usal-navy-600">Técnicas, organizacionales y legales</p>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-usal-green-200">
-          <IconRocket className="h-8 w-8 text-usal-navy-600 mb-4" />
-          <h3 className="font-semibold text-usal-navy-900 mb-3">Valor</h3>
-          <p className="text-sm text-usal-navy-600">Autonomía 24/7 + alivio operativo</p>
-        </div>
-      </div>
-      {section.figure && <FigurePlaceholder figure={section.figure} />}
-    </div>
-  );
-}
-
-function HipotesisEnfoqueContent({ section }: any) {
-  const timeline = ['Descubrir', 'Diseñar', 'Construir', 'Probar', 'Medir', 'Iterar'];
-  const kpis = [
-    { label: 'Tareas completadas', icon: IconCheck },
-    { label: 'TTR (Time to Resolution)', icon: IconTrendingUp },
-    { label: 'Errores críticos', icon: IconAlertTriangle },
-    { label: 'Satisfacción percibida', icon: IconUsers },
-  ];
-
-  return (
-    <div className="space-y-8">
-      <p className="text-lg text-usal-navy-700 leading-relaxed">{section.copy}</p>
-      
-      {/* Timeline */}
-      <div className="bg-white p-8 rounded-xl border border-usal-green-200">
-        <h3 className="text-xl font-semibold text-usal-navy-900 mb-6">Metodología iterativa:</h3>
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          {timeline.map((step, i) => (
-            <React.Fragment key={step}>
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-usal-green-100 flex items-center justify-center text-usal-green-700 font-bold mb-2">
-                  {i + 1}
-                </div>
-                <span className="text-sm font-medium text-usal-navy-700">{step}</span>
-              </div>
-              {i < timeline.length - 1 && (
-                <div className="hidden md:block h-px flex-1 bg-usal-green-200" />
-              )}
-            </React.Fragment>
-          ))}
-        </div>
-      </div>
-
-      {/* KPIs */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {kpis.map((kpi, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
-            className="bg-gradient-to-br from-usal-green-50 to-white p-6 rounded-xl border border-usal-green-200"
-          >
-            <kpi.icon className="h-6 w-6 text-usal-green-600 mb-3" />
-            <p className="text-sm font-medium text-usal-navy-700">{kpi.label}</p>
-          </motion.div>
-        ))}
-      </div>
-      {section.figure && <FigurePlaceholder figure={section.figure} />}
-    </div>
-  );
-}
-
-function EstadoArteContent({ section }: any) {
-  const tabs = ['TAM', 'NLU/NLG', 'Reglas vs IA'];
-  const [activeTab, setActiveTab] = useState(0);
-
-  return (
-    <div className="space-y-8">
-      <p className="text-lg text-usal-navy-700 leading-relaxed">{section.copy}</p>
-      
-      <div className="bg-white rounded-xl border border-usal-green-200 overflow-hidden">
-        <div className="flex border-b border-usal-green-200">
-          {tabs.map((tab, i) => (
-            <button
-              key={i}
-              onClick={() => setActiveTab(i)}
-              className={`flex-1 px-6 py-4 font-medium transition-colors ${
-                activeTab === i
-                  ? 'bg-usal-green-50 text-usal-green-700 border-b-2 border-usal-green-600'
-                  : 'text-usal-navy-600 hover:bg-usal-green-50/50'
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-        <div className="p-8">
-          {activeTab === 0 && (
-            <div>
-              <h4 className="font-semibold text-usal-navy-900 mb-3">Technology Acceptance Model</h4>
-              <p className="text-usal-navy-700">Utilidad percibida + Facilidad de uso = Adopción exitosa</p>
-            </div>
-          )}
-          {activeTab === 1 && (
-            <div>
-              <h4 className="font-semibold text-usal-navy-900 mb-3">Procesamiento de Lenguaje Natural</h4>
-              <p className="text-usal-navy-700">Intenciones, entidades y explicaciones claras con citas</p>
-            </div>
-          )}
-          {activeTab === 2 && (
-            <div>
-              <h4 className="font-semibold text-usal-navy-900 mb-3">Enfoque Híbrido</h4>
-              <p className="text-usal-navy-700">Reglas para procesos normados + IA para flexibilidad</p>
-            </div>
-          )}
-        </div>
-      </div>
-      {section.figure && <FigurePlaceholder figure={section.figure} />}
-    </div>
-  );
-}
-
-function RequisitosContent({ section }: any) {
-  const rf = [
-    { title: 'Inscripciones', desc: 'Guiadas con validaciones previas' },
-    { title: 'Correlativas/Cupos', desc: 'Consulta en tiempo real' },
-    { title: 'Certificados', desc: 'Descarga autoservicio' },
-    { title: 'Navegación', desc: 'Deep-links directos' },
-    { title: 'Emails', desc: 'Generación institucional' },
-    { title: 'FAQs', desc: 'Con cita de fuente' },
-  ];
-
-  const rnf = [
-    'Privacidad (Ley 25.326)',
-    'Accesibilidad AA',
-    'Rendimiento percibido',
-    'Observabilidad sin PII',
-    'Mantenibilidad',
-    'Confiabilidad ante ambigüedad',
-  ];
-
-  return (
-    <div className="space-y-8">
-      <p className="text-lg text-usal-navy-700 leading-relaxed">{section.copy}</p>
-      
-      <div>
-        <h3 className="text-xl font-semibold text-usal-navy-900 mb-4 flex items-center gap-2">
-          <IconCheck className="h-6 w-6 text-usal-green-600" />
-          Requisitos Funcionales
-        </h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {rf.map((req, i) => (
-            <div key={i} className="bg-white p-4 rounded-lg border border-usal-green-200">
-              <h4 className="font-semibold text-usal-navy-900 mb-1">{req.title}</h4>
-              <p className="text-sm text-usal-navy-600">{req.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-xl font-semibold text-usal-navy-900 mb-4 flex items-center gap-2">
-          <IconShield className="h-6 w-6 text-usal-gold-600" />
-          Requisitos No Funcionales
-        </h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {rnf.map((req, i) => (
-            <div key={i} className="flex items-center gap-3 p-3 bg-usal-gold-50 rounded-lg">
-              <IconFileCheck className="h-5 w-5 text-usal-gold-600 flex-shrink-0" />
-              <span className="text-sm text-usal-navy-700 font-medium">{req}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-      {section.figure && <FigurePlaceholder figure={section.figure} />}
-    </div>
-  );
-}
-
-function DisenoMVPContent({ section }: any) {
-  const layers = [
-    { name: 'Interfaz', desc: 'Chat + componentes guía', color: 'bg-usal-green-100' },
-    { name: 'Orquestación', desc: 'Flujos y política de respuestas', color: 'bg-usal-gold-100' },
-    { name: 'Comprensión/Explicación', desc: 'NLU/NLG con citas', color: 'bg-usal-navy-100' },
-    { name: 'Observabilidad', desc: 'Eventos sin PII', color: 'bg-usal-red-100' },
-  ];
-
-  return (
-    <div className="space-y-8">
-      <p className="text-lg text-usal-navy-700 leading-relaxed">{section.copy}</p>
-      
-      <div className="bg-white rounded-xl p-8 border border-usal-green-200">
-        <h3 className="text-xl font-semibold text-usal-navy-900 mb-6">Arquitectura en 4 capas:</h3>
-        <div className="space-y-4">
-          {layers.map((layer, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className={`p-4 rounded-lg ${layer.color}`}
-            >
-              <h4 className="font-semibold text-usal-navy-900 mb-1">{layer.name}</h4>
-              <p className="text-sm text-usal-navy-700">{layer.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      <div className="bg-gradient-to-br from-usal-green-50 to-white p-8 rounded-xl border border-usal-green-200">
-        <h3 className="text-xl font-semibold text-usal-navy-900 mb-4">Demo del chatbot en acción:</h3>
-        <p className="text-usal-navy-600 mb-4">El widget está embebido en la home. Pruébalo allí para ver la experiencia completa.</p>
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-usal-green-600 text-white rounded-lg hover:bg-usal-green-700 transition-colors font-medium"
-        >
-          <IconRocket className="h-5 w-5" />
-          Ir al chatbot
-        </Link>
-      </div>
-      {section.figure && <FigurePlaceholder figure={section.figure} />}
-    </div>
-  );
-}
-
-function EncuestaContent({ section }: any) {
-  return (
-    <div className="space-y-8">
-      <p className="text-lg text-usal-navy-700 leading-relaxed">{section.copy}</p>
-      
-      <div className="grid md:grid-cols-3 gap-6">
-        <SimpleBarChart
-          title="Consultas más frecuentes"
-          data={[
-            { label: 'Inscripciones', value: 68 },
-            { label: 'Horarios', value: 54 },
-            { label: 'Certificados', value: 42 },
-            { label: 'Contacto', value: 38 },
-          ]}
-        />
-        <SimpleLineChart
-          title="Adopción en el tiempo"
-          insight="Picos en períodos de inscripción"
-        />
-        <SimpleDonutChart
-          title="Satisfacción general"
-          value={82}
-          label="Útil"
-        />
-      </div>
-
-      <div className="bg-usal-green-50 p-8 rounded-xl border border-usal-green-200">
-        <h3 className="text-xl font-semibold text-usal-navy-900 mb-4 flex items-center gap-2">
-          <IconBulb className="h-6 w-6 text-usal-gold-600" />
-          Insight clave:
-        </h3>
-        <p className="text-lg text-usal-navy-700">
-          El 68% reporta dificultad inicial en Inscripciones; el bot la reduce cuando explica "por qué no puedo inscribirme todavía" y cita la norma correspondiente.
-        </p>
-      </div>
-      {section.figure && <FigurePlaceholder figure={section.figure} />}
-    </div>
-  );
-}
-
-function RiesgosContent({ section }: any) {
-  const risks = [
-    { type: 'Técnicos', impact: 'Medio', mitigation: 'Versionado de contenido' },
-    { type: 'Legal/Privacidad', impact: 'Alto', mitigation: 'Datos simulados + política clara' },
-    { type: 'Organizacionales', impact: 'Medio', mitigation: 'Parametrización por unidad' },
-    { type: 'Adopción', impact: 'Bajo', mitigation: 'Comunicación transparente' },
-  ];
-
-  return (
-    <div className="space-y-8">
-      <p className="text-lg text-usal-navy-700 leading-relaxed">{section.copy}</p>
-      
-      <div className="bg-white rounded-xl border border-usal-green-200 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-usal-navy-50">
-            <tr>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-usal-navy-900">Tipo de Riesgo</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-usal-navy-900">Impacto</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-usal-navy-900">Mitigación</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-usal-green-200">
-            {risks.map((risk, i) => (
-              <tr key={i} className="hover:bg-usal-green-50/50 transition-colors">
-                <td className="px-6 py-4 text-sm text-usal-navy-700 font-medium">{risk.type}</td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
-                      risk.impact === 'Alto'
-                        ? 'bg-red-100 text-red-700'
-                        : risk.impact === 'Medio'
-                          ? 'bg-yellow-100 text-yellow-700'
-                          : 'bg-green-100 text-green-700'
-                    }`}
-                  >
-                    {risk.impact}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-sm text-usal-navy-600">{risk.mitigation}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {section.figure && <FigurePlaceholder figure={section.figure} />}
-    </div>
-  );
-}
-
-function SupuestosContent({ section }: any) {
-  return (
-    <div className="space-y-8">
-      <p className="text-lg text-usal-navy-700 leading-relaxed">{section.copy}</p>
-      <ul className="space-y-3">
-        {section.bullets.map((bullet: string, i: number) => (
-          <li key={i} className="flex items-start gap-3 p-4 bg-white rounded-lg border border-usal-green-200">
-            <IconFileCheck className="h-5 w-5 text-usal-green-600 flex-shrink-0 mt-0.5" />
-            <span className="text-usal-navy-700">{bullet}</span>
-          </li>
-        ))}
-      </ul>
-      
-      <div className="bg-usal-navy-50 p-6 rounded-xl border-2 border-usal-navy-200">
-        <div className="flex items-start gap-3">
-          <IconShield className="h-6 w-6 text-usal-navy-600 flex-shrink-0 mt-0.5" />
-          <div>
-            <h3 className="font-semibold text-usal-navy-900 mb-2">Privacidad por diseño (Ley 25.326)</h3>
-            <p className="text-sm text-usal-navy-700">
-              Se minimiza la recolección de datos, se anonimiza para métricas y se respeta el consentimiento informado en cada interacción.
-            </p>
-          </div>
-        </div>
-      </div>
-      {section.figure && <FigurePlaceholder figure={section.figure} />}
-    </div>
-  );
-}
-
-function QARoadmapContent({ section }: any) {
-  const roadmap = [
-    {
-      phase: 'Corto plazo',
-      items: ['Ampliar intents prioritarios', 'Ajustar prompts con feedback', 'Optimizar tiempos de respuesta'],
-    },
-    {
-      phase: 'Mediano plazo',
-      items: ['Panel de métricas sin PII', 'Contenidos por facultad', 'Plantillas de correo por caso'],
-    },
-    {
-      phase: 'Largo plazo',
-      items: ['Integración con sistemas internos', 'Soporte multilingüe', 'Interfaz por voz'],
-    },
-  ];
-
-  return (
-    <div className="space-y-8">
-      <p className="text-lg text-usal-navy-700 leading-relaxed">{section.copy}</p>
-      
-      <div className="space-y-6">
-        {roadmap.map((phase, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
-            className="bg-white rounded-xl p-6 border border-usal-green-200"
-          >
-            <h3 className="text-lg font-semibold text-usal-navy-900 mb-4">{phase.phase}</h3>
-            <ul className="space-y-2">
-              {phase.items.map((item, j) => (
-                <li key={j} className="flex items-start gap-3">
-                  <IconCheck className="h-5 w-5 text-usal-green-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-usal-navy-700">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        ))}
-      </div>
-      {section.figure && <FigurePlaceholder figure={section.figure} />}
-    </div>
-  );
-}
-
-function ImplicanciasContent({ section }: any) {
-  const logrosCompromisos = [
-    {
-      title: 'Objetivo del Proyecto',
-      items: [
-        'Desarrollar un asistente conversacional funcional',
-        'Reducir fricción en tareas académicas frecuentes',
-        'Guiar con pasos claros y validaciones previas',
-        'Citar fuentes oficiales en cada respuesta',
-      ],
-      icon: IconTarget,
-      color: 'usal-green',
-    },
-    {
-      title: 'Enfoque Metodológico',
-      items: [
-        'Ciclo iterativo Descubrir→Diseñar→Construir→Probar',
-        'Combinar reglas claras con IA explicativa',
-        'Métricas objetivas: TTR, errores, satisfacción',
-        'Validación con estudiantes reales',
-      ],
-      icon: IconChecks,
-      color: 'usal-gold',
-    },
-    {
-      title: 'Requisitos Técnicos',
-      items: [
-        'Arquitectura en 4 capas (UI, Orquestación, IA, Observabilidad)',
-        'Privacidad por diseño (Ley 25.326, sin PII)',
-        'Accesibilidad AA y navegación por teclado',
-        'Fallbacks seguros ante ambigüedad',
-      ],
-      icon: IconShield,
-      color: 'usal-navy',
-    },
-    {
-      title: 'Validación y Resultados',
-      items: [
-        'Encuesta a estudiantes sobre dolores actuales',
-        '68% identifica fricción en inscripciones',
-        'Alta percepción de utilidad cuando cita fuente',
-        'Preferencia por tono cercano y explicaciones claras',
-      ],
-      icon: IconChartBar,
-      color: 'usal-red',
-    },
-  ];
-
-  return (
-    <div className="space-y-12">
-      {/* Pregunta retórica impactante */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        className="bg-gradient-to-br from-usal-green-600 via-usal-green-500 to-usal-gold-500 p-12 rounded-2xl text-white text-center relative overflow-hidden"
-      >
-        <motion.div
-          className="absolute inset-0"
-          animate={{
-            background: [
-              'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%)',
-              'radial-gradient(circle at 80% 50%, rgba(255,255,255,0.1) 0%, transparent 50%)',
-              'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%)',
-            ],
-          }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <div className="relative z-10">
-          <IconSparkles className="h-16 w-16 mx-auto mb-6 opacity-90" />
-          <h2 className="text-5xl font-bold mb-6 leading-tight">
-            ¿Cumplí con el objetivo?
-          </h2>
-          <p className="text-2xl text-usal-green-50 mb-8 max-w-3xl mx-auto">
-            Revisemos juntos cada compromiso del proyecto y validemos los resultados obtenidos
-          </p>
-        </div>
-      </motion.div>
-
-      {/* Checklists de logros */}
-      <div className="grid md:grid-cols-2 gap-8">
-        {logrosCompromisos.map((categoria, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
-            className={`bg-white rounded-xl p-6 border-2 border-${categoria.color}-200 shadow-lg hover:shadow-xl transition-shadow`}
-          >
-            <div className="flex items-start gap-4 mb-4">
-              <div className={`p-3 rounded-lg bg-${categoria.color}-100`}>
-                <categoria.icon className={`h-6 w-6 text-${categoria.color}-600`} />
-              </div>
-              <h3 className={`text-xl font-bold text-${categoria.color}-900 flex-1`}>
-                {categoria.title}
-              </h3>
-            </div>
-            <ul className="space-y-3">
-              {categoria.items.map((item, j) => (
-                <motion.li
-                  key={j}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 + j * 0.05 }}
-                  className="flex items-start gap-3 group"
-                >
-                  <div className={`flex-shrink-0 mt-0.5 w-5 h-5 rounded-full bg-${categoria.color}-100 flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                    <IconCircleCheck className={`h-4 w-4 text-${categoria.color}-600`} />
-                  </div>
-                  <span className="text-sm text-usal-navy-700 leading-relaxed">{item}</span>
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Implicancias por stakeholder */}
-      <div className="bg-gradient-to-br from-usal-navy-50 to-usal-green-50 p-8 rounded-xl border border-usal-green-200">
-        <h3 className="text-2xl font-bold text-usal-navy-900 mb-6 text-center">
-          ¿Qué cambia si lo adoptamos?
-        </h3>
-        <div className="grid md:grid-cols-3 gap-6">
-          {[
-            {
-              icon: IconUsers,
-              title: 'Para estudiantes',
-              desc: 'Mayor autonomía, menos ansiedad, disponibilidad 24/7',
-              color: 'usal-green',
-            },
-            {
-              icon: IconChartBar,
-              title: 'Para administración',
-              desc: 'Menos tickets repetitivos, comunicación estandarizada',
-              color: 'usal-gold',
-            },
-            {
-              icon: IconBulb,
-              title: 'Para la universidad',
-              desc: 'Datos para mejora continua, mejor experiencia institucional',
-              color: 'usal-navy',
-            },
-          ].map((imp, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-white p-6 rounded-xl border border-usal-green-200 text-center"
-            >
-              <imp.icon className={`h-8 w-8 text-${imp.color}-600 mx-auto mb-4`} />
-              <h4 className="font-semibold text-usal-navy-900 mb-2">{imp.title}</h4>
-              <p className="text-sm text-usal-navy-600">{imp.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      {/* CTA Final con respuesta */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        className="bg-gradient-to-r from-usal-green-600 to-usal-green-500 p-10 rounded-2xl text-white text-center relative overflow-hidden"
-      >
-        <div className="relative z-10">
-          <motion.div
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2, type: 'spring' }}
-          >
-            <IconCircleCheck className="h-20 w-20 mx-auto mb-6" />
-          </motion.div>
-          <h3 className="text-4xl font-bold mb-4">Sí, el objetivo se cumplió</h3>
-          <p className="text-xl mb-8 text-usal-green-50 max-w-2xl mx-auto">
-            Testis no solo guía: explica el porqué, cita la fuente y valida antes de actuar. 
-            El bot no reemplaza SIU, lo hace transitable.
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link
-              href="/"
-              className="px-8 py-4 bg-white text-usal-green-600 rounded-lg hover:bg-usal-green-50 transition-colors font-bold shadow-lg hover:shadow-xl inline-flex items-center gap-2"
-            >
-              <IconRocket className="h-5 w-5" />
-              Probar Testis Ahora
-            </Link>
-            <a
-              href="#abstract"
-              className="px-8 py-4 bg-usal-green-700 text-white rounded-lg hover:bg-usal-green-800 transition-colors font-bold inline-flex items-center gap-2"
-            >
-              <IconBook className="h-5 w-5" />
-              Ver desde el Inicio
-            </a>
-          </div>
-        </div>
-        {/* Animated background elements */}
-        <div className="absolute inset-0 opacity-10">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-2 h-2 bg-white rounded-full"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                y: [0, -30, 0],
-                opacity: [0.2, 1, 0.2],
-              }}
-              transition={{
-                duration: 2 + Math.random() * 2,
-                repeat: Infinity,
-                delay: Math.random() * 2,
-              }}
-            />
-          ))}
-        </div>
-      </motion.div>
-
-      {section.figure && <FigurePlaceholder figure={section.figure} />}
-    </div>
-  );
-}
-
-function FinanzasContent({ section }: any) {
-  return (
-    <div className="space-y-8">
-      <p className="text-lg text-usal-navy-700 leading-relaxed mb-8">
-        Análisis financiero interactivo del proyecto Testis, mostrando tres escenarios de viabilidad económica a 5 años con indicadores clave de rentabilidad.
-      </p>
-      <div className="-mx-4 md:-mx-8 lg:-mx-16">
-        <FinancialSimulator />
-      </div>
-    </div>
-  );
-}
-
-// Utility Components
-function FigurePlaceholder({ figure }: any) {
-  const [imageError, setImageError] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      className="rounded-xl overflow-hidden border border-usal-green-200 shadow-sm"
-    >
-      {!imageError && !imageLoaded && (
-        <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-usal-navy-50 to-usal-green-50">
-            <IconChartBar className="h-16 w-16 text-usal-green-400 animate-pulse" />
-          </div>
-        </div>
-      )}
-      <img
-        src={figure.src}
-        alt={figure.alt}
-        className={`w-full h-auto transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0 absolute'}`}
-        onError={() => {
-          setImageError(true);
-          setImageLoaded(false);
-        }}
-        onLoad={() => {
-          setImageLoaded(true);
-          setImageError(false);
-        }}
-      />
-      {imageError && (
-        <div className="relative">
-          <img
-            src="/images/tesis/placeholder.svg"
-            alt="Placeholder"
-            className="w-full h-auto"
-          />
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/5">
-            <p className="text-lg font-medium text-usal-navy-700 mb-1">{figure.caption}</p>
-            <p className="text-sm text-usal-navy-500 italic px-4 text-center">
-              Sube: {figure.src.split('/').pop()}
-            </p>
-          </div>
-        </div>
-      )}
-      {(imageLoaded || imageError) && (
-        <div className="px-4 py-3 bg-white border-t border-usal-green-200">
-          <p className="text-sm text-usal-navy-600 text-center italic">{figure.caption}</p>
-        </div>
-      )}
-    </motion.div>
-  );
-}
-
-function SimpleBarChart({ title, data }: any) {
-  const max = Math.max(...data.map((d: any) => d.value));
-  return (
-    <div className="bg-white p-6 rounded-xl border border-usal-green-200">
-      <h4 className="font-semibold text-usal-navy-900 mb-4">{title}</h4>
-      <div className="space-y-3">
-        {data.map((item: any, i: number) => (
-          <div key={i}>
-            <div className="flex justify-between text-sm mb-1">
-              <span className="text-usal-navy-700">{item.label}</span>
-              <span className="text-usal-navy-500">{item.value}%</span>
-            </div>
-            <div className="h-2 bg-usal-green-100 rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                whileInView={{ width: `${(item.value / max) * 100}%` }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: i * 0.1 }}
-                className="h-full bg-usal-green-600 rounded-full"
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function SimpleLineChart({ title, insight }: any) {
-  return (
-    <div className="bg-white p-6 rounded-xl border border-usal-green-200">
-      <h4 className="font-semibold text-usal-navy-900 mb-4">{title}</h4>
-      <div className="h-32 flex items-end justify-between gap-2 mb-4">
-        {[20, 35, 55, 45, 70, 85].map((height, i) => (
-          <motion.div
-            key={i}
-            initial={{ height: 0 }}
-            whileInView={{ height: `${height}%` }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="flex-1 bg-gradient-to-t from-usal-gold-600 to-usal-gold-400 rounded-t"
-          />
-        ))}
-      </div>
-      <p className="text-xs text-usal-navy-500 italic">{insight}</p>
-    </div>
-  );
-}
-
-function SimpleDonutChart({ title, value, label }: any) {
-  return (
-    <div className="bg-white p-6 rounded-xl border border-usal-green-200">
-      <h4 className="font-semibold text-usal-navy-900 mb-4">{title}</h4>
-      <div className="flex flex-col items-center">
-        <div className="relative w-32 h-32 mb-4">
-          <svg className="w-full h-full transform -rotate-90">
-            <circle
-              cx="64"
-              cy="64"
-              r="56"
-              fill="none"
-              stroke="#e5e7eb"
-              strokeWidth="12"
-            />
-            <motion.circle
-              cx="64"
-              cy="64"
-              r="56"
-              fill="none"
-              stroke="#16a34a"
-              strokeWidth="12"
-              strokeDasharray={`${2 * Math.PI * 56}`}
-              initial={{ strokeDashoffset: 2 * Math.PI * 56 }}
-              whileInView={{ strokeDashoffset: 2 * Math.PI * 56 * (1 - value / 100) }}
-              viewport={{ once: true }}
-              transition={{ duration: 1 }}
-            />
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-3xl font-bold text-usal-navy-900">{value}%</span>
-          </div>
-        </div>
-        <p className="text-sm text-usal-navy-600 font-medium">{label}</p>
-      </div>
-    </div>
-  );
-}
-
-function NavigationArrows({ activeSection }: any) {
-  const sections = presentationData.meta.toc.map(t => t.id);
-  const currentIndex = sections.indexOf(activeSection);
-
-  const goTo = (direction: 'prev' | 'next') => {
-    const newIndex = direction === 'prev' ? currentIndex - 1 : currentIndex + 1;
-    if (newIndex >= 0 && newIndex < sections.length) {
-      document.getElementById(sections[newIndex])?.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  return (
-    <>
-      {currentIndex > 0 && (
-        <motion.button
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          onClick={() => goTo('prev')}
-          className="fixed left-6 bottom-6 xl:left-96 p-4 bg-usal-green-600 text-white rounded-full shadow-xl hover:bg-usal-green-700 transition-colors z-30"
-          title="Anterior (← o K)"
-        >
-          <IconChevronLeft className="h-6 w-6" />
-        </motion.button>
-      )}
-      {currentIndex < sections.length - 1 && (
-        <motion.button
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          onClick={() => goTo('next')}
-          className="fixed right-6 bottom-6 p-4 bg-usal-green-600 text-white rounded-full shadow-xl hover:bg-usal-green-700 transition-colors z-30"
-          title="Siguiente (→ o J)"
-        >
-          <IconChevronRight className="h-6 w-6" />
-        </motion.button>
-      )}
-    </>
-  );
-}
-
