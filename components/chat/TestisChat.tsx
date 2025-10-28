@@ -222,12 +222,21 @@ export const TestisChat = () => {
               exit={{ opacity: 0, y: 20, rotateX: -10 }}
               transition={{ duration: 0.2 }}
               className={cn(
-                "mb-4 h-screen md:h-[46vh] min-h-[76vh] w-full md:w-[30rem] bg-gradient-to-br from-usal-green-50 to-white rounded-lg flex flex-col justify-between overflow-hidden border border-usal-green-200",
+                "mb-4 h-screen md:h-[46vh] min-h-[76vh] w-full md:w-[30rem] bg-gradient-to-br from-usal-green-50 to-white rounded-lg flex flex-col justify-between overflow-hidden border border-usal-green-200 relative",
                 isExpanded && "w-full h-full md:h-full md:w-full min-h-0 mb-0"
               )}
+              style={{
+                backgroundImage: 'url(/usal-logo.jpg)',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center center',
+                backgroundSize: isExpanded ? 'auto 35%' : 'auto 30%',
+                backgroundAttachment: 'fixed',
+              }}
             >
+              {/* Overlay único para todo el chat */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-white/85 to-usal-green-50/80 pointer-events-none" />
               {/* Header */}
-              <div className="h-10 w-full bg-gradient-to-r from-usal-green-600 via-usal-green-500 to-usal-green-700 rounded-tr-lg rounded-tl-lg flex justify-between px-10 md:px-6 py-2">
+              <div className="h-10 w-full bg-gradient-to-r from-usal-green-600 via-usal-green-500 to-usal-green-700 rounded-tr-lg rounded-tl-lg flex justify-between px-10 md:px-6 py-2 relative z-20">
                 <div className="font-medium text-sm flex items-center gap-2 text-white">
                   <button 
                     onClick={() => {
@@ -390,7 +399,7 @@ export const TestisChat = () => {
 
               {/* Quick Access Blocks */}
               {!messages.length && (
-                <div className="px-5 py-10 grid grid-cols-1 md:grid-cols-2 gap-2 overflow-y-auto">
+                <div className="px-5 py-10 grid grid-cols-1 md:grid-cols-2 gap-2 overflow-y-auto relative z-10">
                   {quickAccessBlocks.map((block, index) => (
                     <motion.button
                       key={block.title}
@@ -420,7 +429,7 @@ export const TestisChat = () => {
               {/* Messages */}
               <div
                 ref={messageHistoryRef}
-                className="p-2 flex flex-1 overflow-y-auto"
+                className="p-2 flex flex-1 overflow-y-auto relative z-10"
               >
                 <div className="flex flex-1 flex-col">
                   {messages.map((message) => (
@@ -441,7 +450,7 @@ export const TestisChat = () => {
               {/* Input Form */}
               <form
                 onSubmit={handleSubmit}
-                className="max-h-[10vh] py-1 px-5 relative"
+                className="max-h-[10vh] py-1 px-5 relative z-20"
               >
                 {showScrollButton && (
                   <button
