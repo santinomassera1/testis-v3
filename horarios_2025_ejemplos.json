@@ -1,0 +1,83 @@
+[
+  {
+    "turno": "Mañana",
+    "anio": 1,
+    "codigo": 143,
+    "materia": "Metodología de la Investigación",
+    "dia": "Lunes",
+    "franja": "08:00-12:00",
+    "docente": "B. Benedini"
+  },
+  {
+    "turno": "Mañana",
+    "anio": 1,
+    "codigo": 145,
+    "materia": "Arquitectura de Computadoras",
+    "dia": "Martes",
+    "franja": "08:00-12:00",
+    "docente": "A. Martinez"
+  },
+  {
+    "turno": "Mañana",
+    "anio": 1,
+    "codigo": 144,
+    "materia": "Introducción a la Programación",
+    "dia": "Miércoles",
+    "franja": "08:00-12:00",
+    "docente": "F. Martinez"
+  },
+  {
+    "turno": "Mañana",
+    "anio": 1,
+    "codigo": 154,
+    "materia": "Álgebra II",
+    "dia": "Jueves",
+    "franja": "08:00-12:00",
+    "docente": "E. Sfara"
+  },
+  {
+    "turno": "Mañana",
+    "anio": 1,
+    "codigo": 141,
+    "materia": "Sistemas Numéricos",
+    "dia": "Viernes",
+    "franja": "08:00-12:00",
+    "docente": "F. Braica"
+  },
+  {
+    "turno": "Noche",
+    "anio": 2,
+    "codigo": 152,
+    "materia": "Estructura de Datos y Algoritmos",
+    "dia": "Lunes",
+    "franja": "18:30-22:30",
+    "docente": "H. Lurati"
+  },
+  {
+    "turno": "Noche",
+    "anio": 2,
+    "codigo": 150,
+    "materia": "Física I",
+    "dia": "Martes",
+    "franja": "18:30-22:30",
+    "docente": "—"
+  },
+  {
+    "turno": "Noche",
+    "anio": 2,
+    "codigo": 156,
+    "materia": "Programación II",
+    "dia": "Miércoles",
+    "franja": "18:30-22:30",
+    "docente": "—"
+  },
+  {
+    "turno": "Noche",
+    "anio": 2,
+    "codigo": 153,
+    "materia": "Sistemas de Información I",
+    "dia": "Jueves",
+    "franja": "18:30-22:30",
+    "docente": "—"
+  }
+]

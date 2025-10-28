@@ -1,0 +1,1444 @@
+[
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 140,
+    "materia": "Introd. A La Administr. De Empresas",
+    "nov_dic_1": "2025-07-11",
+    "nov_dic_2": "2025-11-28",
+    "feb_2026": "2025-12-12",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 141,
+    "materia": "Sistemas Numéricos",
+    "nov_dic_1": "2025-07-21",
+    "nov_dic_2": "2025-12-01",
+    "feb_2026": "2025-12-15",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 142,
+    "materia": "Análisis Matemático I",
+    "nov_dic_1": "2025-07-16",
+    "nov_dic_2": "2025-11-26",
+    "feb_2026": "2025-12-10",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 143,
+    "materia": "Metodología De La Investigación",
+    "nov_dic_1": "2025-07-18",
+    "nov_dic_2": "2025-12-05",
+    "feb_2026": "2025-12-19",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 144,
+    "materia": "Introducción A La Programación",
+    "nov_dic_1": "2025-07-08",
+    "nov_dic_2": "2025-11-25",
+    "feb_2026": "2025-12-09",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 145,
+    "materia": "Arquitectura De Computadoras",
+    "nov_dic_1": "2025-07-14",
+    "nov_dic_2": "2025-11-25",
+    "feb_2026": "2025-12-09",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 146,
+    "materia": "Algebra I",
+    "nov_dic_1": "2025-07-10",
+    "nov_dic_2": "2025-11-27",
+    "feb_2026": "2025-12-11",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 147,
+    "materia": "Paradigmas De Programación",
+    "nov_dic_1": "2025-07-11",
+    "nov_dic_2": "2025-11-28",
+    "feb_2026": "2025-12-12",
+    "correlativas": [
+      144
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 148,
+    "materia": "Programación I",
+    "nov_dic_1": "2025-07-22",
+    "nov_dic_2": "2025-12-02",
+    "feb_2026": "2025-12-16",
+    "correlativas": [
+      144
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 149,
+    "materia": "Sistemas De Representación",
+    "nov_dic_1": "2025-07-15",
+    "nov_dic_2": "2025-12-04",
+    "feb_2026": "2025-12-17",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 150,
+    "materia": "Física I",
+    "nov_dic_1": "2025-07-08",
+    "nov_dic_2": "2025-11-25",
+    "feb_2026": "2025-12-09",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 151,
+    "materia": "Cálculo Numérico",
+    "nov_dic_1": "2025-07-17",
+    "nov_dic_2": "2025-12-04",
+    "feb_2026": "2025-12-18",
+    "correlativas": [
+      142
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 152,
+    "materia": "Estructura De Datos Y Algoritmos",
+    "nov_dic_1": "2025-07-16",
+    "nov_dic_2": "2025-11-26",
+    "feb_2026": "2025-12-10",
+    "correlativas": [
+      144
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 153,
+    "materia": "Sistemas De Información I",
+    "nov_dic_1": "2025-07-16",
+    "nov_dic_2": "2025-11-26",
+    "feb_2026": "2025-12-10",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 154,
+    "materia": "Álgebra Ii",
+    "nov_dic_1": "2025-07-17",
+    "nov_dic_2": "2025-12-04",
+    "feb_2026": "2025-12-18",
+    "correlativas": [
+      146
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 155,
+    "materia": "Filosofía",
+    "nov_dic_1": "2025-07-07",
+    "nov_dic_2": "2025-11-28",
+    "feb_2026": "2025-12-12",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 158,
+    "materia": "Análisis Matemático Ii",
+    "nov_dic_1": "2025-07-10",
+    "nov_dic_2": "2025-11-27",
+    "feb_2026": "2025-12-11",
+    "correlativas": [
+      142
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 159,
+    "materia": "Química General",
+    "nov_dic_1": "2025-07-07",
+    "nov_dic_2": "2025-11-28",
+    "feb_2026": "2025-12-12",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 160,
+    "materia": "Física Ii",
+    "nov_dic_1": "2025-07-15",
+    "nov_dic_2": "2025-12-04",
+    "feb_2026": "2025-12-15",
+    "correlativas": [
+      150
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 161,
+    "materia": "Sistemas Operativos",
+    "nov_dic_1": "2025-07-14",
+    "nov_dic_2": "2025-11-25",
+    "feb_2026": "2025-12-09",
+    "correlativas": [
+      152
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 162,
+    "materia": "Sistemas De Información Ii",
+    "nov_dic_1": "2025-07-18",
+    "nov_dic_2": "2025-12-05",
+    "feb_2026": "2025-12-19",
+    "correlativas": [
+      153
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 163,
+    "materia": "Sistemas De Bases De Datos",
+    "nov_dic_1": "2025-07-17",
+    "nov_dic_2": "2025-12-04",
+    "feb_2026": "2025-12-18",
+    "correlativas": [
+      152
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 164,
+    "materia": "Probabilidad Y Estadística",
+    "nov_dic_1": "2025-07-08",
+    "nov_dic_2": "2025-11-25",
+    "feb_2026": "2025-12-09",
+    "correlativas": [
+      154
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 165,
+    "materia": "Programación Avanzada",
+    "nov_dic_1": "2025-07-23",
+    "nov_dic_2": "2025-12-10",
+    "feb_2026": "2025-12-17",
+    "correlativas": [
+      156
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 166,
+    "materia": "Teleinformática",
+    "nov_dic_1": "2025-07-08",
+    "nov_dic_2": "2025-11-25",
+    "feb_2026": "2025-12-09",
+    "correlativas": [
+      145
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 167,
+    "materia": "Física Iii",
+    "nov_dic_1": "2025-07-07",
+    "nov_dic_2": "2025-11-28",
+    "feb_2026": "2025-12-12",
+    "correlativas": [
+      160
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 168,
+    "materia": "Ingles I",
+    "nov_dic_1": "2025-07-22",
+    "nov_dic_2": "2025-12-02",
+    "feb_2026": "2025-12-16",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 169,
+    "materia": "Ingles Ii",
+    "nov_dic_1": "2025-07-22",
+    "nov_dic_2": "2025-12-02",
+    "feb_2026": "2025-12-16",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 170,
+    "materia": "Tecnología Informática",
+    "nov_dic_1": "2025-07-23",
+    "nov_dic_2": "2025-12-04",
+    "feb_2026": "2025-12-17",
+    "correlativas": [
+      161
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 171,
+    "materia": "Ingeniería Del Software",
+    "nov_dic_1": "2025-07-11",
+    "nov_dic_2": "2025-11-28",
+    "feb_2026": "2025-12-12",
+    "correlativas": [
+      162
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 172,
+    "materia": "Seminario De Integración Profes.",
+    "nov_dic_1": "2025-07-10",
+    "nov_dic_2": "2025-11-27",
+    "feb_2026": "2025-12-11",
+    "correlativas": [
+      156,
+      162
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 173,
+    "materia": "Investigación Operativa",
+    "nov_dic_1": "2025-07-16",
+    "nov_dic_2": "2025-11-26",
+    "feb_2026": "2025-12-10",
+    "correlativas": [
+      164
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 174,
+    "materia": "Arquitectura De Redes",
+    "nov_dic_1": "2025-07-22",
+    "nov_dic_2": "2025-12-02",
+    "feb_2026": "2025-12-16",
+    "correlativas": [
+      166
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 175,
+    "materia": "Dirección De Proyectos Informáticos",
+    "nov_dic_1": "2025-07-08",
+    "nov_dic_2": "2025-11-25",
+    "feb_2026": "2025-12-09",
+    "correlativas": [
+      162
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 176,
+    "materia": "Auditoria De Sistemas",
+    "nov_dic_1": "2025-07-07",
+    "nov_dic_2": "2025-11-28",
+    "feb_2026": "2025-12-12",
+    "correlativas": [
+      162
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 177,
+    "materia": "Teología",
+    "nov_dic_1": "2025-07-23",
+    "nov_dic_2": "2025-12-04",
+    "feb_2026": "2025-12-17",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 178,
+    "materia": "Modelos Y Simulación",
+    "nov_dic_1": "2025-07-18",
+    "nov_dic_2": "2025-12-05",
+    "feb_2026": "2025-12-19",
+    "correlativas": [
+      164
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 179,
+    "materia": "Derecho Informático",
+    "nov_dic_1": "2025-07-15",
+    "nov_dic_2": "2025-12-04",
+    "feb_2026": "2025-12-17",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 180,
+    "materia": "Ética Profesional",
+    "nov_dic_1": "2025-07-16",
+    "nov_dic_2": "2025-11-26",
+    "feb_2026": "2025-12-10",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 181,
+    "materia": "Tecnologías Emergentes",
+    "nov_dic_1": "2025-07-21",
+    "nov_dic_2": "2025-12-01",
+    "feb_2026": "2025-12-15",
+    "correlativas": [
+      170
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 182,
+    "materia": "Sistemas Inteligentes",
+    "nov_dic_1": "2025-07-14",
+    "nov_dic_2": "2025-11-25",
+    "feb_2026": "2025-12-09",
+    "correlativas": [
+      165
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 183,
+    "materia": "Proyecto Final De Ing. Informática",
+    "nov_dic_1": "2025-07-17",
+    "nov_dic_2": "2025-12-04",
+    "feb_2026": "2025-12-18",
+    "correlativas": [
+      172,
+      175
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 184,
+    "materia": "Gestión Ambiental",
+    "nov_dic_1": "2025-07-15",
+    "nov_dic_2": "2025-12-04",
+    "feb_2026": "2025-12-17",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 185,
+    "materia": "Aseg. De La Calidad Del Software",
+    "nov_dic_1": "2025-07-22",
+    "nov_dic_2": "2025-12-02",
+    "feb_2026": "2025-12-16",
+    "correlativas": [
+      171
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 186,
+    "materia": "Seguridad Informática",
+    "nov_dic_1": "2025-07-15",
+    "nov_dic_2": "2025-12-04",
+    "feb_2026": "2025-12-17",
+    "correlativas": [
+      176
+    ]
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 187,
+    "materia": "Elementos De Economía",
+    "nov_dic_1": "2025-07-07",
+    "nov_dic_2": "2025-11-28",
+    "feb_2026": "2025-12-12",
+    "correlativas": []
+  },
+  {
+    "sede": "Centro",
+    "turno": "-",
+    "codigo": 641,
+    "materia": "Práctica Profesional Supervisada",
+    "nov_dic_1": "2025-07-10",
+    "nov_dic_2": "2025-11-27",
+    "feb_2026": "2025-12-11",
+    "correlativas": [
+      156,
+      162
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 140,
+    "materia": "Introd. A La Administr. De Empresas ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-09",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 141,
+    "materia": "Sistemas Numéricos ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-10",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 142,
+    "materia": "Análisis Matemático I ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-09",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 143,
+    "materia": "Metodología De La Investigación ",
+    "nov_dic_1": "2025-11-27",
+    "nov_dic_2": "2025-12-11",
+    "feb_2026": "2026-02-12",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 144,
+    "materia": "Introducción A La Programación ",
+    "nov_dic_1": "2025-11-28",
+    "nov_dic_2": "2025-12-12",
+    "feb_2026": "2026-02-13",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 145,
+    "materia": "Arquitectura De Computadoras ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-10",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 146,
+    "materia": "Algebra I ",
+    "nov_dic_1": "2025-11-26",
+    "nov_dic_2": "2025-12-10",
+    "feb_2026": "2026-02-11",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 147,
+    "materia": "Paradigmas De Programación ",
+    "nov_dic_1": "2025-12-04",
+    "nov_dic_2": "2025-12-17",
+    "feb_2026": "2026-02-18",
+    "correlativas": [
+      144
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 148,
+    "materia": "Programación I ",
+    "nov_dic_1": "2025-12-05",
+    "nov_dic_2": "2025-12-19",
+    "feb_2026": "2026-02-20",
+    "correlativas": [
+      144
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 149,
+    "materia": "Sistemas De Representación ",
+    "nov_dic_1": "2025-12-04",
+    "nov_dic_2": "2025-12-18",
+    "feb_2026": "2026-02-18",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 150,
+    "materia": "Física I ",
+    "nov_dic_1": "2025-11-28",
+    "nov_dic_2": "2025-12-12",
+    "feb_2026": "2026-02-13",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 151,
+    "materia": "Cálculo Numérico ",
+    "nov_dic_1": "2025-12-02",
+    "nov_dic_2": "2025-12-16",
+    "feb_2026": "2026-02-24",
+    "correlativas": [
+      142
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 152,
+    "materia": "Estructura De Datos Y Algoritmos ",
+    "nov_dic_1": "2025-11-27",
+    "nov_dic_2": "2025-12-11",
+    "feb_2026": "2026-02-19",
+    "correlativas": [
+      144
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 153,
+    "materia": "Sistemas De Información I ",
+    "nov_dic_1": "2025-11-26",
+    "nov_dic_2": "2025-12-10",
+    "feb_2026": "2026-02-11",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 154,
+    "materia": "Álgebra Ii ",
+    "nov_dic_1": "2025-12-04",
+    "nov_dic_2": "2025-12-18",
+    "feb_2026": "2026-02-19",
+    "correlativas": [
+      146
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 155,
+    "materia": "Filosofía ",
+    "nov_dic_1": "2025-12-04",
+    "nov_dic_2": "2025-12-18",
+    "feb_2026": "2026-02-18",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 158,
+    "materia": "Análisis Matemático Ii ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-10",
+    "correlativas": [
+      142
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 159,
+    "materia": "Química General ",
+    "nov_dic_1": "2025-12-05",
+    "nov_dic_2": "2025-12-19",
+    "feb_2026": "2026-02-26",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 160,
+    "materia": "Física Ii ",
+    "nov_dic_1": "2025-12-05",
+    "nov_dic_2": "2025-12-19",
+    "feb_2026": "2026-02-20",
+    "correlativas": [
+      150
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 161,
+    "materia": "Sistemas Operativos ",
+    "nov_dic_1": "2025-11-26",
+    "nov_dic_2": "2025-12-10",
+    "feb_2026": "2026-02-19",
+    "correlativas": [
+      152
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 162,
+    "materia": "Sistemas De Información Ii ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-19",
+    "correlativas": [
+      153
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 163,
+    "materia": "Sistemas De Bases De Datos ",
+    "nov_dic_1": "2025-11-27",
+    "nov_dic_2": "2025-12-11",
+    "feb_2026": "2026-02-26",
+    "correlativas": [
+      152
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 164,
+    "materia": "Probabilidad Y Estadística ",
+    "nov_dic_1": "2025-11-28",
+    "nov_dic_2": "2025-12-12",
+    "feb_2026": "2026-02-26",
+    "correlativas": [
+      154
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 165,
+    "materia": "Programación Avanzada ",
+    "nov_dic_1": "2025-12-02",
+    "nov_dic_2": "2025-12-16",
+    "feb_2026": "2026-02-24",
+    "correlativas": [
+      156
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Mañana",
+    "codigo": 166,
+    "materia": "Teleinformática ",
+    "nov_dic_1": "2025-12-04",
+    "nov_dic_2": "2025-12-17",
+    "feb_2026": "2026-02-18",
+    "correlativas": [
+      145
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Tarde",
+    "codigo": 141,
+    "materia": "Sistemas Numéricos ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-09",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Tarde",
+    "codigo": 142,
+    "materia": "Análisis Matemático I ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-10",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Tarde",
+    "codigo": 143,
+    "materia": "Metodología De La Investigación ",
+    "nov_dic_1": "2025-11-27",
+    "nov_dic_2": "2025-12-11",
+    "feb_2026": "2026-02-12",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Tarde",
+    "codigo": 144,
+    "materia": "Introducción A La Programación ",
+    "nov_dic_1": "2025-11-28",
+    "nov_dic_2": "2025-12-12",
+    "feb_2026": "2026-02-13",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Tarde",
+    "codigo": 145,
+    "materia": "Arquitectura De Computadoras ",
+    "nov_dic_1": "2025-12-01",
+    "nov_dic_2": "2025-12-15",
+    "feb_2026": "2026-02-23",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Tarde",
+    "codigo": 146,
+    "materia": "Algebra I ",
+    "nov_dic_1": "2025-11-26",
+    "nov_dic_2": "2025-12-10",
+    "feb_2026": "2026-02-11",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Tarde",
+    "codigo": 147,
+    "materia": "Paradigmas De Programación ",
+    "nov_dic_1": "2025-12-04",
+    "nov_dic_2": "2025-12-17",
+    "feb_2026": "2026-02-25",
+    "correlativas": [
+      144
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Tarde",
+    "codigo": 148,
+    "materia": "Programación I ",
+    "nov_dic_1": "2025-12-05",
+    "nov_dic_2": "2025-12-19",
+    "feb_2026": "2026-02-20",
+    "correlativas": [
+      144
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Tarde",
+    "codigo": 154,
+    "materia": "Álgebra Ii ",
+    "nov_dic_1": "2025-12-04",
+    "nov_dic_2": "2025-12-18",
+    "feb_2026": "2026-02-19",
+    "correlativas": [
+      146
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Tarde",
+    "codigo": 160,
+    "materia": "Física Ii ",
+    "nov_dic_1": "2025-11-28",
+    "nov_dic_2": "2025-12-12",
+    "feb_2026": "2026-02-13",
+    "correlativas": [
+      150
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Tarde",
+    "codigo": 167,
+    "materia": "Física Iii ",
+    "nov_dic_1": "2025-12-01",
+    "nov_dic_2": "2025-12-15",
+    "feb_2026": "2026-02-23",
+    "correlativas": [
+      160
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 140,
+    "materia": "Introd. A La Administr. De Empresas ",
+    "nov_dic_1": "2025-12-01",
+    "nov_dic_2": "2025-12-15",
+    "feb_2026": "2026-02-23",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 141,
+    "materia": "Sistemas Numéricos ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-10",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 142,
+    "materia": "Análisis Matemático I ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-09",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 143,
+    "materia": "Metodología De La Investigación ",
+    "nov_dic_1": "2025-11-27",
+    "nov_dic_2": "2025-12-11",
+    "feb_2026": "2026-02-12",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 144,
+    "materia": "Introducción A La Programación ",
+    "nov_dic_1": "2025-11-26",
+    "nov_dic_2": "2025-12-10",
+    "feb_2026": "2026-02-11",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 145,
+    "materia": "Arquitectura De Computadoras ",
+    "nov_dic_1": "2025-12-05",
+    "nov_dic_2": "2025-12-19",
+    "feb_2026": "2026-02-20",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 146,
+    "materia": "Algebra I ",
+    "nov_dic_1": "2025-11-28",
+    "nov_dic_2": "2025-12-12",
+    "feb_2026": "2026-02-13",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 147,
+    "materia": "Paradigmas De Programación ",
+    "nov_dic_1": "2025-12-02",
+    "nov_dic_2": "2025-12-16",
+    "feb_2026": "2026-02-18",
+    "correlativas": [
+      144
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 148,
+    "materia": "Programación I ",
+    "nov_dic_1": "2025-12-04",
+    "nov_dic_2": "2025-12-17",
+    "feb_2026": "2026-02-18",
+    "correlativas": [
+      144
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 149,
+    "materia": "Sistemas De Representación ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-18",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 150,
+    "materia": "Física I ",
+    "nov_dic_1": "2025-11-26",
+    "nov_dic_2": "2025-12-10",
+    "feb_2026": "2026-02-11",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 151,
+    "materia": "Cálculo Numérico ",
+    "nov_dic_1": "2025-12-02",
+    "nov_dic_2": "2025-12-17",
+    "feb_2026": "2026-02-24",
+    "correlativas": [
+      142
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 152,
+    "materia": "Estructura De Datos Y Algoritmos ",
+    "nov_dic_1": "2025-11-27",
+    "nov_dic_2": "2025-12-11",
+    "feb_2026": "2026-02-12",
+    "correlativas": [
+      144
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 153,
+    "materia": "Sistemas De Información I ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-10",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 154,
+    "materia": "Álgebra Ii ",
+    "nov_dic_1": "2025-12-04",
+    "nov_dic_2": "2025-12-18",
+    "feb_2026": "2026-02-19",
+    "correlativas": [
+      146
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 155,
+    "materia": "Filosofía ",
+    "nov_dic_1": "2025-11-26",
+    "nov_dic_2": "2025-12-10",
+    "feb_2026": "2026-02-18",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 158,
+    "materia": "Análisis Matemático Ii ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-19",
+    "correlativas": [
+      142
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 159,
+    "materia": "Química General ",
+    "nov_dic_1": "2025-12-05",
+    "nov_dic_2": "2025-12-19",
+    "feb_2026": "2026-02-26",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 160,
+    "materia": "Física Ii ",
+    "nov_dic_1": "2025-12-05",
+    "nov_dic_2": "2025-12-19",
+    "feb_2026": "2026-02-20",
+    "correlativas": [
+      150
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 161,
+    "materia": "Sistemas Operativos ",
+    "nov_dic_1": "2025-12-02",
+    "nov_dic_2": "2025-12-16",
+    "feb_2026": "2026-02-24",
+    "correlativas": [
+      152
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 162,
+    "materia": "Sistemas De Información Ii ",
+    "nov_dic_1": "2025-12-05",
+    "nov_dic_2": "2025-12-19",
+    "feb_2026": "2026-02-20",
+    "correlativas": [
+      153
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 163,
+    "materia": "Sistemas De Bases De Datos ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-19",
+    "correlativas": [
+      152
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 164,
+    "materia": "Probabilidad Y Estadística ",
+    "nov_dic_1": "2025-11-27",
+    "nov_dic_2": "2025-12-11",
+    "feb_2026": "2026-02-23",
+    "correlativas": [
+      154
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 165,
+    "materia": "Programación Avanzada ",
+    "nov_dic_1": "2025-12-02",
+    "nov_dic_2": "2025-12-17",
+    "feb_2026": "2026-02-25",
+    "correlativas": [
+      156
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 166,
+    "materia": "Teleinformática ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-23",
+    "correlativas": [
+      145
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 168,
+    "materia": "Ingles I ",
+    "nov_dic_1": "2025-12-04",
+    "nov_dic_2": "2025-12-18",
+    "feb_2026": "2026-02-19",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 169,
+    "materia": "Ingles Ii ",
+    "nov_dic_1": "2025-12-04",
+    "nov_dic_2": "2025-12-18",
+    "feb_2026": "2026-02-19",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 170,
+    "materia": "Tecnología Informática ",
+    "nov_dic_1": "2025-12-01",
+    "nov_dic_2": "2025-12-15",
+    "feb_2026": "2026-02-23",
+    "correlativas": [
+      161
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 171,
+    "materia": "Ingeniería Del Software ",
+    "nov_dic_1": "2025-12-04",
+    "nov_dic_2": "2025-12-18",
+    "feb_2026": "2026-02-25",
+    "correlativas": [
+      162
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 172,
+    "materia": "Seminario De Integración Profes. ",
+    "nov_dic_1": "2025-12-04",
+    "nov_dic_2": "2025-12-17",
+    "feb_2026": "2026-02-25",
+    "correlativas": [
+      156,
+      162
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 173,
+    "materia": "Investigación Operativa ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-24",
+    "correlativas": [
+      164
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 174,
+    "materia": "Arquitectura De Redes ",
+    "nov_dic_1": "2025-12-02",
+    "nov_dic_2": "2025-12-16",
+    "feb_2026": "2026-02-24",
+    "correlativas": [
+      166
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 175,
+    "materia": "Dirección De Proyectos Informáticos ",
+    "nov_dic_1": "2025-12-05",
+    "nov_dic_2": "2025-12-19",
+    "feb_2026": "2026-02-23",
+    "correlativas": [
+      162
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 176,
+    "materia": "Auditoria De Sistemas ",
+    "nov_dic_1": "2025-11-27",
+    "nov_dic_2": "2025-12-11",
+    "feb_2026": "2026-02-26",
+    "correlativas": [
+      162
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 177,
+    "materia": "Teología ",
+    "nov_dic_1": "2025-11-28",
+    "nov_dic_2": "2025-12-12",
+    "feb_2026": "2026-02-13",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 178,
+    "materia": "Modelos Y Simulación ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-23",
+    "correlativas": [
+      164
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 179,
+    "materia": "Derecho Informático ",
+    "nov_dic_1": "2025-12-01",
+    "nov_dic_2": "2025-12-15",
+    "feb_2026": "2026-02-26",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 180,
+    "materia": "Ética Profesional ",
+    "nov_dic_1": "2025-11-26",
+    "nov_dic_2": "2025-12-10",
+    "feb_2026": "2026-02-18",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 181,
+    "materia": "Tecnologías Emergentes ",
+    "nov_dic_1": "2025-11-26",
+    "nov_dic_2": "2025-12-10",
+    "feb_2026": "2026-02-25",
+    "correlativas": [
+      170
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 182,
+    "materia": "Sistemas Inteligentes ",
+    "nov_dic_1": "2025-11-28",
+    "nov_dic_2": "2025-12-12",
+    "feb_2026": "2026-02-27",
+    "correlativas": [
+      165
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 183,
+    "materia": "Proyecto Final De Ing. Informática ",
+    "nov_dic_1": "2025-12-02",
+    "nov_dic_2": "2025-12-16",
+    "feb_2026": "2026-02-27",
+    "correlativas": [
+      172,
+      175
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 184,
+    "materia": "Gestión Ambiental ",
+    "nov_dic_1": "2025-12-01",
+    "nov_dic_2": "2025-12-15",
+    "feb_2026": "2026-02-23",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 185,
+    "materia": "Aseg. De La Calidad Del Software ",
+    "nov_dic_1": "2025-12-04",
+    "nov_dic_2": "2025-12-18",
+    "feb_2026": "2026-02-26",
+    "correlativas": [
+      171
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 186,
+    "materia": "Seguridad Informática ",
+    "nov_dic_1": "2025-11-27",
+    "nov_dic_2": "2025-12-11",
+    "feb_2026": "2026-02-26",
+    "correlativas": [
+      176
+    ]
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 187,
+    "materia": "Elementos De Economía ",
+    "nov_dic_1": "2025-11-25",
+    "nov_dic_2": "2025-12-09",
+    "feb_2026": "2026-02-09",
+    "correlativas": []
+  },
+  {
+    "sede": "Pilar",
+    "turno": "Noche",
+    "codigo": 641,
+    "materia": "Práctica Profesional Supervisada ",
+    "nov_dic_1": "2025-11-26",
+    "nov_dic_2": "2025-12-10",
+    "feb_2026": "2026-02-25",
+    "correlativas": [
+      156,
+      162
+    ]
+  }
+]
