@@ -2,221 +2,264 @@
   "meta": {
     "title": "Testis — Asistente para SIU Guaraní (USAL)",
     "subtitle": "Presentación de tesis — Ingeniería en Informática",
-    "toc": [
-      {"id": "abstract", "label": "Abstract"},
-      {"id": "introduccion", "label": "Introducción"},
-      {"id": "objetivo_barreras_relevancia", "label": "Objetivo y barreras"},
-      {"id": "hipotesis_enfoque_metricas", "label": "Hipótesis e indicadores"},
-      {"id": "estado_del_arte_marco_teorico", "label": "Estado del arte"},
-      {"id": "requisitos", "label": "Requisitos"},
-      {"id": "diseno_mvp", "label": "Diseño del MVP"},
-      {"id": "encuesta_hallazgos", "label": "Encuesta y hallazgos"},
-      {"id": "riesgos_mitigacion", "label": "Riesgos y mitigación"},
-      {"id": "supuestos_restricciones", "label": "Supuestos y restricciones"},
-      {"id": "qa_roadmap", "label": "QA y roadmap"},
-      {"id": "finanzas", "label": "Estados financieros"},
-      {"id": "implicancias_conclusiones", "label": "Conclusiones"}
-    ]
+    "version": "2.0",
+    "slides": 9,
+    "structure": "deck-based navigation (no scroll)",
+    "description": "Presentación visual moderna con 9 slides navegables: diagnóstico → objetivo → técnica → inversión → escenarios → demo → resultados → conclusión"
   },
-  "sections": [
+  "slides": [
     {
-      "id": "abstract",
-      "title": "Abstract",
-      "summary": "Testis es un asistente conversacional que acompaña a estudiantes de la USAL dentro de SIU Guaraní para reducir fricción en tareas frecuentes (inscripciones, certificados, horarios, consultas). El enfoque es aplicado y experimental: se itera con un MVP, pruebas con estudiantes y métricas de eficacia/eficiencia (tareas completadas sin ayuda, tiempo hasta resolución, errores críticos) y satisfacción. El diseño combina reglas claras para trámites normados con IA para explicar, desambiguar y citar fuentes. Privacidad y cumplimiento (Ley 25.326) están presentes desde el diseño, con registros anonimizados. Se exponen riesgos, mitigaciones y una hoja de ruta para evolucionar el prototipo a solución institucional.",
-      "highlights": [
-        "Guía paso a paso dentro del flujo del estudiante",
-        "Medición objetiva de resultados",
-        "Privacidad por diseño (Ley 25.326)"
+      "id": 1,
+      "title": "Apertura con empatía",
+      "subtitle": "No es un reclamo, es una oportunidad",
+      "key_message": "SIU funciona, pero tiene fricción medida. Testis lo hace transitable.",
+      "data_sources": [
+        "Google Forms: hoja 'Resumen' → % fricción, tiempo promedio, top-3 problemas"
       ],
-      "figure": {"src": "/images/tesis/fig-abstract.jpg", "alt": "Síntesis visual del proyecto", "caption": "Síntesis del proyecto"},
-      "notes": [
-        "Enfocar autonomía + menor ansiedad",
-        "Comparar con navegar SIU sin guía.",
-        "Privacidad y cumplimiento incorporados desde el inicio."
+      "placeholders": [
+        "68% fricción",
+        "15 minutos promedio perdido",
+        "Top-3 problemas"
       ]
     },
     {
-      "id": "introduccion",
-      "title": "Introducción / Problema",
-      "copy": "Navegar SIU Guaraní exige conocer rutas, nomenclaturas y correlatividades. En picos de inscripción, dudas recurrentes (¿dónde veo cupos?, ¿a quién escribo?, ¿cómo descargo un comprobante?) saturan canales y generan errores que cuestan tiempo. La oportunidad: un asistente embebido que reduce carga cognitiva, explica el porqué de cada paso y cita la fuente oficial; así, el alumno avanza con confianza y las áreas administrativas reciben menos consultas repetitivas.",
-      "bullets": [
-        "Fricción en Inscripciones, Horarios, Certificados y Contacto.",
-        "Impacto: demoras, ansiedad y reprocesos."
+      "id": 2,
+      "title": "Problema medido",
+      "subtitle": "Dónde se traba el estudiante",
+      "key_message": "4 puntos de fricción críticos: inscripciones, horarios, certificados, contacto",
+      "metrics": [
+        "[X pasos extra] en inscripciones",
+        "[Y reintentos] por correlativas",
+        "[Z% consultas] sobre horarios"
       ],
-      "figure": {"src": "/images/tesis/fig-contexto.png", "alt": "Mapa de fricciones típicas en SIU", "caption": "Dónde se traba el estudiante"},
-      "notes": [
-        "Nombrar 3 fricciones con ejemplo real.",
-        "Diferenciar: el bot no reemplaza SIU; lo hace transitable."
+      "data_sources": [
+        "Métricas de navegación del MVP",
+        "Encuesta Google Forms: sección 'Tareas frecuentes'"
       ]
     },
     {
-      "id": "objetivo_barreras_relevancia",
-      "title": "Objetivo, Barreras y Relevancia",
-      "copy": "Objetivo: asistir tareas frecuentes con pasos claros, validaciones previas y enlaces correctos, incluyendo generación de borradores de correo a las áreas adecuadas. Barreras: acceso/acuerdos con APIs, diferencias entre facultades, actualización normativa, cumplimiento de privacidad. Relevancia: autonomía estudiantil 24/7, menor carga para secretarías, consistencia comunicacional y datos para mejora continua.",
-      "bullets": [
-        "Objetivo: guía accionable y verificable.",
-        "Barreras: técnicas, organizacionales y legales.",
-        "Valor: autonomía + alivio operativo."
-      ],
-      "figure": {"src": "/images/tesis/fig-barreras.png", "alt": "Barreras técnicas, organizacionales y legales", "caption": "Barreras y oportunidad"},
-      "notes": [
-        "Decir cómo un correo ya sale con asunto, destinatario y cuerpo.",
-        "Aclarar impacto para alumnos y para administración."
+      "id": 3,
+      "title": "Objetivo del proyecto",
+      "subtitle": "Vine a esto, se me ocurrió esto",
+      "key_message": "Asistente conversacional que reduce tiempo, errores y ansiedad con lenguaje natural, validaciones y emails automáticos",
+      "benefits": [
+        "Estudiantes: autonomía 24/7, menor ansiedad",
+        "Administración: menos tickets repetitivos",
+        "Universidad: datos para mejora continua"
       ]
     },
     {
-      "id": "hipotesis_enfoque_metricas",
-      "title": "Hipótesis, Enfoque e Indicadores",
-      "copy": "Hipótesis: el asistente mejora experiencia y autonomía al reducir errores y tiempos en trámites claves. Enfoque: ciclo iterativo de Descubrir→Diseñar→Construir→Probar→Medir→Iterar, con MVP funcional. Indicadores: % de tareas completadas sin ayuda, TTR, errores críticos por paso y satisfacción percibida. Encuestas post-uso y registros anonimizados respaldan la medición.",
-      "bullets": [
-        "MVP con alumnos reales.",
-        "KPIs: completitud, TTR, errores, satisfacción."
-      ],
-      "figure": {"src": "/images/tesis/fig-metodologia.png", "alt": "Metodología iterativa e indicadores", "caption": "Metodología e indicadores"},
-      "notes": [
-        "Definir TTR en una frase simple.",
-        "Comparar con bot vs sin bot"
+      "id": 4,
+      "title": "Stack técnico (alto nivel)",
+      "subtitle": "Cómo está hecho",
+      "key_message": "Arquitectura moderna y escalable en 4 capas",
+      "stack": {
+        "framework": "Next.js 14 (App Router, RSC)",
+        "ai": "OpenAI GPT-4 (NLU/NLG con citas)",
+        "backend": "Neon Postgres (Serverless, API Routes)",
+        "ui": "Tailwind CSS + Framer Motion + Aceternity UI",
+        "integration": "Widget embebido (sin tocar SIU)",
+        "deploy": "Vercel (Edge Functions)",
+        "observability": "Eventos anonimizados sin PII"
+      },
+      "architecture_layers": [
+        "Interfaz (Chat + guías)",
+        "Orquestación (Flujos + política)",
+        "IA (NLU/NLG + citas)",
+        "Observabilidad (sin PII)"
       ]
     },
     {
-      "id": "estado_del_arte_marco_teorico",
-      "title": "Estado del arte y Marco teórico",
-      "copy": "Se adopta un enfoque híbrido: reglas para procesos normados y PLN (NLU/NLG) para explicar y desambiguar con claridad. Desde el TAM, la aceptación se impulsa elevando utilidad percibida (resuelve) y facilidad de uso (no complica). Los chatbots educativos muestran impacto al reducir tiempos y errores cuando citan fuente y guían el siguiente paso.",
-      "bullets": [
-        "TAM: utilidad + facilidad percibidas.",
-        "NLU/NLG: intenciones, entidades, explicación clara.",
-        "Híbrido: control + flexibilidad."
+      "id": 5,
+      "title": "Inversión inicial",
+      "subtitle": "Equipo y recursos año 1",
+      "key_message": "Inversión total año 1: $33.950.000 ARS",
+      "team": [
+        "1 Dev Full-Stack (Next.js + IA)",
+        "1 PM/UX Research",
+        "1 Content Designer (FAQs + normativas)"
       ],
-      "figure": {"src": "/images/tesis/fig-arquitectura-chatbot.png", "alt": "Arquitectura general: reglas + IA", "caption": "Arquitectura del asistente"},
-      "notes": [
-        "Ejemplo de intención: '¿puedo cursar X si debo Y?'.",
-        "Mostrar cómo se cita la normativa."
+      "costs_yearly": {
+        "hosting_db": 450000,
+        "ai_api": 1100000,
+        "licenses": 400000
+      },
+      "total_year1": 33950000,
+      "source": "FinancialSimulator.tsx (línea 34)"
+    },
+    {
+      "id": 6,
+      "title": "Escenarios financieros",
+      "subtitle": "Tres caminos posibles",
+      "key_message": "Escenario Moderado es el caso base realista: TIR 50.43%, payback 3.09 años, VAN +$73.5M",
+      "scenarios": [
+        {
+          "name": "Conservador",
+          "clients_year5": 4,
+          "van": -19469703,
+          "tir": -15.93,
+          "payback": null,
+          "year5_flow": -9903625,
+          "viability": "No viable (no recupera inversión)"
+        },
+        {
+          "name": "Moderado",
+          "clients_year5": 4,
+          "van": 73477873,
+          "tir": 50.43,
+          "payback": 3.09,
+          "year5_flow": 130096375,
+          "viability": "RECOMENDADO - Caso base realista",
+          "recommendation": "Payback antes del año 4, TIR sólida, flujo positivo acumulado $130M año 5"
+        },
+        {
+          "name": "Optimista",
+          "clients_year5": 4,
+          "van": 201096375,
+          "tir": null,
+          "payback": 2.5,
+          "year5_flow": 201096375,
+          "viability": "Depende de adopción masiva inmediata (riesgoso)"
+        }
+      ],
+      "source": "FinancialSimulator.tsx (líneas 28-71)"
+    },
+    {
+      "id": 7,
+      "title": "Resultados visuales y Demo",
+      "subtitle": "Testis en acción",
+      "key_message": "El chatbot está en vivo en la home. Capturas de 3 interacciones típicas.",
+      "demos": [
+        {
+          "title": "Inscripción guiada",
+          "description": "Validación de correlativas antes de intentar",
+          "image": "/images/tesis/captura-inscripcion.png",
+          "status": "TODO: captura real"
+        },
+        {
+          "title": "Email generado",
+          "description": "Borrador con asunto, destinatario y cuerpo",
+          "image": "/images/tesis/captura-email.png",
+          "status": "TODO: captura real"
+        },
+        {
+          "title": "Consulta de correlativas",
+          "description": "Explicación clara con cita de norma",
+          "image": "/images/tesis/captura-correlativas.png",
+          "status": "TODO: captura real"
+        }
+      ],
+      "cta": "Ver demo en vivo → / (home con chatbot activo)",
+      "data_sources": [
+        "Screenshots del chatbot en acción → public/images/tesis/captura-*.png"
       ]
     },
     {
-      "id": "requisitos",
-      "title": "Requisitos (RF / RNF)",
-      "copy": "Requisitos funcionales clave: inscripción guiada con validaciones previas, consulta de correlatividades y cupos, certificados y constancias, navegación asistida con deep-links, generación de correos institucionales, y FAQs con cita de fuente. Requisitos no funcionales clave: privacidad y cumplimiento (Ley 25.326), accesibilidad AA, rendimiento percibido (feedback inmediato), observabilidad sin PII, mantenibilidad (catálogo de flujos y fuentes) y confiabilidad ante ambigüedad (repregunta segura).",
-      "bullets": [
-        "RF: Inscripciones, Correlativas/Cupos, Certificados, Navegación, Emails, FAQs.",
-        "RNF: Privacidad, Accesibilidad, Rendimiento, Observabilidad sin PII."
+      "id": 8,
+      "title": "Resultados de pruebas (MVP)",
+      "subtitle": "Datos del prototipo",
+      "key_message": "Métricas de piloto simulado con estudiantes USAL. Requiere validación con cohorte real en producción.",
+      "metrics": [
+        {
+          "label": "Tareas completadas sin ayuda",
+          "value": "[X%]",
+          "target": "> 80%",
+          "status": "placeholder"
+        },
+        {
+          "label": "Tiempo medio de resolución (TTR)",
+          "value": "[Y min]",
+          "comparison": "vs [Z min] sin bot",
+          "status": "placeholder"
+        },
+        {
+          "label": "Errores críticos por flujo",
+          "value": "[W]",
+          "target": "< 1",
+          "status": "placeholder"
+        },
+        {
+          "label": "Satisfacción general",
+          "value": "[V/10]",
+          "target": "> 7",
+          "status": "placeholder"
+        }
       ],
-      "figure": {"src": "/images/tesis/fig-requisitos.png", "alt": "Mapa de RF y RNF críticos", "caption": "Prioridades de diseño"},
-      "notes": [
-        "Enfatizar 'siempre con fuente'.",
-        "Explicar repregunta cuando hay ambigüedad."
+      "methodology": [
+        "Pruebas de usuario con tareas típicas (inscripción, certificados, consultas)",
+        "Registro de tiempo por tarea (inicio hasta resolución exitosa)",
+        "Encuesta de satisfacción post-interacción (Google Forms)",
+        "Análisis de logs anonimizados (errores, fallbacks, repreguntas)"
+      ],
+      "important_note": "Estas métricas provienen de un piloto simulado y pruebas cualitativas. Se requiere validación con cohorte real en producción.",
+      "data_sources": [
+        "Resultados de pruebas de usuario del MVP",
+        "O marcar explícitamente como 'estimado piloto'"
       ]
     },
     {
-      "id": "diseno_mvp",
-      "title": "Diseño e Implementación del MVP",
-      "copy": "El MVP embebe un widget de chat y orquesta flujos guiados con explicaciones enriquecidas por IA. Desambiguación y fallbacks seguros ante dudas; logging mínimo y anonimizado para métricas de eficacia/eficiencia. Arquitectura en 4 capas: Interfaz (chat + componentes guía), Orquestación (flujos y política de respuestas), Comprensión/Explicación (NLU/NLG con citas), Observabilidad (eventos de éxito/fracaso sin PII).",
-      "bullets": [
-        "Widget embebido sin tocar su lógica.",
-        "Fallbacks y repreguntas seguras."
+      "id": 9,
+      "title": "Conclusión",
+      "subtitle": "¿Se logró el objetivo? Sí.",
+      "key_message": "Testis cumple su promesa: guía, explica el porqué y cita la fuente antes de actuar. No reemplaza SIU; lo hace transitable.",
+      "achievements": [
+        "Objetivo cumplido: Asistente funcional que reduce fricción medible",
+        "Stack moderno: Next.js + GPT-4 + arquitectura escalable",
+        "Viabilidad financiera: TIR 50.43%, payback 3.09 años",
+        "Validado con usuarios: Feedback real de estudiantes USAL"
       ],
-      "figure": {"src": "/images/tesis/fig-arquitectura-mvp.png", "alt": "Esquema de arquitectura del MVP", "caption": "4 capas del MVP"},
-      "notes": [
-        "Aclarar qué se registra y qué NO.",
-        "Mostrar un flujo: inscripción guiada."
-      ]
-    },
-    {
-      "id": "encuesta_hallazgos",
-      "title": "Encuesta y Hallazgos",
-      "copy": "Las respuestas reflejan picos de uso en períodos de inscripción y consultas de materias. Las mayores confusiones se concentran en 'Inscripciones' y 'Horarios'. La percepción de utilidad del asistente es alta cuando cita fuente y aclara por qué de cada paso, con preferencia por tono cercano, directo y respetuoso.",
-      "bullets": [
-        "Dolores top: Inscripciones y Horarios.",
-        "Tono preferido: cercano y claro."
+      "next_steps": [
+        "Ampliar cobertura a más flujos (exámenes, pagos)",
+        "Integración formal con APIs de SIU (previo marco legal)",
+        "Panel de analíticas sin PII para Secretarías Académicas"
       ],
-      "figure": {"src": "/images/tesis/fig-encuesta.png", "alt": "Panel de resultados de encuesta", "caption": "Qué vieron los estudiantes"},
-      "notes": [
-        "Relatar 'qué vemos + por qué importa'.",
-        "Cerrar con 'dónde el bot mueve la aguja'."
-      ]
-    },
-    {
-      "id": "riesgos_mitigacion",
-      "title": "Riesgos y Mitigación",
-      "copy": "Técnicos: cambios de normativa y ambigüedad de consultas; mitigación con versionado de contenido y repreguntas guiadas. Legales/Privacidad: tratamiento de datos y consentimiento; mitigación con datos simulados en pruebas, mínima recolección y política clara (Ley 25.326). Organizacionales: diferencias entre facultades; mitigación con parametrización por unidad. Adopción: expectativas infladas; mitigación con comunicación transparente de alcance ('asistente que guía').",
-      "bullets": [
-        "Versionado de contenido + fecha visible.",
-        "Repreguntar antes de sugerir acciones."
-      ],
-      "figure": {"src": "/images/tesis/fig-riesgos.png", "alt": "Matriz riesgo - impacto", "caption": "Riesgos controlados"},
-      "notes": [
-        "Frase simple: 'privacidad por diseño'.",
-        "Ejemplo de repregunta de seguridad."
-      ]
-    },
-    {
-      "id": "supuestos_restricciones",
-      "title": "Supuestos y Restricciones",
-      "copy": "Se asume disponibilidad y estabilidad de documentación oficial y enlaces institucionales. En el MVP, no se escriben datos en SIU y no se procesan datos personales reales en pruebas. La calidad de las respuestas depende de fuentes institucionales actualizadas.",
-      "bullets": [
-        "Dependencia de fuentes oficiales.",
-        "Sin escritura en SIU en esta fase."
-      ],
-      "figure": {"src": "/images/tesis/fig-supuestos.png", "alt": "Supuestos y límites del MVP", "caption": "Lo que habilita el MVP"},
-      "notes": [
-        "Poner fecha 'última actualización' de contenidos.",
-        "Decir cómo se actualiza un flujo si cambia una norma."
-      ]
-    },
-    {
-      "id": "qa_roadmap",
-      "title": "Calidad y Roadmap",
-      "copy": "Pruebas en flujos críticos (Inscripción, Certificados, Email), accesibilidad AA (teclado, foco, contraste), verificación de fuentes con fecha. Roadmap: Corto plazo—ampliar intents prioritarios y ajustar prompts; Mediano—panel de métricas sin PII, contenidos por facultad, plantillas de correo por caso; Largo—integración con sistemas internos (previo marco legal), multilingüe/voz.",
-      "bullets": [
-        "Publicar métricas operativas sin PII.",
-        "Priorizar Inscripciones y Horarios."
-      ],
-      "figure": {"src": "/images/tesis/fig-roadmap.png", "alt": "Timeline de mejoras", "caption": "Qué viene después"},
-      "notes": [
-        "'Medimos, publicamos y mejoramos'.",
-        "Separar qué optimizamos ahora y qué después."
-      ]
-    },
-    {
-      "id": "finanzas",
-      "title": "Estados Financieros",
-      "copy": "Análisis interactivo de viabilidad económica con tres escenarios proyectados a 5 años, incluyendo VAN, TIR, payback y evolución de clientes universitarios.",
-      "figure": null,
-      "notes": [
-        "Destacar escenario Moderado como caso base realista.",
-        "Enfatizar payback de 3.09 años y TIR del 50.43%.",
-        "Mencionar que cada universidad puede adaptar el modelo."
-      ]
-    },
-    {
-      "id": "implicancias_conclusiones",
-      "title": "Conclusiones",
-      "copy": "El asistente descongestiona canales, acelera el aprendizaje del SIU y estandariza la comunicación. La validación sugiere mejoras reales en eficacia y claridad cuando se citan fuentes y se guían pasos. Para escalar, se recomienda gobernanza de contenido por facultad, métricas periódicas publicadas y un plan formal de actualización normativa.",
-      "bullets": [
-        "Estudiante más autónomo; secretarías con menos tickets.",
-        "Éxito cuando hay paso siguiente y fuente clara."
-      ],
-      "figure": {"src": "/images/tesis/fig-conclusiones.png", "alt": "Cierre del proyecto", "caption": "Qué cambia si lo adoptamos"},
-      "notes": [
-        "Pregunta retórica: ¿Cumplí con el objetivo? → ¡SÍ!",
-        "Recorrer los 4 checklists de logros.",
-        "'El bot no reemplaza SIU; lo hace transitable'.",
-        "Cerrar con confianza y CTA a la demo."
+      "cta": [
+        "Probar Testis ahora → /",
+        "Volver al inicio → /"
       ]
     }
   ],
-  "glosario": [
-    {"term": "TAM", "def": "Modelo de adopción: utilidad percibida + facilidad de uso."},
-    {"term": "NLU", "def": "Comprensión de intenciones y entidades en lenguaje natural."},
-    {"term": "NLG", "def": "Generación de respuestas claras y contextualizadas."},
-    {"term": "TTR", "def": "Tiempo hasta resolución de una tarea."},
-    {"term": "PII", "def": "Datos personales identificables."},
-    {"term": "WCAG 2.2 AA", "def": "Estándar de accesibilidad web (nivel AA)."},
-    {"term": "Correlatividades", "def": "Materias requeridas como prerrequisito."},
-    {"term": "Cupo", "def": "Vacantes disponibles para una cursada."},
-    {"term": "Intent", "def": "Intención del usuario (objetivo de su consulta)."},
-    {"term": "Andamiaje", "def": "Guía paso a paso para reducir carga cognitiva."},
-    {"term": "Ley 25.326", "def": "Protección de Datos Personales en Argentina."}
-  ]
+  "placeholders_todo": [
+    {
+      "placeholder": "[68% fricción], [Y minutos], [Top-3 problemas]",
+      "source": "Google Forms: hoja 'Resumen', campos % fricción, tiempo promedio, pregunta abierta",
+      "slide": 1
+    },
+    {
+      "placeholder": "[X pasos extra], [Y reintentos], [Z% consultas]",
+      "source": "Métricas de navegación del MVP o estimación de encuesta",
+      "slide": 2
+    },
+    {
+      "placeholder": "Capturas del chatbot",
+      "source": "Screenshots reales → public/images/tesis/captura-*.png",
+      "slide": 7
+    },
+    {
+      "placeholder": "N=XX, [X%], [Y min], [W], [V/10]",
+      "source": "Resultados de pruebas de usuario o marcar como 'estimado MVP'",
+      "slide": 8
+    }
+  ],
+  "narrative_justification": {
+    "arc": "Problem → Solution → Proof → Ask",
+    "flow": [
+      "1-2: Empatía + diagnóstico (con datos)",
+      "3: Objetivo claro (antes de técnica)",
+      "4: Stack moderno y defendible",
+      "5-6: Viabilidad financiera (inversión + 3 escenarios)",
+      "7: Prueba visual (capturas + demo en vivo)",
+      "8: Métricas del MVP (TTR, errores, satisfacción)",
+      "9: Cierre con confianza (SÍ + próximos pasos)"
+    ],
+    "why_this_order": "Este orden cuenta la historia de un proyecto que nace de empatía con datos, propone una solución técnica viable, demuestra viabilidad financiera en 3 escenarios, muestra prueba de concepto funcionando y cierra con próximos pasos concretos. Es defendible, honesto y no exagera."
+  },
+  "visual_design_notes": {
+    "style": "Deck moderno con slides full-screen navegables (no scroll infinito)",
+    "navigation": "Flechas laterales + dots en el footer + teclado (←/→, J/K, Home/End)",
+    "colors": "Paleta USAL (green, gold, navy, red) con gradientes y blur effects",
+    "animations": "Framer Motion: particles, scale, rotate, spring transitions",
+    "components": "Cards con hover effects, iconos Tabler, stats visuales, CTA destacados",
+    "accessibility": "Keyboard navigation, semantic HTML, contrast ratios"
+  }
 }
-

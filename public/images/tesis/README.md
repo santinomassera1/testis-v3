@@ -1,88 +1,117 @@
-# Imágenes de la Presentación de Tesis
+# Imágenes para Presentación de Tesis
 
-Este directorio contiene las imágenes para la página de presentación (`/presentacion`).
+Este directorio contiene las imágenes utilizadas en la presentación de tesis de Testis.
 
-## Archivos necesarios
+## 📸 Capturas Requeridas (TODO)
 
-Subí las siguientes imágenes con estos nombres exactos:
+Para completar la **Slide 7** de la presentación, necesitamos agregar las siguientes capturas del chatbot en acción:
 
-### Secciones principales
+### 1. `captura-inscripcion.png`
+**Descripción:** Inscripción guiada con validación de correlativas
+- Mostrar conversación donde el chatbot:
+  - Pregunta al estudiante qué materia quiere inscribir
+  - Valida correlativas previas
+  - Explica si puede o no inscribirse (con razón)
+  - Proporciona el deep-link correcto a SIU
 
-1. **`fig-abstract.jpg`** - Síntesis visual del proyecto
-   - Sugerencia: Collage de 3 capturas del prototipo enmarcadas
+**Dimensiones sugeridas:** 1200x800px (ratio 3:2)
 
-2. **`fig-contexto.png`** - Mapa de fricciones típicas en SIU
-   - Sugerencia: Diagrama mostrando puntos de fricción (Inscripciones, Horarios, Certificados, Contacto)
+---
 
-3. **`fig-barreras.png`** - Barreras técnicas, organizacionales y legales
-   - Sugerencia: Diagrama "barreras → oportunidad"
+### 2. `captura-email.png`
+**Descripción:** Generación automática de email institucional
+- Mostrar conversación donde el chatbot:
+  - Genera un borrador de email
+  - Incluye asunto, destinatario correcto (secretaría/área)
+  - Redacta el cuerpo del mensaje de forma institucional
+  - Ofrece el mailto: link para abrir en cliente de correo
 
-4. **`fig-metodologia.png`** - Metodología iterativa e indicadores
-   - Sugerencia: Iconografía de metodología (Descubrir → Diseñar → Construir → Probar → Medir → Iterar)
+**Dimensiones sugeridas:** 1200x800px (ratio 3:2)
 
-5. **`fig-arquitectura-chatbot.png`** - Arquitectura general: reglas + IA
-   - Sugerencia: Diagrama de arquitectura del asistente (capas, flujos)
+---
 
-6. **`fig-requisitos.png`** - Mapa de RF y RNF críticos
-   - Sugerencia: Mapa de flujos prioritarios con requisitos destacados
+### 3. `captura-correlativas.png`
+**Descripción:** Consulta de correlativas con explicación y cita
+- Mostrar conversación donde el chatbot:
+  - Responde a consulta sobre correlativas de una materia
+  - Explica claramente cuáles son y por qué
+  - Cita la fuente oficial (reglamento académico, plan de estudios)
+  - Incluye enlaces útiles
 
-7. **`fig-arquitectura-mvp.png`** - Esquema de arquitectura del MVP
-   - Sugerencia: 4 capas detalladas (UI, Orquestación, Comprensión/Explicación, Observabilidad)
+**Dimensiones sugeridas:** 1200x800px (ratio 3:2)
 
-8. **`fig-encuesta.png`** - Panel de resultados de encuesta
-   - Sugerencia: Gráficos de barras/líneas/donut mostrando resultados clave
+---
 
-9. **`fig-riesgos.png`** - Matriz riesgo - impacto
-   - Sugerencia: Matriz 2x2 o tabla visual con riesgos coloreados por impacto
+## 🎨 Guidelines de Captura
 
-10. **`fig-supuestos.png`** - Supuestos y límites del MVP
-    - Sugerencia: Lista visual o diagrama de límites/alcance
+### Formato
+- **Formato:** PNG con transparencia o fondo blanco
+- **Calidad:** Alta resolución (mínimo 1200px de ancho)
+- **Ratio:** 3:2 (horizontal) para mejor visualización en slides
 
-11. **`fig-roadmap.png`** - Timeline de mejoras
-    - Sugerencia: Línea de tiempo (corto/mediano/largo plazo)
+### Contenido
+- Capturas de pantalla reales del chatbot funcionando
+- Conversaciones auténticas que muestren el valor del producto
+- Texto legible (zoom apropiado)
+- Sin datos personales reales (usar datos demo/simulados)
 
-12. **`fig-conclusiones.png`** - Cierre del proyecto
-    - Sugerencia: Imagen de impacto/resultados finales
+### Privacidad
+- ❌ No incluir datos personales identificables (PII)
+- ✅ Usar nombres ficticios (ej: "Juan Estudiante")
+- ✅ Usar números de legajo simulados
+- ✅ Usar emails genéricos (@ejemplo.com)
 
-## Formato recomendado
+---
 
-- **Formato**: PNG (con transparencia) o JPG (con fondo blanco/crema)
-- **Ancho**: 1200-1600px (se adapta responsivamente)
-- **Calidad**: Alta resolución para pantallas Retina
-- **Estilo**: Coherente con paleta USAL (verdes, crema, navy)
+## 🚀 Cómo Agregar las Capturas
 
-## Alternativa rápida
+1. **Tomar las capturas:**
+   - Abrí el chatbot en la home (/)
+   - Iniciá las conversaciones de prueba correspondientes
+   - Capturá la pantalla cuando la conversación muestre el punto clave
 
-Si no tenés todas las imágenes listas, podés:
-1. Usar placeholders temporales (la página ya los muestra)
-2. Ir subiendo imágenes de a una (reemplazarán los placeholders automáticamente)
-3. Usar capturas de pantalla del chatbot/SIU para demostrar puntos
+2. **Procesá las imágenes:**
+   - Recortá solo la parte relevante (ventana del chat)
+   - Redimensioná a 1200px de ancho manteniendo proporciones
+   - Optimizá el tamaño del archivo (idealmente < 500KB por imagen)
 
-## Tips para crear imágenes rápidas
+3. **Nombrá los archivos:**
+   - `captura-inscripcion.png`
+   - `captura-email.png`
+   - `captura-correlativas.png`
 
-### Opción 1: Excalidraw
-- Ir a https://excalidraw.com
-- Crear diagramas simples y profesionales
-- Exportar como PNG
+4. **Guardá en este directorio:**
+   ```
+   /public/images/tesis/
+   ```
 
-### Opción 2: Figma
-- Crear frames de 1600x900px
-- Usar colores USAL (verde: #16a34a, navy: #0f172a, gold: #ca8a04)
-- Exportar como PNG 2x
+5. **Verificá en la presentación:**
+   - Navegá a `/presentacion`
+   - Andá a la Slide 7
+   - Las imágenes deberían verse automáticamente
 
-### Opción 3: Canva
-- Usar plantillas de infografías
-- Personalizar con colores USAL
-- Exportar en alta calidad
+---
 
-### Opción 4: Screenshots
-- Tomar capturas de pantalla del chatbot funcionando
-- Anotarlas con herramientas como Skitch o CleanShot
-- Mostrar ejemplos reales de interacciones
+## 📦 Placeholder Actual
 
-## Notas
+Mientras las capturas no estén disponibles, la presentación muestra un **placeholder visual** con:
+- Gradiente de color según la temática
+- Emoji representativo
+- Mensaje "Captura pendiente"
 
-- Las imágenes faltantes mostrarán placeholders elegantes con el nombre del archivo
-- La presentación funciona perfectamente sin imágenes (todo el texto está)
-- Priorizá las figuras de: Abstract, Arquitectura MVP, y Encuesta (son las más importantes visualmente)
+Esto permite que la presentación funcione incluso sin las imágenes finales.
 
+---
+
+## 🔄 Actualización Futura
+
+Una vez agregadas las capturas reales:
+1. Las imágenes se cargarán automáticamente
+2. Los placeholders desaparecerán
+3. La nota "TODO: captura real" se puede eliminar del JSON
+
+---
+
+**Última actualización:** 2025-01-21  
+**Responsable:** Santino Massera  
+**Proyecto:** Testis v3 — Asistente conversacional para SIU Guaraní USAL
