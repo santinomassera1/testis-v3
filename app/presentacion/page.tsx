@@ -78,12 +78,12 @@ const financialData = {
         { year: 1, ingresos: 10000000, costos: 33950000, flujoNeto: -23950000, flujoAcumulado: -23950000 },
         { year: 2, ingresos: 20000000, costos: 7000000, flujoNeto: 13000000, flujoAcumulado: -10950000 },
         { year: 3, ingresos: 45000000, costos: 8050000, flujoNeto: 36950000, flujoAcumulado: 26000000 },
-        { year: 4, ingresos: 75000000, costos: 9257500, flujoNeto: 65742500, flujoAcumulado: 91742500 },
-        { year: 5, ingresos: 120000000, costos: 10646125, flujoNeto: 109353875, flujoAcumulado: 201096375 },
+        { year: 4, ingresos: 60000000, costos: 9257500, flujoNeto: 50742500, flujoAcumulado: 76742500 },
+        { year: 5, ingresos: 80000000, costos: 10646125, flujoNeto: 69353875, flujoAcumulado: 146096375 },
       ],
-      van: 201096375,
-      tir: null,
-      payback: 2.5,
+      van: 100000000,
+      tir: 65.5,
+      payback: 2.8,
     },
   ],
 };
@@ -359,7 +359,7 @@ function Slide3() {
           className="bg-white/10 backdrop-blur-md rounded-3xl p-12 mb-12 border-2 border-white/30"
         >
           <p className="text-4xl leading-relaxed">
-            Un asistente conversacional que reduce <span className="font-bold underline decoration-usal-gold-300">tiempo, errores y ansiedad</span> al guiar tareas académicas en SIU
+            Un asistente conversacional que reduce <span className="font-bold">tiempo, errores y ansiedad</span> al guiar tareas académicas en SIU
           </p>
         </motion.div>
 
@@ -447,8 +447,41 @@ function Slide4() {
 
 // Slide 5: Inversión inicial
 function Slide5() {
+  const team = [
+    { 
+      role: 'Dev Full-Stack', 
+      seniority: 'Ssr, 3–5 años', 
+      fte: '0.8 FTE',
+      icon: '👨‍💻',
+      responsibility: 'Arquitectura, integración con Gemini, seguridad, deploy y observabilidad'
+    },
+    { 
+      role: 'PM/UX Research', 
+      seniority: '2–4 años', 
+      fte: '0.5 FTE',
+      icon: '🎨',
+      responsibility: 'Entrevistas, flujos, prototipos, pruebas de usabilidad y métricas'
+    },
+    { 
+      role: 'Content Designer', 
+      seniority: '1–3 años', 
+      fte: '0.25 FTE',
+      icon: '✍️',
+      responsibility: 'FAQs, guías, plantillas de mail institucional, tono y citas normativas'
+    },
+  ];
+
+  const services = [
+    { name: 'Vercel + Neon', desc: 'Infra serverless, CDN, backups' },
+    { name: 'Gemini Business', desc: 'Licencia + API + gobernanza' },
+    { name: 'SendGrid/Postmark', desc: 'Email institucional verificado' },
+    { name: 'Sentry/LogRocket', desc: 'Trazas, errores, replay sin PII' },
+    { name: 'Plausible/GA4', desc: 'Analítica y funnels agregados' },
+    { name: 'Auth0/Clerk', desc: 'SSO y control de acceso opcional' },
+  ];
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
+    <div className="flex flex-col items-center justify-center h-screen p-8 relative overflow-hidden">
       {/* Imagen de fondo plata */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -457,56 +490,72 @@ function Slide5() {
           fill
           className="object-cover"
         />
-        {/* Overlay para legibilidad (reducido para ver mejor la imagen) */}
-        <div className="absolute inset-0 bg-gradient-to-br from-usal-gold-900/70 via-white/65 to-usal-green-900/70" />
+        {/* Overlay para legibilidad */}
+        <div className="absolute inset-0 bg-gradient-to-br from-usal-gold-900/75 via-white/70 to-usal-green-900/75" />
       </div>
 
-      <div className="relative z-10 max-w-6xl w-full">
-            <motion.div
-          initial={{ y: -30, opacity: 0 }}
+      <div className="relative z-10 max-w-7xl w-full">
+        {/* Header con inversión */}
+        <motion.div
+          initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="text-center mb-12"
+          className="text-center mb-8"
         >
-          <IconCurrencyDollar className="h-20 w-20 mx-auto mb-6 text-usal-gold-600" />
-          <h1 className="text-7xl font-bold text-usal-navy-900 mb-4">
-            Qué se necesita para empezar
+          <IconCurrencyDollar className="h-16 w-16 mx-auto mb-4 text-usal-gold-600" />
+          <h1 className="text-6xl font-bold text-usal-navy-900 mb-3">
+            Para empezar
           </h1>
-          <p className="text-3xl text-usal-navy-600">Equipo mínimo y recursos</p>
-            </motion.div>
+          <div className="bg-gradient-to-r from-usal-green-600/90 to-usal-gold-600/90 backdrop-blur-lg rounded-2xl p-6 text-white shadow-2xl inline-block border-2 border-white/30">
+            <p className="text-2xl font-semibold mb-1">Inversión Inicial (Año 1)</p>
+            <div className="text-6xl font-bold drop-shadow-lg">$33.9M</div>
+            <p className="text-xl text-white/95 mt-1">Incluye equipo, servicios y setup</p>
+          </div>
+        </motion.div>
 
-        {/* Team */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          {[
-            { role: 'Dev Full-Stack', icon: '👨‍💻' },
-            { role: 'PM/UX Research', icon: '🎨' },
-            { role: 'Content Designer', icon: '✍️' },
-          ].map((member, i) => (
+        {/* Equipo y dedicación */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          {team.map((member, i) => (
             <motion.div
               key={i}
-              initial={{ y: 30, opacity: 0 }}
+              initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3 + i * 0.1 }}
-              className="bg-white/25 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border-2 border-white/40"
+              transition={{ delay: 0.2 + i * 0.1 }}
+              className="bg-white/30 backdrop-blur-lg rounded-xl p-5 shadow-xl border-2 border-white/40"
             >
-              <div className="text-7xl mb-4 text-center">{member.icon}</div>
-              <h3 className="text-3xl font-bold text-usal-navy-900 text-center">{member.role}</h3>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="text-5xl">{member.icon}</div>
+                <div>
+                  <h3 className="text-3xl font-bold text-usal-navy-900">{member.role}</h3>
+                  <p className="text-xl text-usal-navy-700">{member.seniority} – {member.fte}</p>
+                </div>
+              </div>
+              <p className="text-lg text-usal-navy-700 leading-snug">{member.responsibility}</p>
             </motion.div>
           ))}
-      </div>
-
-        {/* Total */}
-      <motion.div
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.7 }}
-          className="bg-gradient-to-r from-usal-green-600/90 to-usal-gold-600/90 backdrop-blur-lg rounded-3xl p-12 text-white shadow-2xl text-center border-2 border-white/30"
-        >
-          <h3 className="text-4xl font-bold mb-6">Inversión Inicial Total (Año 1)</h3>
-          <div className="text-8xl font-bold drop-shadow-lg">
-            $33.9M
         </div>
-          <p className="text-2xl text-white/95 mt-4">Incluye setup, contenido base y salarios</p>
-      </motion.div>
+
+        {/* Servicios y licencias */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <h3 className="text-3xl font-bold text-usal-navy-900 mb-4">Servicios y licencias</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {services.map((service, i) => (
+              <motion.div
+                key={i}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.6 + i * 0.05 }}
+                className="bg-white/35 backdrop-blur-md rounded-lg p-4 border-2 border-usal-gold-400/40 shadow-lg"
+              >
+                <h4 className="text-xl font-bold text-usal-navy-900 mb-2">{service.name}</h4>
+                <p className="text-lg text-usal-navy-700 leading-snug">{service.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </div>
   );
@@ -596,25 +645,126 @@ function Slide6() {
             </motion.div>
           ))}
     </div>
-
-        {/* Recommendation */}
-            <motion.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.7 }}
-          className="bg-gradient-to-r from-usal-gold-500 to-usal-gold-600 rounded-3xl p-10 shadow-2xl text-center"
-        >
-          <p className="text-3xl font-medium">
-            Moderado como base defendible: payback ~3.09 años, TIR ~50.43%, flujo positivo acumulado ~$130.1M al año 5
-          </p>
-            </motion.div>
         </div>
     </div>
   );
 }
 
-// Slide 7: Comparativa dinámica (NUEVA)
+// Slide 7: Clientes objetivo
 function Slide7() {
+  const clients = [
+    { name: 'USAL', logo: '/usal-logo.jpg', status: 'active' },
+    { name: 'UTN', logo: '/images/tesis/utnlogo.png', status: 'planned' },
+    { name: 'UNC', logo: '/images/tesis/unclogo.png', status: 'planned' },
+    { name: '?', logo: null, status: 'evaluation' },
+  ];
+
+  return (
+    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
+      {/* Imagen de fondo USAL */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/tesis/fondo_usal.png"
+          alt="USAL Background"
+          fill
+          className="object-cover"
+        />
+        {/* Overlay para legibilidad */}
+        <div className="absolute inset-0 bg-gradient-to-br from-usal-navy-900/80 via-white/85 to-usal-green-900/75" />
+        <div className="absolute inset-0 backdrop-blur-[2px]" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl w-full">
+        {/* Header */}
+        <motion.div
+          initial={{ y: -30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="text-center mb-12"
+        >
+          <IconUsers className="h-20 w-20 mx-auto mb-6 text-usal-green-600" />
+          <h1 className="text-7xl font-bold text-usal-navy-900 mb-4">
+            Clientes a los que apuntamos
+          </h1>
+          <p className="text-3xl text-usal-navy-600">
+            Primeros 4 (piloto + expansión)
+          </p>
+        </motion.div>
+
+        {/* Grid de logos - responsive 2x2 o 4x1 */}
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12 max-w-6xl mx-auto">
+          {clients.map((client, i) => (
+            <motion.div
+              key={i}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2 + i * 0.1, type: "spring" }}
+              className="flex flex-col items-center"
+            >
+              {/* Logo container */}
+              <div className={`
+                w-48 h-48 rounded-2xl shadow-2xl border-4 
+                flex items-center justify-center
+                ${client.status === 'active' 
+                  ? 'bg-white border-usal-green-500' 
+                  : client.status === 'planned'
+                  ? 'bg-white border-usal-navy-400'
+                  : 'bg-gray-200 border-gray-400'
+                }
+                hover:scale-105 transition-transform
+              `}>
+                {client.logo ? (
+                  <img 
+                    src={client.logo} 
+                    alt={client.name}
+                    className="w-32 h-32 object-contain p-4"
+                  />
+                ) : client.status === 'evaluation' ? (
+                  <div className="text-gray-400">
+                    <IconAlertTriangle className="h-24 w-24 mx-auto mb-2" />
+                    <p className="text-center text-sm px-2">Universidad en evaluación</p>
+                  </div>
+                ) : (
+                  <div className="text-center text-usal-navy-600">
+                    <div className="text-6xl font-bold mb-2">{client.name}</div>
+                    <p className="text-sm text-usal-navy-500">Logo institucional</p>
+                  </div>
+                )}
+              </div>
+              
+              {/* Etiqueta */}
+              <div className={`
+                mt-4 px-6 py-3 rounded-xl text-2xl font-bold
+                ${client.status === 'active'
+                  ? 'bg-usal-green-600 text-white'
+                  : client.status === 'planned'
+                  ? 'bg-usal-navy-600 text-white'
+                  : 'bg-gray-400 text-white'
+                }
+              `}>
+                {client.name}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Contexto estratégico */}
+        <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          className="bg-gradient-to-r from-usal-green-600/90 to-usal-navy-600/90 backdrop-blur-lg rounded-3xl p-10 shadow-2xl text-center border-2 border-white/30"
+        >
+          <p className="text-3xl font-semibold text-white leading-relaxed" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
+            Estrategia: piloto con USAL, luego expansión a universidades públicas con SIU
+          </p>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+// Slide 8: Comparativa dinámica
+function Slide8() {
   const [currentView, setCurrentView] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const prefersReducedMotion = useReducedMotion();
@@ -632,7 +782,7 @@ function Slide7() {
     if (isPlaying && !prefersReducedMotion) {
       const interval = setInterval(() => {
         setCurrentView((prev) => (prev + 1) % views.length);
-      }, 5000);
+      }, 8000);
       return () => clearInterval(interval);
     }
   }, [isPlaying, prefersReducedMotion, views.length]);
@@ -756,8 +906,8 @@ function Slide7() {
   );
 }
 
-// Slide 8: Demo
-function Slide8() {
+// Slide 9: Demo
+function Slide9() {
   const demos = [
     { title: 'Inscripción guiada', image: '/images/tesis/inscripcion.jpg', desc: 'Valida correlativas' },
     { title: 'Email generado', image: '/images/tesis/mail.jpg', desc: 'Borrador institucional' },
@@ -840,14 +990,14 @@ function Slide8() {
   );
 }
 
-// Slide 9: Resultados MVP
-function Slide9() {
+// Slide 10: Resultados MVP
+function Slide10() {
   return (
     <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
       {/* Imagen de fondo prototipo */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/tesis/prototipo_background.jpg"
+          src="/images/tesis/prototipo_backround.jpg"
           alt="Prototipo"
           fill
           className="object-cover"
@@ -897,24 +1047,13 @@ function Slide9() {
           </motion.div>
         ))}
       </div>
-
-            <motion.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.7 }}
-          className="bg-gradient-to-r from-usal-gold-500/80 to-usal-green-500/80 backdrop-blur-lg rounded-3xl p-10 border-2 border-white/40 text-center shadow-2xl"
-        >
-          <p className="text-2xl text-white drop-shadow-lg">
-            <strong>Datos de piloto MVP</strong> (n=15 estudiantes) — a validar con cohorte mayor en producción
-          </p>
-            </motion.div>
         </div>
       </div>
   );
 }
 
-// Slide 10: Conclusión
-function Slide10() {
+// Slide 11: Conclusión
+function Slide11() {
   return (
     <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
       {/* Imagen de fondo chatbot - más visible */}
@@ -972,46 +1111,41 @@ function Slide10() {
           className="bg-white/20 backdrop-blur-xl rounded-3xl p-12 mb-12 border-2 border-white/50 shadow-2xl"
         >
           <p className="text-4xl leading-relaxed font-semibold" style={{ textShadow: '0 2px 15px rgba(0,0,0,0.7)' }}>
-            Testis cumple su promesa: <span className="font-bold underline decoration-usal-gold-300">guía, explica y cita la fuente</span> antes de actuar
+            Testis cumple su promesa: <span className="font-bold">guía, explica y cita la fuente</span> antes de actuar
           </p>
         </motion.div>
-
-        {/* Achievements */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          {[
-            { icon: IconTarget, title: 'Prototipo', desc: 'Reduce fricción' },
-            { icon: IconCode, title: 'Stack', desc: 'Moderno, extensible' },
-            { icon: IconChartBar, title: 'Finanzas', desc: 'Moderado viable' },
-            { icon: IconUsers, title: 'Validación', desc: 'Piloto + feedback' },
-          ].map((item, i) => (
-    <motion.div
-              key={i}
-              initial={{ y: 40, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.5 + i * 0.1 }}
-              className="bg-white/25 backdrop-blur-xl rounded-2xl p-8 border-2 border-white/50 shadow-xl"
-            >
-              <item.icon className="h-14 w-14 mx-auto mb-4 drop-shadow-2xl" />
-              <h3 className="font-bold text-2xl mb-2" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>{item.title}</h3>
-              <p className="text-xl" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.7)' }}>{item.desc}</p>
-            </motion.div>
-          ))}
-          </div>
 
         {/* Next steps */}
         <motion.div
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.9 }}
+          transition={{ delay: 0.5 }}
           className="bg-white/30 backdrop-blur-xl rounded-3xl p-10 border-2 border-white/50 shadow-2xl"
         >
-          <h3 className="text-4xl font-bold mb-6 flex items-center justify-center gap-4 text-white" style={{ textShadow: '0 3px 15px rgba(0,0,0,0.8)' }}>
+          <h3 className="text-4xl font-bold mb-8 flex items-center justify-center gap-4 text-white" style={{ textShadow: '0 3px 15px rgba(0,0,0,0.8)' }}>
             <IconRocket className="h-10 w-10 text-usal-gold-300 drop-shadow-2xl" />
             Próximos pasos
           </h3>
-          <p className="text-2xl leading-relaxed text-white font-semibold" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}>
-            Ampliar cobertura · Integración formal con SIU · Analíticas sin PII para Académica
-          </p>
+          
+          {/* Objetivo actual */}
+          <div className="mb-6">
+            <h4 className="text-3xl font-bold text-usal-gold-300 mb-3" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}>
+              Objetivo actual
+            </h4>
+            <p className="text-2xl leading-relaxed text-white font-semibold" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}>
+              Integrar la API del SIU Guaraní y lanzar prueba piloto para estudiantes
+            </p>
+          </div>
+
+          {/* Futuro */}
+          <div>
+            <h4 className="text-3xl font-bold text-usal-green-300 mb-3" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}>
+              Futuro
+            </h4>
+            <p className="text-2xl leading-relaxed text-white font-semibold" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}>
+              Desarrollar chatbot para profesores · Analíticas sin PII para Académica
+            </p>
+          </div>
         </motion.div>
           </div>
         </div>
@@ -1033,10 +1167,11 @@ export default function PresentacionPage() {
     { id: 4, title: 'Stack Técnico', component: Slide4 },
     { id: 5, title: 'Inversión', component: Slide5 },
     { id: 6, title: 'Escenarios', component: Slide6 },
-    { id: 7, title: 'Comparativa', component: Slide7 },
-    { id: 8, title: 'Demo', component: Slide8 },
-    { id: 9, title: 'Resultados', component: Slide9 },
-    { id: 10, title: 'Conclusión', component: Slide10 },
+    { id: 7, title: 'Clientes', component: Slide7 },
+    { id: 8, title: 'Comparativa', component: Slide8 },
+    { id: 9, title: 'Demo', component: Slide9 },
+    { id: 10, title: 'Resultados', component: Slide10 },
+    { id: 11, title: 'Conclusión', component: Slide11 },
   ];
 
   useEffect(() => {
