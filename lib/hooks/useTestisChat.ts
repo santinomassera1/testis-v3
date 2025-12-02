@@ -61,13 +61,13 @@ export function useTestisChat() {
   }));
 
   // Wrapper para handleSubmit que funciona tanto con eventos como sin ellos
-  const handleSubmit = useCallback((e?: React.FormEvent) => {
+  const handleSubmit = useCallback((e?: React.FormEvent, options?: any) => {
     if (e) {
       e.preventDefault();
     }
     // Llamar al handleSubmit del SDK
     if (sdkHandleSubmit) {
-      sdkHandleSubmit(e as any);
+      sdkHandleSubmit(e as any, options);
     }
   }, [sdkHandleSubmit]);
 

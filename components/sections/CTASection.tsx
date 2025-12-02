@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { IconRocket, IconUsers, IconShield, IconStar } from "@tabler/icons-react";
+import Image from "next/image";
 
 export const CTASection = () => {
   const benefits = [
@@ -39,12 +40,12 @@ export const CTASection = () => {
           viewport={{ once: true }}
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            ¿Listo para Transformar tu 
+            ¿Listo para Transformar tu
             <span className="block text-usal-gold-300">Experiencia Académica?</span>
           </h2>
-          
+
           <p className="text-xl text-usal-green-100 mb-8 max-w-2xl mx-auto">
-            Únete a miles de estudiantes y universidades que ya han revolucionado 
+            Únete a miles de estudiantes y universidades que ya han revolucionado
             su gestión académica con Testis. La implementación es gratuita y toma menos de un día.
           </p>
 
@@ -94,17 +95,17 @@ export const CTASection = () => {
             className="mt-12 pt-8 border-t border-usal-green-400/30"
           >
             <div className="flex items-center justify-center space-x-8 opacity-70">
-              <img 
-                src="/usal-logo.jpg" 
-                alt="USAL" 
+              <Image
+                src="/usal-logo.jpg"
+                alt="USAL"
+                width={32}
+                height={32}
                 style={{
                   height: '32px',
                   width: 'auto',
                   objectFit: 'contain',
                   display: 'block'
                 }}
-                onLoad={() => console.log('✅ Logo USAL cargado en CTA')}
-                onError={() => console.error('❌ Error cargando logo USAL en CTA')}
               />
               <div className="text-white text-sm">
                 Universidad del Salvador

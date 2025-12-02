@@ -39,11 +39,11 @@ export function useSatisfactionSurvey() {
     }
   }, []);
 
-  // Incrementar contador de mensajes
-  const incrementMessageCount = useCallback(() => {
+  // Actualizar contador de mensajes
+  const setMessageCount = useCallback((count: number) => {
     setMetrics((prev) => ({
       ...prev,
-      messagesCount: prev.messagesCount + 1,
+      messagesCount: count,
     }));
   }, []);
 
@@ -69,7 +69,7 @@ export function useSatisfactionSurvey() {
     console.log('🔍 checkAndShowSurvey llamado');
     console.log('  - hasSurveyBeenShown:', hasSurveyBeenShown);
     console.log('  - messagesCount:', metrics.messagesCount);
-    
+
     // No mostrar si ya se mostró hoy
     if (hasSurveyBeenShown) {
       console.log('⏭️  Ya se mostró la encuesta hoy');
@@ -89,7 +89,7 @@ export function useSatisfactionSurvey() {
       console.log('✅ Mostrando encuesta!');
       setShowSurvey(true);
       setHasSurveyBeenShown(true);
-      
+
       // Guardar que ya se mostró hoy
       localStorage.setItem(
         "testis_survey_shown_today",
@@ -106,12 +106,12 @@ export function useSatisfactionSurvey() {
     console.log('  - showSurvey actual:', showSurvey);
     console.log('  - hasSurveyBeenShown:', hasSurveyBeenShown);
     console.log('  - messagesCount:', metrics.messagesCount);
-    
+
     // DEBUGGING: Ignorar todas las condiciones temporalmente
     console.log('🚨 DEBUG MODE: Mostrando encuesta SIN condiciones!');
     setShowSurvey(true);
     setHasSurveyBeenShown(true);
-    
+
     /* VERSIÓN ORIGINAL (comentada para debug):
     if (!hasSurveyBeenShown && metrics.messagesCount > 0) {
       console.log('✅ Mostrando encuesta (manual)!');
@@ -178,7 +178,7 @@ export function useSatisfactionSurvey() {
       sessionDuration: getSessionDuration(),
       categoriesUsed: Array.from(metrics.categoriesUsed),
     },
-    incrementMessageCount,
+    setMessageCount,
     addCategory,
     checkAndShowSurvey,
     triggerSurvey,

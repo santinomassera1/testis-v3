@@ -19,6 +19,7 @@ import {
   IconChevronLeft,
   IconChevronRight,
   IconStarFilled,
+  IconPaperclip,
 } from "@tabler/icons-react";
 import {
   AnimatePresence,
@@ -44,6 +45,8 @@ export const TestisChat = () => {
   const messageHistoryRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const { data: session } = useSession();
+  const [attachment, setAttachment] = useState<{ name: string; content: string; type: string } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     messages,
@@ -127,10 +130,56 @@ export const TestisChat = () => {
     }
   };
 
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target?.result as string;
+        setAttachment({
+          name: file.name,
+          content: content, // Data URL complete (e.g. data:application/pdf;base64,...)
+          type: file.type
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleFormSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+
+    // Prepare data payload with attachment if exists
+    const options = attachment ? {
+      data: {
+        attachments: [{
+          filename: attachment.name,
+          content: attachment.content.split(',')[1], // Remove data: prefix for nodemailer
+          encoding: 'base64',
+          contentType: attachment.type
+        }]
+      }
+    } : undefined;
+
+    handleSubmit(e, options);
+    setAttachment(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
   // Cargar datos de ejemplo al montar el componente
   useEffect(() => {
     loadDemoData();
   }, []);
+
+  // Sincronizar contador de mensajes con la encuesta
+  useEffect(() => {
+    survey.setMessageCount(messages.length);
+
+    // Intentar mostrar encuesta si corresponde
+    if (messages.length > 0) {
+      survey.checkAndShowSurvey();
+    }
+  }, [messages.length, survey]);
 
   // Efectos para el scroll
   useEffect(() => {
@@ -138,7 +187,7 @@ export const TestisChat = () => {
       if (messageHistoryRef.current) {
         const isAtBottom =
           messageHistoryRef.current.scrollHeight -
-            messageHistoryRef.current.scrollTop ===
+          messageHistoryRef.current.scrollTop ===
           messageHistoryRef.current.clientHeight;
         setIsUserScrolledUp(!isAtBottom);
       }
@@ -197,7 +246,7 @@ export const TestisChat = () => {
           y: 0,
           rotateX: 0
         }}
-        transition={{ 
+        transition={{
           duration: 0.3,
           times: [0, 0.4, 1]
         }}
@@ -238,7 +287,7 @@ export const TestisChat = () => {
               {/* Header */}
               <div className="h-10 w-full bg-gradient-to-r from-usal-green-600 via-usal-green-500 to-usal-green-700 rounded-tr-lg rounded-tl-lg flex justify-between px-10 md:px-6 py-2 relative z-20">
                 <div className="font-medium text-sm flex items-center gap-2 text-white">
-                  <button 
+                  <button
                     onClick={() => {
                       setIsExpanded(!isExpanded);
                     }}
@@ -246,7 +295,7 @@ export const TestisChat = () => {
                   >
                     <IconMaximize className="h-4 w-4 text-white" />
                   </button>
-                  <button 
+                  <button
                     onClick={() => setShowChatHistory(!showChatHistory)}
                     className="hover:bg-white/20 p-1 rounded-full transition-colors"
                     title="Historial de chats"
@@ -270,7 +319,7 @@ export const TestisChat = () => {
                   >
                     <IconStarFilled className="h-4 w-4" />
                   </button>
-                  
+
                   <motion.button
                     className="rounded-full bg-white/20 text-white px-2 py-0.5 text-sm flex items-center justify-center gap-1 overflow-hidden"
                     onClick={() => createNewChat()}
@@ -437,7 +486,7 @@ export const TestisChat = () => {
                       {message.role === "user" ? (
                         <UserMessage content={message.content} />
                       ) : (
-                        <AIMessage 
+                        <AIMessage
                           content={message.content}
                         />
                       )}
@@ -449,9 +498,33 @@ export const TestisChat = () => {
 
               {/* Input Form */}
               <form
-                onSubmit={handleSubmit}
-                className="max-h-[10vh] py-1 px-5 relative z-20"
+                onSubmit={handleFormSubmit}
+                className="max-h-[15vh] py-1 px-5 relative z-20"
               >
+                {/* File Preview */}
+                {attachment && (
+                  <div className="absolute -top-12 left-5 bg-white border border-usal-green-200 rounded-lg p-2 flex items-center gap-2 shadow-sm">
+                    <IconPaperclip className="h-4 w-4 text-usal-green-600" />
+                    <span className="text-xs text-usal-navy-700 max-w-[150px] truncate">{attachment.name}</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAttachment(null);
+                        if (fileInputRef.current) fileInputRef.current.value = '';
+                      }}
+                      className="hover:bg-red-50 rounded-full p-0.5"
+                    >
+                      <IconX className="h-3 w-3 text-red-500" />
+                    </button>
+                  </div>
+                )}
+
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  className="hidden"
+                  onChange={handleFileSelect}
+                />
                 {showScrollButton && (
                   <button
                     onClick={scrollIntoView}
@@ -472,19 +545,29 @@ export const TestisChat = () => {
                       <IconPlayerStopFilled className="h-5 w-5 text-white group-hover:rotate-12 transition duration-200" />
                     </motion.button>
                   ) : (
-                    <button
-                      type="submit"
-                      className="absolute top-1/2 right-8 group -translate-y-1/2 bg-usal-green-100 hover:bg-usal-green-200 h-8 w-8 rounded-full flex items-center justify-center transition-colors"
-                    >
-                      <IconArrowNarrowUp className="h-5 w-5 text-usal-green-600 group-hover:text-usal-green-700 group-hover:-translate-y-0.5 group-hover:rotate-12 transition duration-200" />
-                    </button>
+                    <div className="absolute top-1/2 right-4 -translate-y-1/2 flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="group bg-gray-100 hover:bg-gray-200 h-8 w-8 rounded-full flex items-center justify-center transition-colors"
+                        title="Adjuntar archivo"
+                      >
+                        <IconPaperclip className="h-4 w-4 text-gray-600 group-hover:text-gray-800 transition duration-200" />
+                      </button>
+                      <button
+                        type="submit"
+                        className="group bg-usal-green-100 hover:bg-usal-green-200 h-8 w-8 rounded-full flex items-center justify-center transition-colors"
+                      >
+                        <IconArrowNarrowUp className="h-5 w-5 text-usal-green-600 group-hover:text-usal-green-700 group-hover:-translate-y-0.5 group-hover:rotate-12 transition duration-200" />
+                      </button>
+                    </div>
                   )}
                 </AnimatePresence>
                 <textarea
                   ref={inputRef}
                   disabled={isLoading}
                   className="px-4 w-full pr-10 rounded-lg border-usal-green-200 text-usal-navy-800 border py-[1rem] bg-white text-sm [box-sizing:border-box] overflow-x-auto inline-block focus:outline-none focus:border-usal-green-400 focus:ring-2 focus:ring-usal-green-100 transition duration-100"
-                  placeholder={session 
+                  placeholder={session
                     ? `Hola ${session.user?.name?.split(' ')[0]}, ¿cómo puedo ayudarte con el SIU Guaraní?`
                     : "Pregúntame sobre el SIU Guaraní..."
                   }
@@ -493,7 +576,7 @@ export const TestisChat = () => {
                   onKeyDown={(event) => {
                     if (event.key === "Enter" && !event.shiftKey) {
                       event.preventDefault();
-                      handleSubmit();
+                      handleFormSubmit();
                     }
                   }}
                   style={{ resize: "none" }}
@@ -504,15 +587,15 @@ export const TestisChat = () => {
           )}
         </AnimatePresence>
       </motion.div>
-      
+
       {/* Chat Toggle Button 3D */}
       <motion.button
         onClick={() => setOpen(!open)}
-          className={cn(
-            "h-14 w-14 relative z-10 group bg-gradient-to-r from-usal-green-600 to-usal-green-500 flex hover:from-usal-green-700 hover:to-usal-green-600 cursor-pointer items-center justify-center rounded-full shadow-xl transition duration-200",
-            open ? "z-10" : "z-50",
-            isExpanded && "hidden"
-          )}
+        className={cn(
+          "h-14 w-14 relative z-10 group bg-gradient-to-r from-usal-green-600 to-usal-green-500 flex hover:from-usal-green-700 hover:to-usal-green-600 cursor-pointer items-center justify-center rounded-full shadow-xl transition duration-200",
+          open ? "z-10" : "z-50",
+          isExpanded && "hidden"
+        )}
         style={{
           transform: 'perspective(1000px)',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)',
@@ -544,22 +627,22 @@ export const TestisChat = () => {
         }}
       >
         {/* Glow effect */}
-        <div 
+        <div
           className="absolute inset-0 rounded-full bg-gradient-to-r from-usal-green-400 to-usal-green-300 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
           style={{
             filter: 'blur(8px)',
             transform: 'scale(1.2)',
           }}
         />
-        
+
         {/* Inner glow */}
-        <div 
+        <div
           className="absolute inset-1 rounded-full bg-gradient-to-r from-white/20 to-white/10"
           style={{
             background: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), transparent 50%)',
           }}
         />
-        
+
         <motion.div
           animate={{
             rotateZ: [0, 360],
@@ -572,7 +655,7 @@ export const TestisChat = () => {
         >
           <IconRobot className="h-6 w-6 text-white relative z-10 drop-shadow-sm" />
         </motion.div>
-        
+
         {/* Floating particles around button */}
         {[...Array(3)].map((_, i) => (
           <motion.div
@@ -604,11 +687,11 @@ export const TestisChat = () => {
         isOpen={survey.showSurvey}
         onClose={survey.closeSurvey}
         onSubmit={survey.submitSurvey}
-        messagesCount={survey.metrics.messagesCount}
+        messagesCount={messages.length}
         sessionDuration={survey.metrics.sessionDuration}
         categoriesUsed={survey.metrics.categoriesUsed}
       />
-      
+
       {/* DEBUG: Indicador visual */}
       {survey.showSurvey && (
         <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-[9999]">
@@ -629,9 +712,9 @@ const UserMessage = ({ content }: { content: string }) => {
   );
 };
 
-const AIMessage = ({ 
+const AIMessage = ({
   content
-}: { 
+}: {
   content: string;
 }) => {
   return (

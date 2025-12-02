@@ -4,12 +4,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Balancer from "react-wrap-balancer";
 import Link from "next/link";
+import Image from "next/image";
 import FloatingElements3D from './FloatingElements3D';
 import FallingStarsEffect from './FallingStarsEffect';
-import { 
-  IconBook, 
-  IconCalendar, 
-  IconMail, 
+import {
+  IconBook,
+  IconCalendar,
+  IconMail,
   IconCertificate,
   IconPencil,
   IconCalculator,
@@ -43,9 +44,11 @@ export function Hero() {
       {/* Logo USAL */}
       <div className="relative z-30 mx-auto mb-6 flex justify-center">
         <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-usal-green-200">
-          <img 
-            src="/usal-logo.jpg" 
-            alt="Universidad del Salvador" 
+          <Image
+            src="/usal-logo.jpg"
+            alt="Universidad del Salvador"
+            width={64}
+            height={64}
             className="h-16 w-auto object-contain"
           />
         </div>
@@ -64,7 +67,7 @@ export function Hero() {
         </Balancer>
       </h2>
       <p className="relative z-30 mx-auto mt-4 max-w-xl px-4 text-center text-base/6 text-usal-navy-600">
-        Tu compañero virtual para navegar el SIU Guaraní de la USAL. 
+        Tu compañero virtual para navegar el SIU Guaraní de la USAL.
         Inscripciones, horarios, notas, parciales y más, todo en un solo lugar.
       </p>
       <div className="mb-10 mt-8 flex w-full flex-col items-center justify-center gap-4 px-8 sm:flex-row md:mb-20">
@@ -81,14 +84,14 @@ export function Hero() {
           SIU Guaraní
         </Link>
       </div>
-      
+
       {/* Demo Container - Centered */}
       <div
         ref={containerRef}
         className="relative z-30 mx-auto mt-16 max-w-4xl px-4"
       >
         {/* Centered Testis Demo Section */}
-        <div 
+        <div
           data-demo-container
           className="rounded-[32px] border border-usal-green-200/50 bg-gradient-to-br from-usal-green-50/90 to-white/90 p-2 backdrop-blur-lg md:p-4 shadow-xl"
         >
@@ -127,7 +130,7 @@ const BackgroundGrids = () => {
 // Componente de iconos flotantes académicos
 const FloatingAcademicIcons = () => {
   const [mounted, setMounted] = useState(false);
-  
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -138,33 +141,33 @@ const FloatingAcademicIcons = () => {
     { Icon: IconPencil, color: "text-usal-red-500", size: "h-6 w-6", delay: 0.5 },
     { Icon: IconNotebook, color: "text-usal-gold-500", size: "h-7 w-7", delay: 1 },
     { Icon: IconEdit, color: "text-usal-navy-500", size: "h-6 w-6", delay: 1.5 },
-    
+
     // Elementos académicos
     { Icon: IconSchool, color: "text-usal-green-600", size: "h-9 w-9", delay: 2 },
     { Icon: IconCertificate, color: "text-usal-red-600", size: "h-8 w-8", delay: 2.5 },
     { Icon: IconClipboardList, color: "text-usal-gold-600", size: "h-7 w-7", delay: 3 },
     { Icon: IconBookmark, color: "text-usal-navy-600", size: "h-6 w-6", delay: 3.5 },
-    
+
     // Elementos de ciencias
     { Icon: IconCalculator, color: "text-usal-green-400", size: "h-7 w-7", delay: 4 },
     { Icon: IconFlask, color: "text-usal-red-400", size: "h-8 w-8", delay: 4.5 },
     { Icon: IconAtom, color: "text-usal-gold-400", size: "h-8 w-8", delay: 5 },
     { Icon: IconMath, color: "text-usal-navy-400", size: "h-7 w-7", delay: 5.5 },
-    
+
     // Elementos de comunicación
     { Icon: IconMail, color: "text-usal-green-700", size: "h-6 w-6", delay: 6 },
     { Icon: IconCalendar, color: "text-usal-red-700", size: "h-7 w-7", delay: 6.5 },
-    
+
     // Elementos de inspiración
     { Icon: IconBulb, color: "text-usal-gold-300", size: "h-8 w-8", delay: 7 },
     { Icon: IconClipboard, color: "text-usal-navy-300", size: "h-6 w-6", delay: 7.5 },
-    
+
     // Más libros y elementos de estudio (duplicados con diferentes posiciones)
     { Icon: IconBook, color: "text-usal-green-300", size: "h-6 w-6", delay: 8 },
     { Icon: IconNotebook, color: "text-usal-red-300", size: "h-8 w-8", delay: 8.5 },
     { Icon: IconPencil, color: "text-usal-gold-700", size: "h-5 w-5", delay: 9 },
     { Icon: IconBook, color: "text-usal-navy-700", size: "h-7 w-7", delay: 9.5 },
-    
+
     // Elementos adicionales de estudio
     { Icon: IconSchool, color: "text-usal-green-200", size: "h-6 w-6", delay: 10 },
     { Icon: IconCalculator, color: "text-usal-red-200", size: "h-5 w-5", delay: 10.5 },
@@ -181,22 +184,22 @@ const FloatingAcademicIcons = () => {
         const leftPosition = Math.random() * 85 + 5; // Entre 5% y 90%
         const topPosition = Math.random() * 70 + 10; // Entre 10% y 80%
         const animationDuration = 12 + Math.random() * 8; // Entre 12 y 20 segundos
-        
+
         // Movimientos aleatorios para cada icono
         const randomMoveX = Math.random() * 40 - 20; // Entre -20 y 20
         const randomMoveY = Math.random() * 60 - 30; // Entre -30 y 30
-        
+
         return (
           <motion.div
             key={index}
             className={`absolute ${item.color} opacity-15 hover:opacity-30 transition-opacity duration-500`}
-            initial={{ 
+            initial={{
               x: Math.random() * 50 - 25,
               y: Math.random() * 50 - 25,
               scale: 0,
               rotate: Math.random() * 360
             }}
-            animate={{ 
+            animate={{
               y: [0, randomMoveY, 0, randomMoveY * 0.5, 0],
               x: [0, randomMoveX, 0, randomMoveX * -0.3, 0],
               scale: [0, 1, 0.9, 1.1, 1],
@@ -218,21 +221,21 @@ const FloatingAcademicIcons = () => {
           </motion.div>
         );
       })}
-      
+
       {/* Elementos adicionales que aparecen y desaparecen */}
       {Array.from({ length: 8 }, (_, index) => {
         const randomLeft = Math.random() * 80 + 10; // Entre 10% y 90%
         const randomTop = Math.random() * 60 + 15; // Entre 15% y 75%
-        
+
         return (
           <motion.div
             key={`extra-${index}`}
             className="absolute text-usal-green-200 opacity-10"
-            initial={{ 
+            initial={{
               scale: 0,
               rotate: 0
             }}
-            animate={{ 
+            animate={{
               scale: [0, 1, 0],
               rotate: [0, 180, 360],
               opacity: [0, 0.2, 0]
@@ -257,7 +260,7 @@ const FloatingAcademicIcons = () => {
 };
 
 // Componente de rayos animados
-const AnimatedBeams = ({ containerRef, parentRef }: { 
+const AnimatedBeams = ({ containerRef, parentRef }: {
   containerRef: React.RefObject<HTMLDivElement>;
   parentRef: React.RefObject<HTMLDivElement>;
 }) => {
@@ -292,13 +295,13 @@ const AnimatedBeams = ({ containerRef, parentRef }: {
 };
 
 // Efecto de rayo individual
-const BeamEffect = ({ 
-  containerRef, 
-  parentRef, 
-  className, 
-  color, 
-  duration, 
-  delay 
+const BeamEffect = ({
+  containerRef,
+  parentRef,
+  className,
+  color,
+  duration,
+  delay
 }: {
   containerRef: React.RefObject<HTMLDivElement>;
   parentRef: React.RefObject<HTMLDivElement>;
@@ -355,7 +358,7 @@ const BeamEffect = ({
           className
         )}
         initial={{ translateY: -200, opacity: 0 }}
-        animate={{ 
+        animate={{
           translateY: [null, 800],
           opacity: [0, 1, 1, 0]
         }}
@@ -387,44 +390,47 @@ const BeamEffect = ({
   );
 };
 
+// Conversaciones predefinidas más dinámicas
+const conversations = [
+  {
+    title: "Consulta de Notas",
+    messages: [
+      { role: 'user', content: '¿Cómo consulto mis notas del parcial?', avatar: '👤' },
+      { role: 'assistant', content: '¡Por supuesto! Te ayudo con eso. Ve a "Académico" → "Notas" → selecciona el período actual.', avatar: '🤖' },
+      { role: 'user', content: '¡Genial! ¿Y si quiero ver el promedio general?', avatar: '👤' },
+      { role: 'assistant', content: 'Perfecto. En la misma sección, haz click en "Ver Historial Completo" y verás tu promedio actualizado.', avatar: '🤖' }
+    ]
+  },
+  {
+    title: "Inscripción a Materias",
+    messages: [
+      { role: 'user', content: 'Necesito inscribirme a materias para el próximo cuatrimestre', avatar: '👤' },
+      { role: 'assistant', content: 'Te guío paso a paso: Ve a "Inscripciones" → "Cursar Materias" → selecciona el período 2024-2.', avatar: '🤖' },
+      { role: 'user', content: '¿Qué hago si una materia está llena?', avatar: '👤' },
+      { role: 'assistant', content: 'Puedes anotarte en lista de espera o elegir otro horario. Te mostraré todas las opciones disponibles.', avatar: '🤖' }
+    ]
+  },
+  {
+    title: "Horarios de Cursada",
+    messages: [
+      { role: 'user', content: 'No encuentro mis horarios de clase', avatar: '👤' },
+      { role: 'assistant', content: '¡No te preocupes! Ve a "Académico" → "Mi Horario Semanal" y verás todas tus clases organizadas.', avatar: '🤖' },
+      { role: 'user', content: '¿Puedo exportar el horario al calendario?', avatar: '👤' },
+      { role: 'assistant', content: '¡Claro! Hay un botón "Exportar a Google Calendar" que sincroniza automáticamente tus horarios.', avatar: '🤖' }
+    ]
+  }
+];
+
 // Demo del chatbot mejorada
 const ChatbotDemo = () => {
   const [currentConversation, setCurrentConversation] = useState(0);
   const [currentMessage, setCurrentMessage] = useState(0);
-  const [displayedMessages, setDisplayedMessages] = useState<Array<{role: string, content: string, avatar?: string}>>([]);
+  const [displayedMessages, setDisplayedMessages] = useState<Array<{ role: string, content: string, avatar?: string }>>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [typingText, setTypingText] = useState('');
 
   // Conversaciones predefinidas más dinámicas
-  const conversations = [
-    {
-      title: "Consulta de Notas",
-      messages: [
-        { role: 'user', content: '¿Cómo consulto mis notas del parcial?', avatar: '👤' },
-        { role: 'assistant', content: '¡Por supuesto! Te ayudo con eso. Ve a "Académico" → "Notas" → selecciona el período actual.', avatar: '🤖' },
-        { role: 'user', content: '¡Genial! ¿Y si quiero ver el promedio general?', avatar: '👤' },
-        { role: 'assistant', content: 'Perfecto. En la misma sección, haz click en "Ver Historial Completo" y verás tu promedio actualizado.', avatar: '🤖' }
-      ]
-    },
-    {
-      title: "Inscripción a Materias",
-      messages: [
-        { role: 'user', content: 'Necesito inscribirme a materias para el próximo cuatrimestre', avatar: '👤' },
-        { role: 'assistant', content: 'Te guío paso a paso: Ve a "Inscripciones" → "Cursar Materias" → selecciona el período 2024-2.', avatar: '🤖' },
-        { role: 'user', content: '¿Qué hago si una materia está llena?', avatar: '👤' },
-        { role: 'assistant', content: 'Puedes anotarte en lista de espera o elegir otro horario. Te mostraré todas las opciones disponibles.', avatar: '🤖' }
-      ]
-    },
-    {
-      title: "Horarios de Cursada",
-      messages: [
-        { role: 'user', content: 'No encuentro mis horarios de clase', avatar: '👤' },
-        { role: 'assistant', content: '¡No te preocupes! Ve a "Académico" → "Mi Horario Semanal" y verás todas tus clases organizadas.', avatar: '🤖' },
-        { role: 'user', content: '¿Puedo exportar el horario al calendario?', avatar: '👤' },
-        { role: 'assistant', content: '¡Claro! Hay un botón "Exportar a Google Calendar" que sincroniza automáticamente tus horarios.', avatar: '🤖' }
-      ]
-    }
-  ];
+
 
   const quickActions = [
     { icon: '📚', text: 'Ver Notas', color: 'bg-blue-100 text-blue-700' },
@@ -437,12 +443,12 @@ const ChatbotDemo = () => {
   const typeMessage = (message: string, callback: () => void) => {
     setTypingText('');
     setIsTyping(true);
-    
+
     let i = 0;
     const typeInterval = setInterval(() => {
       setTypingText(message.slice(0, i + 1));
       i++;
-      
+
       if (i >= message.length) {
         clearInterval(typeInterval);
         setTimeout(() => {
@@ -456,10 +462,10 @@ const ChatbotDemo = () => {
   // Lógica para mostrar mensajes progresivamente
   useEffect(() => {
     const conversation = conversations[currentConversation];
-    
+
     if (currentMessage < conversation.messages.length) {
       const message = conversation.messages[currentMessage];
-      
+
       const timer = setTimeout(() => {
         if (message.role === 'assistant') {
           typeMessage(message.content, () => {
@@ -471,7 +477,7 @@ const ChatbotDemo = () => {
           setCurrentMessage(prev => prev + 1);
         }
       }, currentMessage === 0 ? 1000 : 2000);
-      
+
       return () => clearTimeout(timer);
     } else {
       // Cambiar a la siguiente conversación después de un pausa
@@ -482,7 +488,7 @@ const ChatbotDemo = () => {
         setTypingText('');
         setIsTyping(false);
       }, 4000);
-      
+
       return () => clearTimeout(nextConversationTimer);
     }
   }, [currentMessage, currentConversation]);
@@ -496,24 +502,23 @@ const ChatbotDemo = () => {
         <p className="text-usal-navy-600 mb-4">
           Mira cómo Testis resuelve consultas reales de estudiantes
         </p>
-        
+
         {/* Indicador de conversación actual */}
         <div className="flex justify-center space-x-2 mb-4">
           {conversations.map((_, index) => (
             <div
               key={index}
-              className={`h-2 w-8 rounded-full transition-colors duration-300 ${
-                index === currentConversation ? 'bg-usal-green-500' : 'bg-gray-200'
-              }`}
+              className={`h-2 w-8 rounded-full transition-colors duration-300 ${index === currentConversation ? 'bg-usal-green-500' : 'bg-gray-200'
+                }`}
             />
           ))}
         </div>
-        
+
         <div className="text-sm font-medium text-usal-green-600 mb-2">
           {conversations[currentConversation].title}
         </div>
       </div>
-      
+
       {/* Chat Container - DIMENSIONES FIJAS */}
       <div className="bg-gradient-to-br from-usal-green-50 to-white rounded-xl border border-usal-green-200 shadow-inner w-full h-[500px] flex flex-col">
         {/* Chat Header - ALTURA FIJA */}
@@ -529,14 +534,14 @@ const ChatbotDemo = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="flex space-x-1 flex-shrink-0">
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
-            <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+            <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+            <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
           </div>
         </div>
-        
+
         {/* Messages - ALTURA FIJA CON SCROLL */}
         <div className="p-4 h-[356px] overflow-y-auto space-y-4 flex-1">
           {displayedMessages.map((message, index) => (
@@ -552,17 +557,16 @@ const ChatbotDemo = () => {
                   {message.avatar}
                 </div>
               )}
-              
-              <div className={`max-w-[280px] min-w-[120px] px-4 py-3 rounded-2xl shadow-sm ${
-                message.role === 'user' 
-                  ? 'bg-usal-green-500 text-white rounded-br-md' 
+
+              <div className={`max-w-[280px] min-w-[120px] px-4 py-3 rounded-2xl shadow-sm ${message.role === 'user'
+                  ? 'bg-usal-green-500 text-white rounded-br-md'
                   : 'bg-white text-usal-navy-800 border border-usal-green-100 rounded-bl-md'
-              }`}>
+                }`}>
                 <div className="text-sm leading-relaxed break-words">
                   {message.content}
                 </div>
               </div>
-              
+
               {message.role === 'user' && (
                 <div className="w-8 h-8 bg-usal-navy-100 rounded-full flex items-center justify-center text-lg flex-shrink-0">
                   {message.avatar}
@@ -570,7 +574,7 @@ const ChatbotDemo = () => {
               )}
             </motion.div>
           ))}
-          
+
           {/* Typing indicator */}
           {isTyping && (
             <motion.div
@@ -590,7 +594,7 @@ const ChatbotDemo = () => {
             </motion.div>
           )}
         </div>
-        
+
         {/* Quick Actions - ALTURA FIJA */}
         <div className="p-4 border-t border-usal-green-100 bg-usal-green-25 h-[72px] flex-shrink-0 flex flex-col justify-center">
           <div className="text-xs text-usal-navy-600 mb-2 text-center">

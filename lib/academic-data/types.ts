@@ -34,8 +34,8 @@ export interface Schedule {
   codigo: number;
   materia: string;
   dia: string;
-  franja: string;
-  docente: string;
+  franja?: string;
+  docente?: string | null;
 }
 
 /** Resultado de búsqueda de fechas de final */

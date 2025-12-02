@@ -15,8 +15,9 @@ import {
   getAcademicData,
 } from '@/lib/academic-data';
 import { getAcademicHelpText } from '@/lib/skills/academicHelp';
+import { sendEmail } from '@/lib/mail/sendEmail';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 export const maxDuration = 8; // Optimizado para respuestas rápidas
 
 /** 1) Schema del "plan" */
@@ -31,6 +32,7 @@ const Plan = z.object({
     'query_correlativas',
     'query_calendario',
     'query_horarios',
+    'send_email',
     'other',
   ]),
   legajo: z.string().nullable().optional(),
@@ -40,13 +42,17 @@ const Plan = z.object({
   codigo: z.number().nullable().optional(),
   materia: z.string().nullable().optional(),
   sede: z.enum(['Centro', 'Pilar']).nullable().optional(),
+  emailTo: z.string().nullable().optional(),
+  emailSubject: z.string().nullable().optional(),
+  emailBody: z.string().nullable().optional(),
 });
 type Plan = z.infer<typeof Plan>;
 
 /** 2) Prompt del planificador (salida SOLO JSON minificado) */
 const PLANNER_SYS = `Sos un planificador de acciones para un asistente universitario de la USAL.
 Tu salida debe ser SOLO JSON MINIFICADO (sin texto extra) y seguir este schema:
-{"intent":"...","legajo":string|null,"materiaId":string|null,"turno":string|null,"topic":string|null,"codigo":number|null,"materia":string|null,"sede":"Centro"|"Pilar"|null}
+Tu salida debe ser SOLO JSON MINIFICADO (sin texto extra) y seguir este schema:
+{"intent":"...","legajo":string|null,"materiaId":string|null,"turno":string|null,"topic":string|null,"codigo":number|null,"materia":string|null,"sede":"Centro"|"Pilar"|null,"emailTo":string|null,"emailSubject":string|null,"emailBody":string|null}
 
 IMPORTANTE: Analiza el CONTEXTO COMPLETO de la conversación. Si el usuario menciona información parcial (como sede o turno) en un seguimiento, combínala con la consulta anterior.
 
@@ -60,6 +66,7 @@ Intents disponibles:
 - "query_correlativas": consulta sobre materias correlativas/requisitos
 - "query_calendario": consulta sobre el calendario académico 2025
 - "query_horarios": consulta sobre horarios de cursada
+- "send_email": el usuario quiere enviar un correo electrónico
 - "other": cualquier otra cosa (saludos, charla general, etc)
 
 Parámetros:
@@ -70,6 +77,10 @@ Parámetros:
 - "turno": turno (ej: "Mañana", "Tarde", "Noche") si el usuario lo menciona
 - "sede": sede ("Centro" o "Pilar") si el usuario lo menciona. Reconoce variantes: "cede", "sede", "campus"
 - "topic": para intent "help", el tema sobre el que pide ayuda
+- "emailTo": destinatario del email (ej: "profesor@usal.edu.ar"). Si no lo menciona, null.
+- "emailSubject": asunto del email. Infiérelo si es necesario. Si el usuario no lo da, genera uno breve y claro.
+- "emailBody": cuerpo del mensaje. CRÍTICO: Si el usuario pide "desarrollar" o da una idea general, REDACTA un mensaje completo y formal. 1) Intenta inferir el nombre del destinatario desde su email. 2) SIEMPRE firma como 'Santino Massera'. 3) Usa la FECHA ACTUAL provista en el prompt si es necesario.
+- "attachments": array de objetos { filename, content, encoding } si hay archivos adjuntos disponibles en el contexto.
 
 Ejemplos básicos:
 - "¿Cuándo rindo 144 en Pilar turno Noche?" → {"intent":"query_finales","codigo":144,"sede":"Pilar","turno":"Noche"}
@@ -88,18 +99,11 @@ Ejemplos con CONTEXTO (seguimientos):
 
 Si el mensaje actual es solo información complementaria (sede, turno, código) sin verbo de acción, INFIERE el intent del contexto anterior.`;
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
-    const { messages = [] } = await req.json();
-
-    // Tomo último input de user como texto
-    const lastUser = [...messages].reverse().find((m: any) => m?.role === 'user');
-    const userText =
-      typeof lastUser?.content === 'string'
-        ? lastUser.content
-        : Array.isArray(lastUser?.content)
-          ? lastUser.content.map((p: any) => p?.text ?? '').join(' ')
-          : '';
+    const { messages, data } = await req.json();
+    const lastMessage = messages[messages.length - 1];
+    const userText = lastMessage.content;
 
     if (!userText) {
       return new Response(
@@ -108,15 +112,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Construir contexto de conversación (últimos 3 intercambios para no exceder tokens)
+    // Construir contexto de conversación (últimos 10 mensajes para no saturar)
     const conversationContext = messages
-      .slice(-6) // últimos 3 pares usuario-asistente
-      .map((m: any) => {
-        const content = typeof m.content === 'string' ? m.content : 
-                       Array.isArray(m.content) ? m.content.map((p: any) => p?.text ?? '').join(' ') : '';
-        return `${m.role === 'user' ? 'Usuario' : 'Asistente'}: ${content}`;
-      })
+      .slice(-10)
+      .map((m: any) => `${m.role}: ${m.content}`)
       .join('\n');
+
+    // Detectar adjuntos en 'data'
+    const attachments = data?.attachments || [];
+    const attachmentsContext = attachments.length > 0
+      ? `\n[ARCHIVOS ADJUNTOS DISPONIBLES]: ${attachments.map((a: any) => a.filename).join(', ')}`
+      : '';
 
     // Paso 1: PLAN (no stream) - AHORA CON CONTEXTO
     let plan: Plan = { intent: 'other', legajo: null };
@@ -124,8 +130,10 @@ export async function POST(req: NextRequest) {
       const planRes = await generateText({
         model: getModel(), // String del modelo - el AI SDK usa AI_GATEWAY_API_KEY automáticamente
         system: PLANNER_SYS,
-        prompt: `Historial de conversación reciente:
+        prompt: `Fecha actual: ${new Date().toLocaleDateString('es-AR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+Historial de conversación reciente:
 ${conversationContext}
+${attachmentsContext}
 
 Mensaje actual del usuario: ${userText}
 
@@ -185,14 +193,14 @@ Analiza el contexto completo y genera el plan en JSON.`,
           helpText,
         };
       }
-      
+
       // --- Intents de datos académicos locales (JSON) ---
       else if (plan.intent === 'query_finales') {
         // Detectar si pregunta por toda la carrera
         const esCarreraCompleta = plan.materia && /ingeniería|informatica|carrera|todas|plan/i.test(plan.materia);
-        
+
         let results;
-        
+
         if (esCarreraCompleta) {
           // Si pregunta por la carrera, buscar SOLO por sede y turno (ignorar nombre de materia)
           if (!plan.sede || !plan.turno) {
@@ -208,7 +216,7 @@ Analiza el contexto completo y genera el plan en JSON.`,
               sede: plan.sede,
               turno: (plan.turno as 'Mañana' | 'Tarde' | 'Noche' | '-' | undefined),
             });
-            
+
             if (results.length === 0) {
               toolResult = {
                 ok: false,
@@ -295,7 +303,7 @@ Analiza el contexto completo y genera el plan en JSON.`,
               const materia = todasCorrelativas.find(c => c.codigo === cod);
               return materia ? { codigo: cod, nombre: materia.nombre } : { codigo: cod, nombre: 'Desconocida' };
             });
-            
+
             toolResult = {
               ok: true,
               type: 'correlativas',
@@ -309,18 +317,18 @@ Analiza el contexto completo y genera el plan en JSON.`,
         } else if (plan.materia) {
           // Detectar si pregunta por toda la carrera
           const esCarreraCompleta = /ingeniería|informatica|carrera|todas|plan/i.test(plan.materia);
-          
+
           if (esCarreraCompleta) {
             // Devolver resumen de correlativas de la carrera
             const todasCorrelativas = getAcademicData().correlativas;
-            
+
             // Helper: resolver códigos a nombres
-            const resolverNombres = (codigos: number[]) => 
+            const resolverNombres = (codigos: number[]) =>
               codigos.map(cod => {
                 const materia = todasCorrelativas.find(c => c.codigo === cod);
                 return materia ? { codigo: cod, nombre: materia.nombre } : { codigo: cod, nombre: '?' };
               });
-            
+
             const resumen = {
               totalMaterias: todasCorrelativas.length,
               conRequisitos: todasCorrelativas.filter(c => c.requisitos.length > 0).length,
@@ -360,7 +368,7 @@ Analiza el contexto completo y genera el plan en JSON.`,
                   const materia = todasCorrelativas.find(c => c.codigo === cod);
                   return materia ? { codigo: cod, nombre: materia.nombre } : { codigo: cod, nombre: 'Desconocida' };
                 });
-                
+
                 return {
                   codigo: r.exam.codigo,
                   materia: r.exam.materia,
@@ -368,7 +376,7 @@ Analiza el contexto completo y genera el plan en JSON.`,
                   requisitosConNombres,
                 };
               });
-              
+
               toolResult = {
                 ok: true,
                 type: 'correlativas',
@@ -445,6 +453,38 @@ Analiza el contexto completo y genera el plan en JSON.`,
             citation: getCitation('horarios'),
           };
         }
+      } else if (plan.intent === 'send_email') {
+        if (!plan.emailTo || !plan.emailSubject || !plan.emailBody) {
+          toolResult = {
+            ok: false,
+            type: 'send_email',
+            message: 'Para enviar un correo necesito el **destinatario**, el **asunto** y el **mensaje**. Por favor, indicame esos datos.',
+          };
+        } else {
+          const result = await sendEmail({
+            to: plan.emailTo,
+            subject: plan.emailSubject,
+            text: plan.emailBody,
+            html: plan.emailBody.replace(/\n/g, '<br>'),
+            attachments: attachments.length > 0 ? attachments : undefined
+          });
+
+          if (result.success) {
+            toolResult = {
+              ok: true,
+              type: 'send_email',
+              message: `Correo enviado exitosamente a **${plan.emailTo}** con asunto "**${plan.emailSubject}**"${attachments.length > 0 ? ` y ${attachments.length} archivo(s) adjunto(s)` : ''}.`,
+              details: result
+            };
+          } else {
+            toolResult = {
+              ok: false,
+              type: 'send_email',
+              message: 'Hubo un error al intentar enviar el correo. Verificá que la dirección sea correcta.',
+              error: result.error
+            };
+          }
+        }
       }
     } catch (err) {
       console.error('Error ejecutando acción:', err);
@@ -469,7 +509,7 @@ CASOS ESPECIALES:
 - Correlativas de toda la carrera: menciona total, da ejemplos clave con nombres completos
 - Múltiples resultados (3-10): muestra todos de forma compacta
 - Muchos resultados (>10): muestra resumen + primeros ejemplos
-- Saludo: "Hola! Soy Testis 👋 Puedo ayudarte con notas, inasistencias, inscripciones, fechas de finales, correlativas, calendario y horarios. ¿Qué necesitás?"
+- Saludo: "Hola! Soy Testis 👋 Puedo ayudarte con notas, inasistencias, inscripciones, fechas de finales, correlativas, calendario, horarios y **envío de correos con adjuntos**. ¿Qué necesitás?"
 - Seguimientos: si el usuario da información parcial (como sede), úsala para completar su consulta anterior
 - Citación: SIEMPRE incluir "📚 Origen: ..." al final si hay datos
 

@@ -50,7 +50,7 @@ export const mockResponses: Record<string, string[]> = {
 
 ¿Querés que revise tus materias disponibles o te ayude con las correlatividades?`
   ],
-  
+
   notas: [
     `Para consultar tus notas en el SIU Guaraní:
 
@@ -68,7 +68,7 @@ También puedo consultarlas por vos si querés. ¿Te las muestro?`,
 
 ¿Querés que consulte tus notas actuales?`
   ],
-  
+
   inasistencias: [
     `Respecto a las inasistencias:
 
@@ -84,7 +84,7 @@ También puedo consultarlas por vos si querés. ¿Te las muestro?`,
 
 ¿Te consulto el detalle de inasistencias?`
   ],
-  
+
   horarios: [
     `Para ver los horarios de cursada:
 
@@ -101,7 +101,7 @@ También puedo consultarlas por vos si querés. ¿Te las muestro?`,
 
 Recordá que los horarios pueden cambiar al inicio del cuatrimestre.`
   ],
-  
+
   examenes: [
     `Para consultar fechas de exámenes:
 
@@ -122,7 +122,7 @@ Recordá:
 
 Cada uno tiene requisitos diferentes de regularidad.`
   ],
-  
+
   certificados: [
     `Podés obtener varios certificados desde el SIU:
 
@@ -142,7 +142,7 @@ La mayoría los podés descargar directamente en PDF desde el sistema.`,
 
 Algunos certificados pueden tener costo o requerir trámite presencial.`
   ],
-  
+
   ayuda_general: [
     `Soy Testis, tu asistente virtual de la USAL. Puedo ayudarte con:
 
@@ -184,11 +184,11 @@ Algunos certificados pueden tener costo o requerir trámite presencial.`
 
 **Y mucho más!** Solo preguntame lo que necesites.`
   ],
-  
+
   saludo: [
-    `¡Hola! Soy Testis, tu asistente virtual de la Universidad del Salvador (USAL). Estoy acá para ayudarte con consultas académicas y del SIU Guaraní. ¿En qué puedo ayudarte hoy?`,
-    `¡Buen día! ¿Cómo estás? Soy Testis y puedo ayudarte con tus consultas de la USAL. Preguntame lo que necesites.`,
-    `¡Hola! ¿Cómo va? Estoy para ayudarte con lo que necesites sobre materias, notas, inscripciones o cualquier consulta académica de la USAL.`
+    `¡Hola! Soy Testis, tu asistente virtual de la Universidad del Salvador (USAL). Estoy acá para ayudarte con consultas académicas, del SIU Guaraní y envío de correos con adjuntos. ¿En qué puedo ayudarte hoy?`,
+    `¡Buen día! ¿Cómo estás? Soy Testis y puedo ayudarte con tus consultas de la USAL y a enviar emails con archivos. Preguntame lo que necesites.`,
+    `¡Hola! ¿Cómo va? Estoy para ayudarte con lo que necesites sobre materias, notas, inscripciones, envío de correos o cualquier consulta académica de la USAL.`
   ],
 
   cuotas: [
@@ -197,8 +197,8 @@ Algunos certificados pueden tener costo o requerir trámite presencial.`
 Tu resumen de cuotas para el período 2024-2:
 
 ✅ **Pagadas**: Octubre, Septiembre, Agosto
-⏰ **Próximo vencimiento**: 10/11/2024
-💰 **Monto**: $45.800
+⏰ **Próximo vencimiento**: 10/11/2025
+💰 **Monto**: $560.800
 
 **Medios de pago disponibles:**
 - Transferencia bancaria

@@ -85,26 +85,15 @@ export const Bubble = () => {
       role: "user",
       content: content,
     });
-    survey.incrementMessageCount();
   };
 
   // Incrementar contador cuando cambian los mensajes
   const prevMessagesLength = useRef(0);
-  
+
   useEffect(() => {
-    // Solo incrementar cuando realmente aumentan los mensajes
-    if (messages.length > prevMessagesLength.current) {
-      const newMessages = messages.length - prevMessagesLength.current;
-      console.log(`📊 +${newMessages} mensaje(s) nuevo(s). Total: ${messages.length}`);
-      
-      // Incrementar por cada mensaje nuevo
-      for (let i = 0; i < newMessages; i++) {
-        survey.incrementMessageCount();
-      }
-      
-      prevMessagesLength.current = messages.length;
-    }
-    
+    // Sincronizar contador de mensajes
+    survey.setMessageCount(messages.length);
+
     // Verificar si mostrar encuesta cada ciertos mensajes
     if (messages.length >= 3) {
       console.log('🎯 3+ mensajes detectados. Verificando condiciones...');
@@ -131,7 +120,7 @@ export const Bubble = () => {
       if (messageHistoryRef.current) {
         const isAtBottom =
           messageHistoryRef.current.scrollHeight -
-            messageHistoryRef.current.scrollTop ===
+          messageHistoryRef.current.scrollTop ===
           messageHistoryRef.current.clientHeight;
         setIsUserScrolledUp(!isAtBottom);
       }
@@ -203,7 +192,7 @@ export const Bubble = () => {
           y: 0,
           rotateX: 0
         }}
-        transition={{ 
+        transition={{
           duration: 0.3,
           times: [0, 0.4, 1]
         }}
@@ -234,7 +223,7 @@ export const Bubble = () => {
             >
               <div className="h-10 w-full bg-neutral-100 rounded-tr-lg rounded-tl-lg flex justify-between px-10 md:px-6 py-2 bg-gradient-to-l from-black via-gray-700 to-black">
                 <div className="font-medium text-sm flex items-center gap-2 text-white">
-                  <button 
+                  <button
                     onClick={() => {
                       setIsExpanded(!isExpanded);
                       const element = document.querySelector('.bubble-container');
@@ -259,7 +248,7 @@ export const Bubble = () => {
                   >
                     <IconStarFilled className="h-4 w-4" />
                   </button>
-                  
+
                   {messages.length > 0 && (
                     <motion.button
                       className="rounded-full bg-black text-white px-2 py-0.5 text-sm flex items-center justify-center gap-1 overflow-hidden"
@@ -429,7 +418,7 @@ export const Bubble = () => {
         sessionDuration={survey.metrics.sessionDuration}
         categoriesUsed={survey.metrics.categoriesUsed}
       />
-      
+
       {/* DEBUG: Indicador visual */}
       {survey.showSurvey && (
         <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-[9999]">

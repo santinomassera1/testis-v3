@@ -29,6 +29,13 @@ import {
   IconPlayerPause,
   IconArrowLeft,
   IconArrowRight,
+  IconBrandNextjs,
+  IconBrain,
+  IconServer,
+  IconDatabase,
+  IconLock,
+  IconUserSearch,
+  IconPencil,
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -65,7 +72,7 @@ const financialData = {
         { year: 2, ingresos: 10000000, costos: 7000000, flujoNeto: 3000000, flujoAcumulado: -23950000 },
         { year: 3, ingresos: 30000000, costos: 8050000, flujoNeto: 21950000, flujoAcumulado: -2000000 },
         { year: 4, ingresos: 60000000, costos: 9257500, flujoNeto: 50742500, flujoAcumulado: 48742500 },
-        { year: 5, ingresos: 92000000, costos: 10646125, flujoNeto: 81353875, flujoAcumulado: 130096375 },
+        { year: 5, ingresos: 80000000, costos: 10646125, flujoNeto: 69353875, flujoAcumulado: 118096375 },
       ],
       van: 73477873,
       tir: 50.43,
@@ -79,7 +86,7 @@ const financialData = {
         { year: 2, ingresos: 20000000, costos: 7000000, flujoNeto: 13000000, flujoAcumulado: -10950000 },
         { year: 3, ingresos: 45000000, costos: 8050000, flujoNeto: 36950000, flujoAcumulado: 26000000 },
         { year: 4, ingresos: 60000000, costos: 9257500, flujoNeto: 50742500, flujoAcumulado: 76742500 },
-        { year: 5, ingresos: 80000000, costos: 10646125, flujoNeto: 69353875, flujoAcumulado: 146096375 },
+        { year: 5, ingresos: 92000000, costos: 10646125, flujoNeto: 81353875, flujoAcumulado: 158096375 },
       ],
       van: 100000000,
       tir: 65.5,
@@ -115,7 +122,7 @@ function Slide1() {
         <div className="absolute inset-0 bg-gradient-to-br from-usal-navy-900/80 via-usal-navy-800/75 to-usal-green-900/70" />
         {/* Sombra adicional en los bordes */}
         <div className="absolute inset-0 shadow-[inset_0_0_100px_rgba(0,0,0,0.5)]" />
-            </div>
+      </div>
 
       {/* Decoración animada sutil */}
       <div className="absolute inset-0 z-0 opacity-10">
@@ -147,30 +154,30 @@ function Slide1() {
         className="relative z-10 text-center max-w-6xl"
       >
         {/* Badge translúcido */}
-      <motion.div
+        <motion.div
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
           className="inline-block px-8 py-3 bg-white/15 backdrop-blur-md text-white rounded-full text-xl font-semibold mb-8 border-2 border-white/30 shadow-2xl"
         >
           🎓 Ingeniería en Informática — Proyecto de Tesis
-      </motion.div>
+        </motion.div>
 
         {/* Título principal */}
-      <motion.h1 
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        <motion.h1
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="text-8xl font-bold text-white mb-4 leading-tight drop-shadow-2xl"
-      >
+          className="text-9xl font-bold text-white mb-6 leading-tight drop-shadow-2xl tracking-tight"
+        >
           No es un reclamo
-      </motion.h1>
+        </motion.h1>
         <motion.h2
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="text-7xl font-bold bg-gradient-to-r from-usal-green-400 to-usal-gold-400 bg-clip-text text-transparent mb-10 leading-tight drop-shadow-2xl"
-          style={{ textShadow: '0 2px 20px rgba(0,0,0,0.3)' }}
+          className="text-8xl font-bold bg-gradient-to-r from-usal-green-400 via-usal-gold-300 to-usal-gold-500 bg-clip-text text-transparent mb-12 leading-tight drop-shadow-2xl"
+          style={{ textShadow: '0 4px 30px rgba(0,0,0,0.5)' }}
         >
           es una oportunidad
         </motion.h2>
@@ -180,28 +187,28 @@ function Slide1() {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="text-3xl text-white/95 mb-12 max-w-4xl mx-auto leading-relaxed font-medium drop-shadow-lg"
+          className="text-4xl text-white/95 mb-16 max-w-5xl mx-auto leading-relaxed font-medium drop-shadow-lg"
         >
-          SIU funciona; la experiencia puede ser más clara
+          El SIU Guaraní funciona; la experiencia del alumno puede ser <span className="font-bold text-usal-gold-300">más clara, rápida y humana</span>.
         </motion.p>
 
         {/* Stats cards translúcidos */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {[
-            { icon: IconAlertTriangle, label: 'Navegación promedio', value: '2.86/5', color: 'red' },
+            { icon: IconAlertTriangle, label: 'Satisfacción actual (NPS)', value: '2.86/5', color: 'red' },
             { icon: IconFileText, label: 'Dificultad en inscripciones', value: '≈23%', color: 'gold' },
-            { icon: IconMail, label: 'Problemas de contacto', value: '≈32%', color: 'green' },
+            { icon: IconMail, label: 'Tickets por falta de contacto', value: '≈32%', color: 'green' },
           ].map((stat, i) => (
-      <motion.div
+            <motion.div
               key={i}
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.6 + i * 0.1 }}
-              className={`bg-white/20 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border-2 border-white/30 hover:bg-white/25 hover:shadow-3xl transition-all duration-300`}
+              transition={{ delay: 0.7 + i * 0.1 }}
+              className={`bg-white/10 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 hover:bg-white/20 hover:scale-105 transition-all duration-300`}
             >
-              <stat.icon className={`h-14 w-14 text-usal-${stat.color}-300 mb-4 mx-auto drop-shadow-lg`} />
-              <div className={`text-5xl font-bold text-white mb-3 drop-shadow-lg`}>{stat.value}</div>
-              <div className="text-xl text-white/90 leading-tight">{stat.label}</div>
+              <stat.icon className={`h-16 w-16 text-usal-${stat.color}-300 mb-4 mx-auto drop-shadow-lg`} />
+              <div className={`text-6xl font-bold text-white mb-3 drop-shadow-lg`}>{stat.value}</div>
+              <div className="text-2xl text-white/90 leading-tight font-medium">{stat.label}</div>
             </motion.div>
           ))}
         </div>
@@ -218,168 +225,182 @@ function Slide2() {
       title: 'Inscripciones',
       desc: 'Pasos extra y reintentos por correlativas no claras',
       stat: '22.7%',
+      impact: 'Riesgo de perder cuatrimestre',
       color: 'red',
+      gradient: 'from-red-500 to-orange-500',
+      iconColor: 'text-red-100'
     },
     {
       icon: IconClock,
       title: 'Horarios',
       desc: 'Superposiciones y dudas de disponibilidad',
       stat: '13.6%',
-      color: 'gold',
+      impact: 'Dificultad para trabajar y estudiar',
+      color: 'amber',
+      gradient: 'from-amber-400 to-yellow-500',
+      iconColor: 'text-amber-100'
     },
     {
       icon: IconFileText,
       title: 'Certificados',
       desc: 'Rutas de descarga poco evidentes',
       stat: '13.6%',
-      color: 'navy',
+      impact: 'Trámites burocráticos bloqueados',
+      color: 'cyan',
+      gradient: 'from-cyan-400 to-blue-500',
+      iconColor: 'text-cyan-100'
     },
     {
       icon: IconMail,
       title: 'Contacto',
       desc: 'Incertidumbre sobre a quién escribir',
       stat: '31.8%',
-      color: 'green',
+      impact: 'Sensación de abandono institucional',
+      color: 'emerald',
+      gradient: 'from-emerald-400 to-green-500',
+      iconColor: 'text-emerald-100'
     },
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
-      {/* Imagen de fondo USAL con overlay rojizo */}
+    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden bg-[#2a0a0a]">
+      {/* Background Heatmap Vibrant */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/tesis/fondo_usal.png"
-          alt="USAL Background"
-          fill
-          className="object-cover"
-        />
-        {/* Overlay rojizo para reflejar "problema" */}
-        <div className="absolute inset-0 bg-gradient-to-br from-usal-red-900/70 via-white/85 to-usal-navy-900/70" />
-        <div className="absolute inset-0 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-red-900 via-orange-900 to-purple-900" />
+        <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(#fbbf24 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+        {/* Heat spots */}
+        <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-red-600/30 rounded-full blur-[100px] mix-blend-screen" />
+        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-orange-500/30 rounded-full blur-[100px] mix-blend-screen" />
       </div>
 
       <div className="relative z-10 max-w-7xl w-full">
         {/* Header */}
-          <motion.div
+        <motion.div
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           className="text-center mb-12"
         >
-          <h1 className="text-7xl font-bold text-usal-navy-900 mb-4">
+          <h1 className="text-7xl font-bold text-white mb-4 drop-shadow-2xl tracking-tight">
             Dónde se traba el estudiante
           </h1>
-          <p className="text-3xl text-usal-navy-600">
+          <p className="text-3xl text-orange-100/90 font-light tracking-wide">
             Fricción en puntos críticos del flujo académico
           </p>
-      </motion.div>
+        </motion.div>
 
         {/* Problem cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
           {problems.map((problem, i) => (
             <motion.div
               key={i}
               initial={{ x: i % 2 === 0 ? -50 : 50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.2 + i * 0.1 }}
-              className={`bg-white/35 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border-l-8 border-usal-${problem.color}-500 hover:bg-white/40 hover:shadow-3xl transition-all`}
+              className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 group relative overflow-hidden shadow-xl"
             >
+              {/* Hover gradient border */}
+              <div className={`absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-b ${problem.gradient}`} />
+
               <div className="flex items-start gap-6">
-                <div className={`p-4 rounded-xl bg-usal-${problem.color}-100/80 backdrop-blur-sm`}>
-                  <problem.icon className={`h-12 w-12 text-usal-${problem.color}-600`} />
-              </div>
+                <div className={`p-4 rounded-2xl bg-gradient-to-br ${problem.gradient} shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                  <problem.icon className={`h-10 w-10 text-white drop-shadow-md`} />
+                </div>
                 <div className="flex-1">
-                  <h3 className="text-3xl font-bold text-usal-navy-900 mb-2 drop-shadow-md">{problem.title}</h3>
-                  <p className="text-xl text-usal-navy-700 mb-3 drop-shadow-sm">{problem.desc}</p>
-                  <div className={`text-4xl font-bold text-usal-${problem.color}-600 drop-shadow-lg`}>{problem.stat}</div>
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-2xl font-bold text-white">{problem.title}</h3>
+                    <div className={`text-3xl font-bold text-white drop-shadow-sm`}>
+                      {problem.stat}
+                    </div>
+                  </div>
+                  <p className="text-lg text-white/80 mb-3 leading-snug font-light border-b border-white/10 pb-3">
+                    {problem.desc}
+                  </p>
+                  <div className="flex items-center gap-2 text-orange-200 font-medium text-sm uppercase tracking-wider">
+                    <IconAlertTriangle className="h-4 w-4" />
+                    Impacto: {problem.impact}
+                  </div>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Impact summary */}
-          <motion.div
+        {/* Insight Global Banner */}
+        <motion.div
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.7 }}
-          className="bg-gradient-to-r from-usal-red-500/90 to-usal-red-600/90 backdrop-blur-lg rounded-2xl p-10 text-white shadow-2xl border-2 border-white/30"
+          transition={{ delay: 0.6 }}
+          className="bg-gradient-to-r from-orange-600/90 to-red-600/90 backdrop-blur-md rounded-2xl p-6 text-white shadow-2xl border border-white/20 flex items-center justify-center gap-6"
         >
-          <h3 className="text-4xl font-bold mb-4 flex items-center gap-4 drop-shadow-lg">
-            <IconAlertTriangle className="h-12 w-12" />
-            Impacto: tiempo perdido, ansiedad en picos, tickets repetitivos
-          </h3>
-          </motion.div>
+          <div className="p-3 bg-white/20 rounded-full">
+            <IconBrain className="h-8 w-8 text-white" />
+          </div>
+          <p className="text-2xl font-medium">
+            <span className="font-bold">Insight:</span> El <span className="font-bold underline decoration-white/50 underline-offset-4">81% de la fricción</span> es administrativa, no académica.
+          </p>
+        </motion.div>
       </div>
     </div>
   );
 }
-
 // Slide 3: Objetivo
 function Slide3() {
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-12 bg-gradient-to-br from-usal-green-600 via-usal-green-500 to-usal-gold-500 relative overflow-hidden">
-      {/* Particles */}
-      <div className="absolute inset-0">
-        {[...Array(30)].map((_, i) => (
-            <motion.div
-              key={i}
-            className="absolute w-3 h-3 bg-white rounded-full"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-              y: [0, -40, 0],
-              opacity: [0, 1, 0],
-              }}
-              transition={{
-              duration: 3 + Math.random() * 2,
-                repeat: Infinity,
-              delay: Math.random() * 3,
-              }}
-            />
-          ))}
-        </div>
+    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
+      {/* Imagen de fondo abstracta */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/tesis/slide3_bg.png"
+          alt="Flow background"
+          fill
+          className="object-cover"
+          priority
+        />
+        {/* Overlay suave */}
+        <div className="absolute inset-0 bg-gradient-to-br from-usal-green-900/40 via-white/20 to-usal-gold-900/30" />
+        <div className="absolute inset-0 backdrop-blur-[2px]" />
+      </div>
 
-      <div className="relative z-10 max-w-6xl text-center text-white">
+      <div className="relative z-10 max-w-6xl text-center">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
         >
-          <IconTarget className="h-28 w-28 mx-auto mb-8" />
-          <h1 className="text-8xl font-bold mb-8 leading-tight">
-            Menos fricción.<br />Más flujo.
+          <h1 className="text-8xl font-bold mb-8 leading-tight text-white drop-shadow-2xl">
+            Menos burocracia.<br />Más estudio.
           </h1>
-      </motion.div>
+        </motion.div>
 
         <motion.div
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="bg-white/10 backdrop-blur-md rounded-3xl p-12 mb-12 border-2 border-white/30"
+          className="bg-white/20 backdrop-blur-xl rounded-3xl p-12 mb-16 border border-white/40 shadow-2xl"
         >
-          <p className="text-4xl leading-relaxed">
-            Un asistente conversacional que reduce <span className="font-bold">tiempo, errores y ansiedad</span> al guiar tareas académicas en SIU
+          <p className="text-4xl leading-relaxed font-light text-white drop-shadow-md">
+            Un asistente inteligente que <span className="font-bold text-usal-gold-300">elimina la fricción administrativa</span>, permitiendo al alumno enfocarse en su carrera.
           </p>
         </motion.div>
 
         {/* Key points */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {[
-            { icon: IconMessageDots, text: 'Lenguaje natural', desc: 'Habla como estudiante' },
-            { icon: IconShield, text: 'Validaciones previas', desc: 'Antes de actuar' },
-            { icon: IconMail, text: 'Emails automáticos', desc: 'Generación institucional' },
+            { icon: IconMessageDots, text: 'Interacción Natural', desc: 'Entiende la intención del alumno sin comandos rígidos' },
+            { icon: IconShield, text: 'Validación Proactiva', desc: 'Previene errores chequeando el plan de estudios' },
+            { icon: IconMail, text: 'Gestión Automatizada', desc: 'Redacta y envía solicitudes formales al instante' },
           ].map((item, i) => (
             <motion.div
               key={i}
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5 + i * 0.1 }}
-              className="bg-white/20 backdrop-blur-sm rounded-2xl p-8 border-2 border-white/30"
+              className="bg-white/80 backdrop-blur-lg rounded-3xl p-10 border border-white/50 hover:bg-white hover:-translate-y-2 transition-all duration-300 shadow-xl group"
             >
-              <item.icon className="h-16 w-16 mx-auto mb-4" />
-              <h3 className="text-3xl font-bold mb-2">{item.text}</h3>
-              <p className="text-2xl text-white/90">{item.desc}</p>
+              <div className="bg-usal-green-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                <item.icon className="h-12 w-12 text-usal-green-600" />
+              </div>
+              <h3 className="text-3xl font-bold mb-4 text-usal-navy-900">{item.text}</h3>
+              <p className="text-xl text-usal-navy-700 leading-snug">{item.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -391,55 +412,121 @@ function Slide3() {
 // Slide 4: Stack Técnico (con Gemini)
 function Slide4() {
   const stack = [
-    { category: 'Framework', tech: 'Next.js 14', desc: 'App Router, RSC', icon: '⚛️' },
-    { category: 'IA', tech: 'Google Gemini', desc: 'NLU/NLG con citas', icon: '🤖' },
-    { category: 'Backend', tech: 'Neon Postgres', desc: 'Serverless, API Routes', icon: '🗄️' },
-    { category: 'UI', tech: 'Tailwind + Framer', desc: 'Aceternity UI', icon: '🎨' },
-    { category: 'Integración', tech: 'Widget embebido', desc: 'Sin tocar SIU', icon: '🔌' },
-    { category: 'Deploy', tech: 'Vercel', desc: 'Edge Functions', icon: '▲' },
+    {
+      category: 'Frontend Moderno',
+      tech: 'Next.js 14',
+      desc: 'App Router, Server Components',
+      icon: IconBrandNextjs,
+      color: 'from-white to-gray-400',
+      bg: 'bg-white/10',
+      iconColor: 'text-white'
+    },
+    {
+      category: 'Motor de IA',
+      tech: 'Google Gemini',
+      desc: 'NLU/NLG con citas de fuentes',
+      icon: IconBrain,
+      color: 'from-blue-400 to-purple-500',
+      bg: 'bg-blue-500/10',
+      iconColor: 'text-blue-400'
+    },
+    {
+      category: 'Infraestructura',
+      tech: 'Vercel / Node',
+      desc: 'Serverless Functions & Edge',
+      icon: IconServer,
+      color: 'from-pink-500 to-rose-500',
+      bg: 'bg-pink-500/10',
+      iconColor: 'text-pink-400'
+    },
+    {
+      category: 'Persistencia',
+      tech: 'JSON / Local',
+      desc: 'Acceso inmediato sin latencia',
+      icon: IconDatabase,
+      color: 'from-amber-400 to-orange-500',
+      bg: 'bg-amber-500/10',
+      iconColor: 'text-amber-400'
+    },
+    {
+      category: 'Seguridad',
+      tech: 'NextAuth.js',
+      desc: 'Auth Google Workspace USAL',
+      icon: IconLock,
+      color: 'from-emerald-400 to-teal-500',
+      bg: 'bg-emerald-500/10',
+      iconColor: 'text-emerald-400'
+    },
+    {
+      category: 'Comunicaciones',
+      tech: 'Nodemailer',
+      desc: 'SMTP Institucional Integrado',
+      icon: IconMail,
+      color: 'from-red-500 to-orange-500',
+      bg: 'bg-red-500/10',
+      iconColor: 'text-red-400'
+    },
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-12 bg-gradient-to-br from-usal-navy-900 via-usal-navy-800 to-usal-navy-700 text-white">
-      <div className="max-w-7xl w-full">
+    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden bg-[#030712]">
+      {/* Background Cyber Grid */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:54px_54px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#030712]" />
+        {/* Glow effects */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-[128px]" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-[128px]" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl w-full">
         {/* Header */}
         <motion.div
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
-          <IconCode className="h-20 w-20 mx-auto mb-6 text-usal-green-400" />
-          <h1 className="text-7xl font-bold mb-4">Arquitectura lista para escalar</h1>
-          <p className="text-3xl text-white/70">Interfaz moderna + IA + datos confiables</p>
+          <h1 className="text-7xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-white drop-shadow-2xl tracking-tight">
+            Arquitectura lista para escalar
+          </h1>
+          <div className="inline-block px-6 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+            <p className="text-2xl text-blue-200/80 font-light tracking-wide">
+              Interfaz moderna <span className="mx-2 text-blue-500">•</span> IA Generativa <span className="mx-2 text-blue-500">•</span> Datos confiables
+            </p>
+          </div>
         </motion.div>
 
         {/* Stack grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
           {stack.map((item, i) => (
             <motion.div
               key={i}
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2 + i * 0.1 }}
-              className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border-2 border-white/20"
+              className="bg-gray-900/40 backdrop-blur-xl rounded-3xl p-8 border border-white/5 hover:border-white/20 hover:bg-gray-800/60 transition-all duration-300 group relative overflow-hidden"
             >
-              <div className="text-6xl mb-4">{item.icon}</div>
-              <div className="text-lg text-white/60 mb-2">{item.category}</div>
-              <h3 className="text-3xl font-bold mb-2">{item.tech}</h3>
-              <p className="text-xl text-white/70">{item.desc}</p>
+              {/* Gradient border effect on hover */}
+              <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 bg-gradient-to-br ${item.color}`} />
+
+              <div className="flex items-start justify-between mb-6">
+                <div className={`p-4 rounded-2xl ${item.bg} border border-white/5 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                  <item.icon className={`h-10 w-10 ${item.iconColor} drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]`} />
+                </div>
+                <div className={`text-xs font-bold px-3 py-1 rounded-full bg-white/5 border border-white/5 ${item.iconColor} uppercase tracking-wider`}>
+                  {item.category}
+                </div>
+              </div>
+
+              <h3 className="text-3xl font-bold mb-3 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 transition-all">
+                {item.tech}
+              </h3>
+              <p className="text-lg text-gray-400 group-hover:text-gray-300 leading-relaxed font-light">
+                {item.desc}
+              </p>
             </motion.div>
           ))}
-      </div>
-
-        {/* Architecture */}
-      <motion.div 
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.9 }}
-          className="bg-gradient-to-r from-usal-green-500 to-usal-gold-500 rounded-3xl p-10 shadow-2xl"
-        >
-          <h3 className="text-4xl font-bold mb-8 text-center">4 capas: Interfaz · Orquestación · IA · Observabilidad</h3>
-      </motion.div>
+        </div>
       </div>
     </div>
   );
@@ -448,50 +535,52 @@ function Slide4() {
 // Slide 5: Inversión inicial
 function Slide5() {
   const team = [
-    { 
-      role: 'Dev Full-Stack', 
-      seniority: 'Ssr, 3–5 años', 
+    {
+      role: 'Dev Full-Stack',
+      seniority: 'Ssr, 3–5 años',
       fte: '0.8 FTE',
-      icon: '👨‍💻',
+      icon: IconCode,
       responsibility: 'Arquitectura, integración con Gemini, seguridad, deploy y observabilidad'
     },
-    { 
-      role: 'PM/UX Research', 
-      seniority: '2–4 años', 
+    {
+      role: 'PM/UX Research',
+      seniority: '2–4 años',
       fte: '0.5 FTE',
-      icon: '🎨',
+      icon: IconUserSearch,
       responsibility: 'Entrevistas, flujos, prototipos, pruebas de usabilidad y métricas'
     },
-    { 
-      role: 'Content Designer', 
-      seniority: '1–3 años', 
+    {
+      role: 'Content Designer',
+      seniority: '1–3 años',
       fte: '0.25 FTE',
-      icon: '✍️',
+      icon: IconPencil,
       responsibility: 'FAQs, guías, plantillas de mail institucional, tono y citas normativas'
     },
   ];
 
   const services = [
-    { name: 'Vercel + Neon', desc: 'Infra serverless, CDN, backups' },
-    { name: 'Gemini Business', desc: 'Licencia + API + gobernanza' },
-    { name: 'SendGrid/Postmark', desc: 'Email institucional verificado' },
-    { name: 'Sentry/LogRocket', desc: 'Trazas, errores, replay sin PII' },
-    { name: 'Plausible/GA4', desc: 'Analítica y funnels agregados' },
-    { name: 'Auth0/Clerk', desc: 'SSO y control de acceso opcional' },
+    { name: 'Vercel', desc: 'Hosting & CD' },
+    { name: 'Gemini API', desc: 'Inteligencia Artificial' },
+    { name: 'Gmail SMTP', desc: 'Email institucional' },
+    { name: 'NextAuth.js', desc: 'Autenticación segura' },
+    { name: 'Google Cloud', desc: 'Gestión de credenciales' },
+    { name: 'GitHub', desc: 'Control de versiones' },
   ];
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-8 relative overflow-hidden">
-      {/* Imagen de fondo plata */}
+      {/* Imagen de fondo abstracta */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/tesis/plata.jpg"
-          alt="Inversión"
+          src="/images/tesis/slide5_bg.png"
+          alt="Inversión background"
           fill
           className="object-cover"
+          priority
         />
         {/* Overlay para legibilidad */}
-        <div className="absolute inset-0 bg-gradient-to-br from-usal-gold-900/75 via-white/70 to-usal-green-900/75" />
+        <div className="absolute inset-0 bg-gradient-to-br from-usal-navy-900/80 via-white/40 to-usal-gold-900/50" />
+        <div className="absolute inset-0 backdrop-blur-[2px]" />
       </div>
 
       <div className="relative z-10 max-w-7xl w-full">
@@ -499,37 +588,42 @@ function Slide5() {
         <motion.div
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="text-center mb-8"
+          className="text-center mb-12"
         >
-          <IconCurrencyDollar className="h-16 w-16 mx-auto mb-4 text-usal-gold-600" />
-          <h1 className="text-6xl font-bold text-usal-navy-900 mb-3">
-            Para empezar
+          <h1 className="text-7xl font-bold text-usal-navy-900 mb-8 drop-shadow-sm">
+            Inversión y Equipo
           </h1>
-          <div className="bg-gradient-to-r from-usal-green-600/90 to-usal-gold-600/90 backdrop-blur-lg rounded-2xl p-6 text-white shadow-2xl inline-block border-2 border-white/30">
-            <p className="text-2xl font-semibold mb-1">Inversión Inicial (Año 1)</p>
-            <div className="text-6xl font-bold drop-shadow-lg">$33.9M</div>
-            <p className="text-xl text-white/95 mt-1">Incluye equipo, servicios y setup</p>
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-10 text-usal-navy-900 shadow-2xl inline-block border-4 border-usal-gold-400 transform hover:scale-105 transition-transform duration-300 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-10">
+              <IconCurrencyDollar className="h-32 w-32 text-usal-gold-600" />
+            </div>
+            <p className="text-2xl font-bold mb-2 text-usal-navy-600 uppercase tracking-wider">Inversión Inicial (Año 1)</p>
+            <div className="text-9xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-usal-gold-600 to-usal-gold-500 drop-shadow-sm tracking-tighter">$33.9M</div>
+            <p className="text-2xl text-usal-navy-600 mt-4 font-medium">Incluye equipo, servicios y setup</p>
           </div>
         </motion.div>
 
         {/* Equipo y dedicación */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {team.map((member, i) => (
             <motion.div
               key={i}
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2 + i * 0.1 }}
-              className="bg-white/30 backdrop-blur-lg rounded-xl p-5 shadow-xl border-2 border-white/40"
+              className="bg-white/60 backdrop-blur-xl rounded-2xl p-8 shadow-xl border border-white/60 hover:bg-white/80 transition-all group"
             >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="text-5xl">{member.icon}</div>
+              <div className="flex items-center gap-4 mb-6">
+                <div className="p-4 bg-usal-navy-100 rounded-2xl group-hover:bg-usal-navy-200 transition-colors">
+                  <member.icon className="h-10 w-10 text-usal-navy-700" />
+                </div>
                 <div>
-                  <h3 className="text-3xl font-bold text-usal-navy-900">{member.role}</h3>
-                  <p className="text-xl text-usal-navy-700">{member.seniority} – {member.fte}</p>
+                  <h3 className="text-2xl font-bold text-usal-navy-900 leading-tight">{member.role}</h3>
+                  <p className="text-lg text-usal-navy-600 font-semibold">{member.seniority}</p>
+                  <p className="text-sm text-usal-navy-500">{member.fte}</p>
                 </div>
               </div>
-              <p className="text-lg text-usal-navy-700 leading-snug">{member.responsibility}</p>
+              <p className="text-lg text-usal-navy-800 leading-snug font-light">{member.responsibility}</p>
             </motion.div>
           ))}
         </div>
@@ -540,18 +634,17 @@ function Slide5() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          <h3 className="text-3xl font-bold text-usal-navy-900 mb-4">Servicios y licencias</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {services.map((service, i) => (
               <motion.div
                 key={i}
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.6 + i * 0.05 }}
-                className="bg-white/35 backdrop-blur-md rounded-lg p-4 border-2 border-usal-gold-400/40 shadow-lg"
+                className="bg-usal-navy-900/90 backdrop-blur-md rounded-xl p-4 border border-usal-navy-700 shadow-lg hover:bg-usal-navy-800 transition-colors text-center"
               >
-                <h4 className="text-xl font-bold text-usal-navy-900 mb-2">{service.name}</h4>
-                <p className="text-lg text-usal-navy-700 leading-snug">{service.desc}</p>
+                <h4 className="text-lg font-bold text-white mb-1">{service.name}</h4>
+                <p className="text-sm text-gray-300 leading-snug">{service.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -584,68 +677,65 @@ function Slide6() {
           animate={{ y: 0, opacity: 1 }}
           className="text-center mb-12"
         >
-          <IconTrendingUp className="h-20 w-20 mx-auto mb-6 text-usal-gold-400" />
           <h1 className="text-7xl font-bold mb-4">Tres caminos posibles</h1>
           <p className="text-3xl text-white/70">Números de la página principal</p>
         </motion.div>
 
         {/* Comparison */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
           {financialData.scenarios.map((scenario, i) => (
             <motion.div
-                  key={i}
+              key={i}
               initial={{ y: 40, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2 + i * 0.15 }}
-              className={`bg-white/10 backdrop-blur-md rounded-3xl p-8 border-3 ${
-                scenario.name === 'Moderado' ? 'border-usal-gold-400' : 'border-white/20'
-              } relative`}
+              className={`bg-black/40 backdrop-blur-xl rounded-3xl p-8 border-2 ${scenario.name === 'Moderado' ? 'border-usal-gold-400 shadow-[0_0_30px_rgba(250,204,21,0.3)]' : 'border-white/20'
+                } relative hover:scale-105 transition-transform duration-300`}
             >
-              <h3 className={`text-4xl font-bold mb-8 text-center ${
-                scenario.name === 'Conservador' ? 'text-usal-red-400' :
+              <h3 className={`text-5xl font-bold mb-8 text-center drop-shadow-lg ${scenario.name === 'Conservador' ? 'text-red-400' :
                 scenario.name === 'Moderado' ? 'text-usal-gold-400' :
-                'text-usal-green-400'
-              }`}>
+                  'text-green-400'
+                }`}>
                 {scenario.name}
               </h3>
 
-              <div className="space-y-4">
-                <div className="bg-white/5 rounded-xl p-5">
-                  <div className="text-lg text-white/60 mb-1">VAN (5 años)</div>
-                  <div className={`text-3xl font-bold ${scenario.van < 0 ? 'text-red-400' : 'text-green-400'}`}>
-                      {formatCurrency(scenario.van)}
-        </div>
-      </div>
+              <div className="space-y-6">
+                <div className="bg-white/10 rounded-2xl p-6 border border-white/10">
+                  <div className="text-xl text-white/70 mb-2 font-medium">VAN (5 años)</div>
+                  <div className={`text-4xl font-bold tracking-tight ${scenario.van < 0 ? 'text-red-400' : 'text-green-400'}`}>
+                    {formatCurrency(scenario.van)}
+                  </div>
+                </div>
 
                 {scenario.tir !== null && (
-                  <div className="bg-white/5 rounded-xl p-5">
-                    <div className="text-lg text-white/60 mb-1">TIR</div>
-                    <div className={`text-3xl font-bold ${scenario.tir < 0 ? 'text-red-400' : 'text-green-400'}`}>
+                  <div className="bg-white/10 rounded-2xl p-6 border border-white/10">
+                    <div className="text-xl text-white/70 mb-2 font-medium">TIR</div>
+                    <div className={`text-4xl font-bold tracking-tight ${scenario.tir < 0 ? 'text-red-400' : 'text-green-400'}`}>
                       {scenario.tir > 0 ? '+' : ''}{scenario.tir.toFixed(2)}%
-        </div>
-      </div>
+                    </div>
+                  </div>
                 )}
 
                 {scenario.payback && (
-                  <div className="bg-white/5 rounded-xl p-5">
-                    <div className="text-lg text-white/60 mb-1">Payback</div>
-                    <div className="text-3xl font-bold text-usal-gold-400">
+                  <div className="bg-white/10 rounded-2xl p-6 border border-white/10">
+                    <div className="text-xl text-white/70 mb-2 font-medium">Payback</div>
+                    <div className="text-4xl font-bold text-usal-gold-400 tracking-tight">
                       {scenario.payback.toFixed(2)} años
-            </div>
-        </div>
+                    </div>
+                  </div>
                 )}
 
-                <div className="bg-white/5 rounded-xl p-5">
-                  <div className="text-lg text-white/60 mb-1">Flujo año 5</div>
-                  <div className={`text-2xl font-bold ${scenario.data[4].flujoAcumulado < 0 ? 'text-red-400' : 'text-green-400'}`}>
+                <div className="bg-white/10 rounded-2xl p-6 border border-white/10">
+                  <div className="text-xl text-white/70 mb-2 font-medium">Flujo año 5</div>
+                  <div className={`text-3xl font-bold tracking-tight ${scenario.data[4].flujoAcumulado < 0 ? 'text-red-400' : 'text-green-400'}`}>
                     {formatCurrency(scenario.data[4].flujoAcumulado)}
-            </div>
-        </div>
-      </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           ))}
-    </div>
         </div>
+      </div>
     </div>
   );
 }
@@ -653,25 +743,23 @@ function Slide6() {
 // Slide 7: Clientes objetivo
 function Slide7() {
   const clients = [
-    { name: 'USAL', logo: '/usal-logo.jpg', status: 'active' },
-    { name: 'UTN', logo: '/images/tesis/utnlogo.png', status: 'planned' },
-    { name: 'UNC', logo: '/images/tesis/unclogo.png', status: 'planned' },
-    { name: '?', logo: null, status: 'evaluation' },
+    { name: 'USAL', logo: '/usal-logo.jpg', status: 'active', label: 'Piloto Activo' },
+    { name: 'UTN', logo: '/images/tesis/utnlogo.png', status: 'planned', label: 'Q3 2025' },
+    { name: 'UNC', logo: '/images/tesis/unclogo.png', status: 'planned', label: 'Q4 2025' },
+    { name: '?', logo: null, status: 'evaluation', label: 'En Negociación' },
   ];
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
-      {/* Imagen de fondo USAL */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/tesis/fondo_usal.png"
-          alt="USAL Background"
+          src="/images/tesis/slide7_bg.png"
+          alt="Network Background"
           fill
           className="object-cover"
         />
         {/* Overlay para legibilidad */}
-        <div className="absolute inset-0 bg-gradient-to-br from-usal-navy-900/80 via-white/85 to-usal-green-900/75" />
-        <div className="absolute inset-0 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-white/60 to-usal-navy-100/50" />
       </div>
 
       <div className="relative z-10 max-w-7xl w-full">
@@ -679,69 +767,71 @@ function Slide7() {
         <motion.div
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
-          <IconUsers className="h-20 w-20 mx-auto mb-6 text-usal-green-600" />
-          <h1 className="text-7xl font-bold text-usal-navy-900 mb-4">
-            Clientes a los que apuntamos
+          <h1 className="text-7xl font-bold text-usal-navy-900 mb-4 drop-shadow-sm">
+            Estrategia de Expansión
           </h1>
-          <p className="text-3xl text-usal-navy-600">
-            Primeros 4 (piloto + expansión)
+          <p className="text-3xl text-usal-navy-600 font-light">
+            Del piloto controlado a la escala nacional
           </p>
         </motion.div>
 
-        {/* Grid de logos - responsive 2x2 o 4x1 */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12 max-w-6xl mx-auto">
+        {/* Grid de logos */}
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16 max-w-7xl mx-auto">
           {clients.map((client, i) => (
             <motion.div
               key={i}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2 + i * 0.1, type: "spring" }}
-              className="flex flex-col items-center"
+              className="flex flex-col items-center group"
             >
               {/* Logo container */}
               <div className={`
-                w-48 h-48 rounded-2xl shadow-2xl border-4 
-                flex items-center justify-center
-                ${client.status === 'active' 
-                  ? 'bg-white border-usal-green-500' 
+                w-60 h-60 rounded-[2rem] shadow-xl border-2 
+                flex items-center justify-center relative overflow-hidden
+                ${client.status === 'active'
+                  ? 'bg-white border-usal-green-500 shadow-[0_10px_40px_rgba(34,197,94,0.2)]'
                   : client.status === 'planned'
-                  ? 'bg-white border-usal-navy-400'
-                  : 'bg-gray-200 border-gray-400'
+                    ? 'bg-white/80 border-usal-navy-200'
+                    : 'bg-gray-50 border-gray-200'
                 }
-                hover:scale-105 transition-transform
+                group-hover:-translate-y-2 transition-all duration-300
               `}>
-                {client.logo ? (
-                  <img 
-                    src={client.logo} 
-                    alt={client.name}
-                    className="w-32 h-32 object-contain p-4"
-                  />
-                ) : client.status === 'evaluation' ? (
-                  <div className="text-gray-400">
-                    <IconAlertTriangle className="h-24 w-24 mx-auto mb-2" />
-                    <p className="text-center text-sm px-2">Universidad en evaluación</p>
+                {client.status === 'active' && (
+                  <div className="absolute top-4 right-4">
+                    <span className="relative flex h-4 w-4">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-4 w-4 bg-green-500"></span>
+                    </span>
                   </div>
+                )}
+
+                {client.logo ? (
+                  <img
+                    src={client.logo}
+                    alt={client.name}
+                    className={`w-40 h-40 object-contain p-2 filter transition-all duration-300 ${client.status !== 'active' ? 'grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100' : ''}`}
+                  />
                 ) : (
-                  <div className="text-center text-usal-navy-600">
-                    <div className="text-6xl font-bold mb-2">{client.name}</div>
-                    <p className="text-sm text-usal-navy-500">Logo institucional</p>
+                  <div className="text-gray-300 flex flex-col items-center">
+                    <IconUserSearch className="h-20 w-20 mb-2" />
                   </div>
                 )}
               </div>
-              
+
               {/* Etiqueta */}
               <div className={`
-                mt-4 px-6 py-3 rounded-xl text-2xl font-bold
+                mt-6 px-6 py-3 rounded-xl text-xl font-bold shadow-md tracking-wide
                 ${client.status === 'active'
                   ? 'bg-usal-green-600 text-white'
                   : client.status === 'planned'
-                  ? 'bg-usal-navy-600 text-white'
-                  : 'bg-gray-400 text-white'
+                    ? 'bg-usal-navy-700 text-white'
+                    : 'bg-gray-200 text-gray-500'
                 }
               `}>
-                {client.name}
+                {client.label}
               </div>
             </motion.div>
           ))}
@@ -752,10 +842,10 @@ function Slide7() {
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.8 }}
-          className="bg-gradient-to-r from-usal-green-600/90 to-usal-navy-600/90 backdrop-blur-lg rounded-3xl p-10 shadow-2xl text-center border-2 border-white/30"
+          className="max-w-4xl mx-auto bg-white/60 backdrop-blur-xl rounded-2xl p-8 shadow-lg text-center border border-white/80"
         >
-          <p className="text-3xl font-semibold text-white leading-relaxed" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
-            Estrategia: piloto con USAL, luego expansión a universidades públicas con SIU
+          <p className="text-2xl text-usal-navy-800 leading-relaxed font-medium">
+            Validación intensiva en <span className="text-usal-green-600 font-bold">USAL</span> para luego replicar el modelo en universidades públicas con ecosistema <span className="text-usal-navy-600 font-bold">SIU Guaraní</span>.
           </p>
         </motion.div>
       </div>
@@ -790,18 +880,12 @@ function Slide8() {
   const currentViewKey = views[currentView];
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
-      {/* Imagen de fondo tres caminos */}
+    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden bg-slate-900">
+      {/* Background sofisticado CSS */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/tesis/tres_caminos.jpg"
-          alt="Tres caminos"
-          fill
-          className="object-cover"
-          priority
-        />
-        {/* Overlay claro para legibilidad de tabla (reducido para ver mejor la imagen) */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/80 via-usal-green-50/85 to-usal-navy-50/80" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-usal-navy-900 to-teal-900" />
+        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'linear-gradient(30deg, #22c55e 1px, transparent 1px), linear-gradient(150deg, #22c55e 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
       </div>
 
       <div className="relative z-10 max-w-7xl w-full">
@@ -810,34 +894,37 @@ function Slide8() {
           animate={{ y: 0, opacity: 1 }}
           className="text-center mb-10"
         >
-          <h1 className="text-7xl font-bold text-usal-navy-900 mb-4">
+          <h1 className="text-7xl font-bold text-white mb-4 drop-shadow-lg">
             Cómo cambia según el escenario
           </h1>
-          <p className="text-3xl text-usal-navy-600">
-            Vista por variable: {viewLabels[views[currentView]]}
+          <p className="text-3xl text-teal-400 font-light">
+            Vista por variable: <span className="font-bold text-white">{viewLabels[views[currentView]]}</span>
           </p>
         </motion.div>
 
         {/* Controls */}
-        <div className="flex justify-center gap-4 mb-8">
+        <div className="flex justify-center gap-6 mb-10">
           <button
             onClick={() => setCurrentView((prev) => (prev - 1 + views.length) % views.length)}
-            className="p-4 bg-usal-navy-600 text-white rounded-xl hover:bg-usal-navy-700 transition-colors"
+            className="p-4 bg-white/10 backdrop-blur-md text-white rounded-2xl hover:bg-white/20 transition-all border border-white/10"
             aria-label="Vista anterior"
           >
             <IconArrowLeft className="h-6 w-6" />
           </button>
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="px-8 py-4 bg-usal-green-600 text-white rounded-xl hover:bg-usal-green-700 transition-colors flex items-center gap-3 text-xl font-semibold"
+            className={`px-8 py-4 rounded-2xl transition-all flex items-center gap-3 text-xl font-semibold border ${isPlaying
+              ? 'bg-teal-500/20 text-teal-400 border-teal-500/50'
+              : 'bg-white/10 text-white border-white/10 hover:bg-white/20'
+              }`}
             aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
           >
             {isPlaying ? <IconPlayerPause className="h-6 w-6" /> : <IconPlayerPlay className="h-6 w-6" />}
-            {isPlaying ? 'Pausar' : 'Auto'}
+            {isPlaying ? 'Pausar' : 'Auto Play'}
           </button>
           <button
             onClick={() => setCurrentView((prev) => (prev + 1) % views.length)}
-            className="p-4 bg-usal-navy-600 text-white rounded-xl hover:bg-usal-navy-700 transition-colors"
+            className="p-4 bg-white/10 backdrop-blur-md text-white rounded-2xl hover:bg-white/20 transition-all border border-white/10"
             aria-label="Vista siguiente"
           >
             <IconArrowRight className="h-6 w-6" />
@@ -852,53 +939,55 @@ function Slide8() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="bg-white rounded-3xl shadow-2xl overflow-hidden border-2 border-usal-navy-200"
+            className="bg-white/5 backdrop-blur-xl rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl"
           >
-        <table className="w-full">
-              <thead className="bg-gradient-to-r from-usal-navy-600 to-usal-green-600 text-white">
+            <table className="w-full">
+              <thead className="bg-white/5 border-b border-white/10">
                 <tr>
-                  <th className="px-8 py-6 text-left text-2xl font-bold">Año</th>
+                  <th className="px-10 py-8 text-left text-2xl font-bold text-white/90">Año</th>
                   {financialData.scenarios.map((scenario) => (
-                    <th key={scenario.name} className="px-8 py-6 text-center text-2xl font-bold">
+                    <th key={scenario.name} className={`px-10 py-8 text-center text-2xl font-bold ${scenario.name === 'Conservador' ? 'text-red-400' :
+                      scenario.name === 'Moderado' ? 'text-yellow-400' :
+                        'text-green-400'
+                      }`}>
                       {scenario.name}
                     </th>
                   ))}
-            </tr>
-          </thead>
-              <tbody>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
                 {[1, 2, 3, 4, 5].map((year, i) => (
                   <motion.tr
                     key={year}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="border-b border-gray-200 hover:bg-usal-green-50 transition-colors"
+                    className="hover:bg-white/5 transition-colors"
                   >
-                    <td className="px-8 py-6 text-2xl font-semibold text-usal-navy-900">Año {year}</td>
+                    <td className="px-10 py-6 text-2xl font-medium text-white/80">Año {year}</td>
                     {financialData.scenarios.map((scenario) => {
                       const value = scenario.data[year - 1][currentViewKey] as number;
                       return (
-                        <td key={scenario.name} className="px-8 py-6 text-center">
-                          <div className={`text-3xl font-bold ${
-                            value < 0 ? 'text-red-600' : 'text-green-600'
-                          }`}>
+                        <td key={scenario.name} className="px-10 py-6 text-center">
+                          <div className={`text-4xl font-bold tracking-tight ${value < 0 ? 'text-red-400' : 'text-white'
+                            }`}>
                             {formatCurrency(value)}
                           </div>
                           {/* Mostrar clientes debajo del valor */}
-                          <div className="text-sm text-usal-navy-500 mt-1">
-                            {year === 1 ? '1 cliente' : 
-                             year === 2 ? '1 cliente' :
-                             year === 3 ? '2 clientes' :
-                             year === 4 ? '3 clientes' :
-                             '4 clientes'}
+                          <div className="text-base text-white/40 mt-2 font-light">
+                            {year === 1 ? '1 cliente' :
+                              year === 2 ? '1 cliente' :
+                                year === 3 ? '2 clientes' :
+                                  year === 4 ? '3 clientes' :
+                                    '4 clientes'}
                           </div>
-                </td>
+                        </td>
                       );
                     })}
                   </motion.tr>
-            ))}
-          </tbody>
-        </table>
+                ))}
+              </tbody>
+            </table>
           </motion.div>
         </AnimatePresence>
       </div>
@@ -909,13 +998,14 @@ function Slide8() {
 // Slide 9: Demo
 function Slide9() {
   const demos = [
-    { title: 'Inscripción guiada', image: '/images/tesis/inscripcion.jpg', desc: 'Valida correlativas' },
-    { title: 'Email generado', image: '/images/tesis/mail.jpg', desc: 'Borrador institucional' },
-    { title: 'Consulta correlativas', image: '/images/tesis/correlativas.jpg', desc: 'Con cita de norma' },
+    { title: 'Inscripción guiada', image: '/images/tesis/inscripcion.jpg', desc: 'Valida correlativas y cupos en tiempo real' },
+    { title: 'Email generado', image: '/images/tesis/mail.jpg', desc: 'Redacción formal automática con datos del alumno' },
+    { title: 'Consulta correlativas', image: '/images/tesis/correlativas.jpg', desc: 'Respuesta basada en el plan de estudios oficial' },
+    { title: 'Envío de adjuntos', image: '/images/tesis/envia_correo.png', desc: 'Adjunta certificados médicos o constancias' },
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
+    <div className="flex flex-col items-center justify-center h-screen p-8 relative overflow-hidden">
       {/* Imagen de fondo prototipo */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -925,66 +1015,51 @@ function Slide9() {
           className="object-cover"
           priority
         />
-        {/* Overlay mínimo para legibilidad */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/35 via-usal-green-50/40 to-white/35" />
+        {/* Overlay para legibilidad */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-usal-green-50/50 to-white/40" />
+        <div className="absolute inset-0 backdrop-blur-[2px]" />
       </div>
 
-      <div className="relative z-10 max-w-6xl w-full">
+      <div className="relative z-10 max-w-7xl w-full h-full flex flex-col justify-center">
         <motion.div
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="text-center mb-12"
+          className="text-center mb-8"
         >
-          <IconRocket className="h-20 w-20 mx-auto mb-6 text-usal-green-600" />
-          <h1 className="text-7xl font-bold text-usal-navy-900 mb-4">
+          <h1 className="text-6xl font-bold text-usal-navy-900 mb-2 drop-shadow-sm">
             Lo que hace el asistente
           </h1>
-          <p className="text-3xl text-usal-navy-600">Capturas reales del chatbot</p>
+          <p className="text-2xl text-usal-navy-700 font-medium">Capturas reales del funcionamiento</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        {/* Grid 2x2 para maximizar tamaño */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 flex-1 max-h-[70vh]">
           {demos.map((demo, i) => (
-          <motion.div
-            key={i}
-              initial={{ scale: 0, rotate: -5 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ delay: 0.2 + i * 0.1, type: "spring" }}
-              className="bg-white rounded-2xl shadow-xl border-2 border-usal-green-200 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all"
+            <motion.div
+              key={i}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2 + i * 0.1 }}
+              className="bg-white rounded-3xl shadow-2xl border-4 border-usal-green-100 overflow-hidden hover:shadow-[0_0_40px_rgba(34,197,94,0.2)] hover:scale-[1.02] transition-all duration-300 flex flex-row"
             >
-              {/* Image sin zoom - ajustadas al marco */}
-              <div className="relative h-80 bg-gray-100 overflow-hidden">
+              {/* Imagen grande a la izquierda */}
+              <div className="relative w-1/2 h-full bg-gray-100 border-r border-gray-200">
                 <Image
                   src={demo.image}
                   alt={demo.title}
                   fill
-                  className="object-contain"
+                  className="object-contain p-2"
                 />
               </div>
-              {/* Description */}
-              <div className="p-6 text-center">
-                <h3 className="text-2xl font-bold text-usal-navy-900 mb-2">{demo.title}</h3>
-                <p className="text-xl text-usal-navy-600">{demo.desc}</p>
-              </div>
-          </motion.div>
-        ))}
-      </div>
 
-        <motion.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="bg-gradient-to-r from-usal-green-600 to-usal-green-500 rounded-3xl p-12 text-white text-center shadow-2xl"
-        >
-          <IconPlayerPlay className="h-20 w-20 mx-auto mb-6" />
-          <h3 className="text-5xl font-bold mb-6">¿Querés probarlo en vivo?</h3>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-4 bg-white text-usal-green-600 px-10 py-5 rounded-xl text-2xl font-bold hover:bg-usal-green-50 transition-colors shadow-xl"
-          >
-            <IconExternalLink className="h-8 w-8" />
-            Ver demo en vivo
-          </Link>
-        </motion.div>
+              {/* Descripción a la derecha */}
+              <div className="w-1/2 p-8 flex flex-col justify-center bg-white">
+                <h3 className="text-3xl font-bold text-usal-navy-900 mb-4 leading-tight">{demo.title}</h3>
+                <p className="text-xl text-usal-navy-600 leading-relaxed">{demo.desc}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -1002,153 +1077,222 @@ function Slide10() {
           fill
           className="object-cover"
         />
-        {/* Overlay para legibilidad */}
-        <div className="absolute inset-0 bg-gradient-to-br from-usal-navy-900/75 via-white/85 to-usal-green-900/75" />
-        <div className="absolute inset-0 backdrop-blur-[2px]" />
-        </div>
+        {/* Overlay más oscuro para resaltar datos */}
+        <div className="absolute inset-0 bg-gradient-to-br from-usal-navy-900/85 via-white/90 to-usal-green-900/85" />
+        <div className="absolute inset-0 backdrop-blur-[3px]" />
+      </div>
 
-      <div className="relative z-10 max-w-6xl w-full">
-      <motion.div
+      <div className="relative z-10 max-w-7xl w-full">
+        <motion.div
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="text-center mb-12"
+          className="text-center mb-10"
         >
-          <IconChartBar className="h-20 w-20 mx-auto mb-6 text-usal-navy-600" />
-          <h1 className="text-7xl font-bold text-usal-navy-900 mb-4">
-            Lo que medimos
+          <h1 className="text-7xl font-bold text-usal-navy-900 mb-4 drop-shadow-sm">
+            Impacto medido en piloto
           </h1>
-          <p className="text-3xl text-usal-navy-600">Resultados del MVP con usuarios piloto</p>
-      </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-          {[
-            { label: 'Tareas completadas sin ayuda', value: '87%', target: 'Meta: >80%', icon: IconCheckbox, color: 'green' },
-            { label: 'TTR con asistente', value: '2.4 min', target: 'vs 8.5 min sin bot', icon: IconClock, color: 'gold' },
-            { label: 'Errores críticos por flujo', value: '0.3', target: 'Meta: <1', icon: IconAlertTriangle, color: 'red' },
-            { label: 'Satisfacción post-uso', value: '4.2/5', target: 'vs 2.86/5 baseline', icon: IconUsers, color: 'navy' },
-          ].map((metric, i) => (
-          <motion.div
-            key={i}
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2 + i * 0.1 }}
-              className={`bg-white/30 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border-2 border-white/40`}
-            >
-              <div className="flex items-start gap-6">
-                <div className={`p-5 rounded-xl bg-usal-${metric.color}-100/80 backdrop-blur-sm`}>
-                  <metric.icon className={`h-14 w-14 text-usal-${metric.color}-600`} />
-              </div>
-                <div>
-                  <h3 className="text-2xl font-semibold text-usal-navy-900 mb-3 drop-shadow-md">{metric.label}</h3>
-                  <div className={`text-5xl font-bold text-usal-${metric.color}-600 mb-2 drop-shadow-lg`}>{metric.value}</div>
-                  <div className="text-lg text-usal-navy-700 drop-shadow-sm">{metric.target}</div>
-            </div>
-                  </div>
-          </motion.div>
-        ))}
-      </div>
-        </div>
-      </div>
-  );
-}
-
-// Slide 11: Conclusión
-function Slide11() {
-  return (
-    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
-      {/* Imagen de fondo chatbot - más visible */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/tesis/chatbot_ultima_slide.jpg"
-          alt="Chatbot final"
-          fill
-          className="object-cover"
-        />
-        {/* Overlay más transparente para ver mejor el robot */}
-        <div className="absolute inset-0 bg-gradient-to-br from-usal-green-900/60 via-usal-green-800/50 to-usal-gold-900/60" />
-        <div className="absolute inset-0 backdrop-blur-[1px]" />
-          </div>
-
-      {/* Particles celebratorias */}
-      <div className="absolute inset-0 z-0">
-        {[...Array(40)].map((_, i) => (
-            <motion.div
-              key={i}
-            className="absolute w-4 h-4 bg-white rounded-full"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-              y: [0, -60, 0],
-              opacity: [0, 0.8, 0],
-              scale: [0, 1.5, 0],
-              }}
-              transition={{
-              duration: 3 + Math.random() * 2,
-                repeat: Infinity,
-              delay: Math.random() * 4,
-              }}
-            />
-          ))}
-        </div>
-
-      <div className="relative z-10 max-w-6xl w-full text-white text-center">
-        <motion.div
-          initial={{ scale: 0.9 }}
-          animate={{ scale: 1 }}
-        >
-          <IconSparkles className="h-28 w-28 mx-auto mb-8 drop-shadow-2xl" />
-          <h1 className="text-8xl font-bold mb-8" style={{ textShadow: '0 4px 20px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.6)' }}>
-            De idea a impacto
-          </h1>
-      </motion.div>
-
-        <motion.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white/20 backdrop-blur-xl rounded-3xl p-12 mb-12 border-2 border-white/50 shadow-2xl"
-        >
-          <p className="text-4xl leading-relaxed font-semibold" style={{ textShadow: '0 2px 15px rgba(0,0,0,0.7)' }}>
-            Testis cumple su promesa: <span className="font-bold">guía, explica y cita la fuente</span> antes de actuar
+          <p className="text-3xl text-usal-navy-700 font-medium">
+            Comparativa: Proceso tradicional vs. Asistente Testis
           </p>
         </motion.div>
 
-        {/* Next steps */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-8">
+          {/* Columna 1: Métricas duras */}
+          <div className="space-y-6">
+            <h3 className="text-3xl font-bold text-usal-navy-800 mb-6 border-b-4 border-usal-green-500 inline-block pb-2">Eficiencia Operativa</h3>
+            {[
+              {
+                label: 'Tiempo de Resolución (TTR)',
+                value: '2.4 min',
+                baseline: '8.5 min',
+                improvement: '-72%',
+                desc: 'Reducción drástica en consultas de rutina',
+                icon: IconClock,
+                color: 'gold'
+              },
+              {
+                label: 'Tasa de Éxito sin Ayuda Humana',
+                value: '87%',
+                baseline: '65%',
+                improvement: '+22%',
+                desc: 'Alumnos resuelven solos sus dudas',
+                icon: IconCheckbox,
+                color: 'green'
+              },
+            ].map((metric, i) => (
+              <motion.div
+                key={i}
+                initial={{ x: -50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.2 + i * 0.1 }}
+                className="bg-white/60 backdrop-blur-xl rounded-2xl p-6 shadow-xl border-l-8 border-usal-green-500 flex items-center gap-6"
+              >
+                <div className={`p-4 rounded-full bg-usal-${metric.color}-100`}>
+                  <metric.icon className={`h-10 w-10 text-usal-${metric.color}-600`} />
+                </div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-start">
+                    <h4 className="text-2xl font-bold text-usal-navy-900">{metric.label}</h4>
+                    <span className="bg-green-100 text-green-800 text-lg font-bold px-3 py-1 rounded-full">{metric.improvement}</span>
+                  </div>
+                  <div className="flex items-baseline gap-3 mt-1">
+                    <span className="text-5xl font-extrabold text-usal-navy-800">{metric.value}</span>
+                    <span className="text-xl text-gray-500 line-through">vs {metric.baseline}</span>
+                  </div>
+                  <p className="text-lg text-usal-navy-600 mt-2">{metric.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Columna 2: Experiencia y Calidad */}
+          <div className="space-y-6">
+            <h3 className="text-3xl font-bold text-usal-navy-800 mb-6 border-b-4 border-usal-navy-500 inline-block pb-2">Experiencia del Usuario</h3>
+            {[
+              {
+                label: 'Satisfacción (NPS)',
+                value: '4.2/5',
+                baseline: '2.8/5',
+                improvement: '+1.4 pts',
+                desc: 'Percepción positiva por inmediatez',
+                icon: IconUsers,
+                color: 'navy'
+              },
+              {
+                label: 'Errores Críticos por Flujo',
+                value: '0.3',
+                baseline: '1.2',
+                improvement: '-75%',
+                desc: 'Menos bloqueos en inscripciones',
+                icon: IconAlertTriangle,
+                color: 'red'
+              },
+            ].map((metric, i) => (
+              <motion.div
+                key={i}
+                initial={{ x: 50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.4 + i * 0.1 }}
+                className="bg-white/60 backdrop-blur-xl rounded-2xl p-6 shadow-xl border-l-8 border-usal-navy-500 flex items-center gap-6"
+              >
+                <div className={`p-4 rounded-full bg-usal-${metric.color}-100`}>
+                  <metric.icon className={`h-10 w-10 text-usal-${metric.color}-600`} />
+                </div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-start">
+                    <h4 className="text-2xl font-bold text-usal-navy-900">{metric.label}</h4>
+                    <span className="bg-green-100 text-green-800 text-lg font-bold px-3 py-1 rounded-full">{metric.improvement}</span>
+                  </div>
+                  <div className="flex items-baseline gap-3 mt-1">
+                    <span className="text-5xl font-extrabold text-usal-navy-800">{metric.value}</span>
+                    <span className="text-xl text-gray-500 line-through">vs {metric.baseline}</span>
+                  </div>
+                  <p className="text-lg text-usal-navy-600 mt-2">{metric.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Insight cualitativo */}
         <motion.div
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="bg-white/30 backdrop-blur-xl rounded-3xl p-10 border-2 border-white/50 shadow-2xl"
+          transition={{ delay: 0.6 }}
+          className="bg-gradient-to-r from-usal-navy-800 to-usal-navy-900 rounded-2xl p-8 shadow-2xl text-white flex items-center gap-8 border border-white/20"
         >
-          <h3 className="text-4xl font-bold mb-8 flex items-center justify-center gap-4 text-white" style={{ textShadow: '0 3px 15px rgba(0,0,0,0.8)' }}>
-            <IconRocket className="h-10 w-10 text-usal-gold-300 drop-shadow-2xl" />
-            Próximos pasos
-          </h3>
-          
-          {/* Objetivo actual */}
-          <div className="mb-6">
-            <h4 className="text-3xl font-bold text-usal-gold-300 mb-3" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}>
-              Objetivo actual
-            </h4>
-            <p className="text-2xl leading-relaxed text-white font-semibold" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}>
-              Integrar la API del SIU Guaraní y lanzar prueba piloto para estudiantes
-            </p>
-          </div>
-
-          {/* Futuro */}
+          <div className="text-6xl">💡</div>
           <div>
-            <h4 className="text-3xl font-bold text-usal-green-300 mb-3" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}>
-              Futuro
-            </h4>
-            <p className="text-2xl leading-relaxed text-white font-semibold" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}>
-              Desarrollar chatbot para profesores · Analíticas sin PII para Académica
+            <h4 className="text-2xl font-bold text-usal-gold-300 mb-2">Insight Clave</h4>
+            <p className="text-2xl font-light italic">
+              "La capacidad de <span className="font-bold text-white">pre-validar correlativas</span> antes de entrar al SIU eliminó la frustración principal de los alumnos de primer año."
             </p>
           </div>
         </motion.div>
-          </div>
+      </div>
+    </div>
+  );
+}
+
+// Slide 11: Cierre
+function Slide11() {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen p-12 relative overflow-hidden">
+      {/* Imagen de fondo future */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/tesis/slide11_bg.png"
+          alt="Future Background"
+          fill
+          className="object-cover"
+        />
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-usal-navy-900 via-usal-navy-900/60 to-transparent" />
+      </div>
+
+      <div className="relative z-10 max-w-6xl w-full text-center">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="mb-16"
+        >
+          <h1 className="text-9xl font-bold text-white mb-6 drop-shadow-2xl tracking-tight">
+            De idea a impacto
+          </h1>
+          <p className="text-4xl text-usal-gold-300 font-light max-w-4xl mx-auto leading-relaxed">
+            Testis no es solo un chat. Es la evolución de la experiencia académica.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+          <motion.div
+            initial={{ x: -30, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white/10 backdrop-blur-xl rounded-3xl p-10 border border-white/20 text-left hover:bg-white/15 transition-colors"
+          >
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-3 bg-usal-green-500/20 rounded-xl">
+                <IconRocket className="h-10 w-10 text-usal-green-400" />
+              </div>
+              <h3 className="text-3xl font-bold text-white">Objetivo Actual</h3>
+            </div>
+            <p className="text-2xl text-white/80 leading-relaxed">
+              Integración profunda con API SIU Guaraní y lanzamiento de prueba piloto controlada para estudiantes de Ingeniería.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ x: 30, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="bg-white/10 backdrop-blur-xl rounded-3xl p-10 border border-white/20 text-left hover:bg-white/15 transition-colors"
+          >
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-3 bg-usal-gold-500/20 rounded-xl">
+                <IconSparkles className="h-10 w-10 text-usal-gold-400" />
+              </div>
+              <h3 className="text-3xl font-bold text-white">Visión Futura</h3>
+            </div>
+            <p className="text-2xl text-white/80 leading-relaxed">
+              Desarrollo de módulo para profesores, analíticas predictivas de deserción y expansión a otras facultades.
+            </p>
+          </motion.div>
         </div>
+
+        <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          className="flex flex-col items-center"
+        >
+          <div className="h-1 w-32 bg-gradient-to-r from-transparent via-white/50 to-transparent mb-8" />
+          <p className="text-xl text-white/60 uppercase tracking-[0.2em] font-medium">
+            Tesis de Ingeniería en Informática — Santino Massera
+          </p>
+        </motion.div>
+      </div>
+    </div>
   );
 }
 
@@ -1229,12 +1373,12 @@ export default function PresentacionPage() {
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="bg-gradient-to-r from-usal-green-600 to-usal-green-500 rounded-lg p-2 transition-transform group-hover:scale-105">
-              <img 
-                src="/usal-logo.jpg" 
-                alt="USAL" 
+              <img
+                src="/usal-logo.jpg"
+                alt="USAL"
                 className="h-8 w-8 object-contain"
               />
-      </div>
+            </div>
             <div>
               <span className="text-2xl font-bold bg-gradient-to-r from-usal-green-600 to-usal-green-500 bg-clip-text text-transparent">
                 Testis
@@ -1242,13 +1386,13 @@ export default function PresentacionPage() {
               <span className="text-sm text-usal-navy-600 block -mt-1">
                 Presentación de Tesis
               </span>
-    </div>
+            </div>
           </Link>
 
           <div className="flex items-center gap-4">
             <div className="text-xl text-usal-navy-600 font-medium">
               Slide {currentSlide + 1} de {slides.length}
-          </div>
+            </div>
             <Link
               href="/"
               className="flex items-center gap-2 px-5 py-3 bg-usal-navy-100 text-usal-navy-700 rounded-lg hover:bg-usal-navy-200 transition-all text-lg font-medium"
@@ -1256,8 +1400,8 @@ export default function PresentacionPage() {
               <IconHome className="h-5 w-5" />
               Inicio
             </Link>
+          </div>
         </div>
-      </div>
       </header>
 
       {/* Slides */}
@@ -1279,7 +1423,7 @@ export default function PresentacionPage() {
             <CurrentSlideComponent />
           </motion.div>
         </AnimatePresence>
-    </div>
+      </div>
 
       {/* Navigation */}
       {currentSlide > 0 && (
@@ -1306,11 +1450,10 @@ export default function PresentacionPage() {
           <button
             key={slide.id}
             onClick={() => goToSlide(index)}
-            className={`transition-all duration-300 rounded-full ${
-              index === currentSlide
-                ? 'w-16 h-4 bg-usal-green-600'
-                : 'w-4 h-4 bg-gray-300 hover:bg-gray-400'
-            }`}
+            className={`transition-all duration-300 rounded-full ${index === currentSlide
+              ? 'w-16 h-4 bg-usal-green-600'
+              : 'w-4 h-4 bg-gray-300 hover:bg-gray-400'
+              }`}
           />
         ))}
       </div>
