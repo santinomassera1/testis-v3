@@ -29,11 +29,13 @@ export default function SorpresaPage() {
             {/* Background Grid & USAL Gradient */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]" />
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-red-950/30 via-transparent to-slate-950" />
+                {/* Enhanced USAL Background: Red and Gold gradients */}
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#C41E3A]/40 via-transparent to-[#0a0a0a]" />
+                <div className="absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl from-[#FFD700]/10 via-transparent to-transparent" />
             </div>
 
             {/* USAL Ambient Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-red-600/5 rounded-full blur-[120px]" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#C41E3A]/10 rounded-full blur-[120px]" />
 
             <div className="relative z-10 max-w-6xl w-full flex flex-col items-center">
 
@@ -59,15 +61,15 @@ export default function SorpresaPage() {
                         Proyecto Final de Ingeniería
                     </h1>
                     <p className="text-2xl text-yellow-500/90 font-light tracking-widest uppercase mb-8">
-                        Informática • 2024
+                        Informática • 2025
                     </p>
 
                     {/* Acknowledgments */}
-                    <div className="max-w-2xl mx-auto bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-                        <p className="text-lg text-gray-300 leading-relaxed">
-                            Agradecimiento especial a <strong className="text-white font-semibold">Esteban Tissera</strong>, pilar clave en este recorrido.
+                    <div className="max-w-3xl mx-auto bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 shadow-2xl">
+                        <p className="text-xl text-gray-200 leading-relaxed uppercase font-medium tracking-wide">
+                            AGRADECIMIENTO ESPECIAL A <strong className="text-[#FFD700] font-bold">ESTEBAN TISSERA</strong>, PILAR CLAVE EN ESTE RECORRIDO.
                             <br />
-                            Y a todos los presentes por acompañarnos hoy.
+                            Y A TODOS LOS PRESENTES POR ACOMPAÑARNOS HOY.
                         </p>
                     </div>
                 </motion.div>

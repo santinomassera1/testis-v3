@@ -744,8 +744,8 @@ function Slide6() {
 function Slide7() {
   const clients = [
     { name: 'USAL', logo: '/usal-logo.jpg', status: 'active', label: 'Piloto Activo' },
-    { name: 'UTN', logo: '/images/tesis/utnlogo.png', status: 'planned', label: 'Q3 2025' },
-    { name: 'UNC', logo: '/images/tesis/unclogo.png', status: 'planned', label: 'Q4 2025' },
+    { name: 'UTN', logo: '/images/tesis/utnlogo.png', status: 'planned', label: 'Q3 2026' },
+    { name: 'UNC', logo: '/images/tesis/unclogo.png', status: 'planned', label: 'Q4 2026' },
     { name: '?', logo: null, status: 'evaluation', label: 'En Negociación' },
   ];
 
