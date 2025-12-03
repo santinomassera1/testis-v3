@@ -245,7 +245,7 @@ function Slide2() {
       title: 'Certificados',
       desc: 'Rutas de descarga poco evidentes',
       stat: '13.6%',
-      impact: 'Trámites burocráticos bloqueados',
+      impact: 'Gestiones administrativas bloqueadas',
       color: 'cyan',
       gradient: 'from-cyan-400 to-blue-500',
       iconColor: 'text-cyan-100'
@@ -367,7 +367,7 @@ function Slide3() {
           animate={{ scale: 1, opacity: 1 }}
         >
           <h1 className="text-8xl font-bold mb-8 leading-tight text-white drop-shadow-2xl">
-            Menos burocracia.<br />Más estudio.
+            Menos trámites.<br />Más estudio.
           </h1>
         </motion.div>
 
@@ -997,6 +997,9 @@ function Slide8() {
 
 // Slide 9: Demo
 function Slide9() {
+  const [activeDemo, setActiveDemo] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+
   const demos = [
     { title: 'Inscripción guiada', image: '/images/tesis/inscripcion.jpg', desc: 'Valida correlativas y cupos en tiempo real' },
     { title: 'Email generado', image: '/images/tesis/mail.jpg', desc: 'Redacción formal automática con datos del alumno' },
@@ -1004,61 +1007,118 @@ function Slide9() {
     { title: 'Envío de adjuntos', image: '/images/tesis/envia_correo.png', desc: 'Adjunta certificados médicos o constancias' },
   ];
 
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isPlaying) {
+      interval = setInterval(() => {
+        setActiveDemo((prev) => (prev + 1) % demos.length);
+      }, 8500);
+    }
+    return () => clearInterval(interval);
+  }, [isPlaying, demos.length]);
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen p-8 relative overflow-hidden">
+    <div className="flex flex-col items-center justify-center h-screen p-8 relative overflow-hidden bg-white">
       {/* Imagen de fondo prototipo */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/tesis/prototipo_backround.jpg"
+          src="/images/tesis/demo_bg_new.png"
           alt="Prototipo background"
           fill
-          className="object-cover"
+          className="object-cover opacity-20"
           priority
         />
-        {/* Overlay para legibilidad */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-usal-green-50/50 to-white/40" />
-        <div className="absolute inset-0 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent" />
       </div>
 
       <div className="relative z-10 max-w-7xl w-full h-full flex flex-col justify-center">
         <motion.div
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="text-center mb-8"
+          className="mb-8"
         >
           <h1 className="text-6xl font-bold text-usal-navy-900 mb-2 drop-shadow-sm">
-            Lo que hace el asistente
+            Capacidades del Asistente
           </h1>
           <p className="text-2xl text-usal-navy-700 font-medium">Capturas reales del funcionamiento</p>
         </motion.div>
 
-        {/* Grid 2x2 para maximizar tamaño */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 flex-1 max-h-[70vh]">
-          {demos.map((demo, i) => (
-            <motion.div
-              key={i}
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2 + i * 0.1 }}
-              className="bg-white rounded-3xl shadow-2xl border-4 border-usal-green-100 overflow-hidden hover:shadow-[0_0_40px_rgba(34,197,94,0.2)] hover:scale-[1.02] transition-all duration-300 flex flex-row"
-            >
-              {/* Imagen grande a la izquierda */}
-              <div className="relative w-1/2 h-full bg-gray-100 border-r border-gray-200">
-                <Image
-                  src={demo.image}
-                  alt={demo.title}
-                  fill
-                  className="object-contain p-2"
-                />
-              </div>
+        <div className="flex gap-12 h-[65vh]">
+          {/* Left Column: Navigation */}
+          <div className="w-1/3 flex flex-col justify-center gap-4">
+            {demos.map((demo, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  setActiveDemo(i);
+                  setIsPlaying(false);
+                }}
+                className={`text-left p-6 rounded-2xl transition-all duration-300 border-l-4 group relative overflow-hidden ${activeDemo === i
+                  ? 'bg-usal-green-50 border-usal-green-500 shadow-lg scale-105'
+                  : 'bg-white/50 border-transparent hover:bg-white hover:shadow-md'
+                  }`}
+              >
+                <div className="relative z-10">
+                  <h3 className={`text-xl font-bold mb-1 ${activeDemo === i ? 'text-usal-navy-900' : 'text-gray-500 group-hover:text-gray-700'}`}>
+                    {demo.title}
+                  </h3>
+                  <p className={`text-sm ${activeDemo === i ? 'text-usal-navy-700' : 'text-gray-400'}`}>
+                    {demo.desc}
+                  </p>
+                </div>
+                {activeDemo === i && (
+                  <motion.div
+                    layoutId="activeGlow"
+                    className="absolute inset-0 bg-gradient-to-r from-usal-green-100/50 to-transparent -z-0"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  />
+                )}
+              </button>
+            ))}
+          </div>
 
-              {/* Descripción a la derecha */}
-              <div className="w-1/2 p-8 flex flex-col justify-center bg-white">
-                <h3 className="text-3xl font-bold text-usal-navy-900 mb-4 leading-tight">{demo.title}</h3>
-                <p className="text-xl text-usal-navy-600 leading-relaxed">{demo.desc}</p>
-              </div>
-            </motion.div>
-          ))}
+          {/* Right Column: Large Image Display */}
+          <div className="w-2/3 relative rounded-3xl overflow-hidden shadow-2xl border-4 border-usal-green-100 bg-gray-100 group">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeDemo}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.4 }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={demos[activeDemo].image}
+                  alt={demos[activeDemo].title}
+                  fill
+                  className="object-contain p-4"
+                  priority
+                />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Progress Bar for Auto-play */}
+            {isPlaying && (
+              <motion.div
+                className="absolute bottom-0 left-0 h-1.5 bg-usal-green-500 z-20"
+                initial={{ width: "0%" }}
+                animate={{ width: "100%" }}
+                transition={{ duration: 8.5, ease: "linear" }}
+                key={activeDemo}
+              />
+            )}
+
+            {/* Pause/Play indicator on hover */}
+            <button
+              onClick={() => setIsPlaying(!isPlaying)}
+              className="absolute bottom-4 right-4 p-2 bg-black/50 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
+            >
+              {isPlaying ? <IconPlayerPause className="h-5 w-5" /> : <IconPlayerPlay className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -1405,8 +1465,8 @@ export default function PresentacionPage() {
       </header>
 
       {/* Slides */}
-      <div className="h-screen">
-        <AnimatePresence initial={false} custom={direction} mode="wait">
+      <div className="h-screen relative w-full overflow-hidden">
+        <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={currentSlide}
             custom={direction}
@@ -1418,7 +1478,7 @@ export default function PresentacionPage() {
               x: { type: "spring", stiffness: 300, damping: 30 },
               opacity: { duration: 0.2 },
             }}
-            className="h-full"
+            className="absolute inset-0 w-full h-full"
           >
             <CurrentSlideComponent />
           </motion.div>
