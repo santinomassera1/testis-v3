@@ -25,17 +25,18 @@ function Counter({ from, to, duration = 2 }: { from: number; to: number; duratio
 
 export default function SorpresaPage() {
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden py-12">
             {/* Background Grid & USAL Gradient */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]" />
-                {/* Enhanced USAL Background: Red and Gold gradients */}
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#C41E3A]/40 via-transparent to-[#0a0a0a]" />
-                <div className="absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl from-[#FFD700]/10 via-transparent to-transparent" />
+                {/* Enhanced USAL Background: Green, White, Gold */}
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#00A859]/20 via-transparent to-[#0a0a0a]" />
+                <div className="absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl from-[#FFD700]/10 via-transparent to-[#00A859]/10" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03),transparent_70%)]" />
             </div>
 
             {/* USAL Ambient Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#C41E3A]/10 rounded-full blur-[120px]" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#00A859]/10 rounded-full blur-[120px]" />
 
             <div className="relative z-10 max-w-6xl w-full flex flex-col items-center">
 
@@ -57,7 +58,7 @@ export default function SorpresaPage() {
                         />
                     </div>
 
-                    <h1 className="text-6xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-red-100 to-white drop-shadow-2xl tracking-tight">
+                    <h1 className="text-6xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-green-100 to-white drop-shadow-2xl tracking-tight">
                         Proyecto Final de Ingeniería
                     </h1>
                     <p className="text-2xl text-yellow-500/90 font-light tracking-widest uppercase mb-8">
@@ -80,7 +81,7 @@ export default function SorpresaPage() {
                         { icon: IconFileText, label: 'Versiones de "Tesis_Final"', value: 47, bgClass: 'bg-blue-500/10', textClass: 'text-blue-400', delay: 0.2 },
                         { icon: IconDeviceDesktop, label: 'Horas hablando con la IA', value: 210, bgClass: 'bg-purple-500/10', textClass: 'text-purple-400', delay: 0.3 },
                         { icon: IconCoffee, label: 'Cafés consumidos', value: 452, bgClass: 'bg-amber-500/10', textClass: 'text-amber-500', delay: 0.4 },
-                        { icon: IconCertificate, label: 'Ganas de recibirme', value: 100, suffix: '%', bgClass: 'bg-red-500/10', textClass: 'text-red-500', delay: 0.5 },
+                        { icon: IconCertificate, label: 'Ganas de recibirme', value: 100, suffix: '%', bgClass: 'bg-green-500/10', textClass: 'text-green-500', delay: 0.5 },
                     ].map((item, i) => (
                         <motion.div
                             key={i}
@@ -117,15 +118,15 @@ export default function SorpresaPage() {
                     </div>
                 </motion.div>
 
-                {/* Footer */}
+                {/* Footer - Fixed Overlap */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.5 }}
-                    className="absolute bottom-6 left-0 right-0 flex justify-center"
+                    className="mt-16 flex justify-center"
                 >
-                    <div className="flex items-center gap-2 text-white/20 text-xs font-light uppercase tracking-widest">
-                        Hecho con <IconHeart className="h-3 w-3 text-red-800 fill-red-800 animate-pulse" /> para la USAL
+                    <div className="flex items-center gap-2 text-white/30 text-xs font-light uppercase tracking-widest">
+                        Hecho con <IconHeart className="h-3 w-3 text-red-600 fill-red-600 animate-pulse" /> para la USAL
                     </div>
                 </motion.div>
             </div>

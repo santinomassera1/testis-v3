@@ -55,7 +55,6 @@ type Plan = z.infer<typeof Plan>;
 /** 2) Prompt del planificador (salida SOLO JSON minificado) */
 const PLANNER_SYS = `Sos un planificador de acciones para un asistente universitario de la USAL.
 Tu salida debe ser SOLO JSON MINIFICADO (sin texto extra) y seguir este schema:
-Tu salida debe ser SOLO JSON MINIFICADO (sin texto extra) y seguir este schema:
 {"intent":"...","legajo":string|null,"materiaId":string|null,"turno":string|null,"topic":string|null,"codigo":number|null,"materia":string|null,"sede":"Centro"|"Pilar"|null,"emailTo":string|null,"emailSubject":string|null,"emailBody":string|null}
 
 IMPORTANTE: Analiza el CONTEXTO COMPLETO de la conversación. Si el usuario menciona información parcial (como sede o turno) en un seguimiento, combínala con la consulta anterior.
@@ -81,7 +80,7 @@ Parámetros:
 - "turno": turno (ej: "Mañana", "Tarde", "Noche") si el usuario lo menciona
 - "sede": sede ("Centro" o "Pilar") si el usuario lo menciona. Reconoce variantes: "cede", "sede", "campus"
 - "topic": para intent "help", el tema sobre el que pide ayuda
-- "emailTo": destinatario del email (ej: "profesor@usal.edu.ar"). Si no lo menciona, null.
+- "emailTo": destinatario(s) del email. Si son varios, UNILOS con comas en un solo string (ej: "mail1@test.com, mail2@test.com"). Si no lo menciona, null.
 - "emailSubject": asunto del email. Infiérelo si es necesario. Si el usuario no lo da, genera uno breve y claro.
 - "emailBody": cuerpo del mensaje. CRÍTICO: Si el usuario pide "desarrollar" o da una idea general, REDACTA un mensaje completo y formal. 1) Intenta inferir el nombre del destinatario desde su email. 2) SIEMPRE firma como 'Santino Massera'. 3) Usa la FECHA ACTUAL provista en el prompt si es necesario.
 - "attachments": array de objetos { filename, content, encoding } si hay archivos adjuntos disponibles en el contexto.
@@ -92,6 +91,7 @@ Ejemplos básicos:
 - "¿Qué correlativas tiene 147?" → {"intent":"query_correlativas","codigo":147}
 - "los finales de ingeniería en informática" → {"intent":"query_finales","materia":"Ingeniería en Informática"}
 - "las correlativas de la carrera ingeniería en informática" → {"intent":"query_correlativas","materia":"Ingeniería en Informática"}
+- "mandale el kit a juan@mail.com y pedro@mail.com" → {"intent":"send_email","emailTo":"juan@mail.com, pedro@mail.com","emailSubject":"Kit de Defensa - Testis","emailBody":"..."}
 
 Ejemplos con CONTEXTO (seguimientos):
 - Conversación: "¿finales de ingeniería?" → Bot pide sede → Usuario: "soy de pilar"
