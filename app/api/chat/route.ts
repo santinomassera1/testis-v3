@@ -1,5 +1,9 @@
-// app/api/chat/route.ts
-import { NextRequest } from 'next/server';
+import path from 'path';
+
+// ... (rest of imports)
+
+// ... (inside the function)
+
 import { generateText, streamText } from 'ai';
 import { z } from 'zod';
 import { getSiuClient } from '@/lib/siu';
@@ -461,19 +465,37 @@ Analiza el contexto completo y genera el plan en JSON.`,
             message: 'Para enviar un correo necesito el **destinatario**, el **asunto** y el **mensaje**. Por favor, indicame esos datos.',
           };
         } else {
+          // DETECTAR SI ES EL KIT DE DEFENSA
+          const keywords = ['kit', 'defensa', 'inversión', 'inversion', 'resumen', 'piloto'];
+          const shouldAttachKit = keywords.some(k =>
+            plan.emailSubject?.toLowerCase().includes(k) ||
+            plan.emailBody?.toLowerCase().includes(k)
+          );
+
+          const finalAttachments = [...attachments];
+
+          if (shouldAttachKit) {
+
+            const kitPath = path.join(process.cwd(), 'public', 'Testis_Kit_Defensa.md');
+            finalAttachments.push({
+              filename: 'Testis_Kit_Defensa.md',
+              path: kitPath
+            });
+          }
+
           const result = await sendEmail({
             to: plan.emailTo,
             subject: plan.emailSubject,
             text: plan.emailBody,
             html: plan.emailBody.replace(/\n/g, '<br>'),
-            attachments: attachments.length > 0 ? attachments : undefined
+            attachments: finalAttachments.length > 0 ? finalAttachments : undefined
           });
 
           if (result.success) {
             toolResult = {
               ok: true,
               type: 'send_email',
-              message: `Correo enviado exitosamente a **${plan.emailTo}** con asunto "**${plan.emailSubject}**"${attachments.length > 0 ? ` y ${attachments.length} archivo(s) adjunto(s)` : ''}.`,
+              message: `Correo enviado exitosamente a **${plan.emailTo}** con asunto "**${plan.emailSubject}**"${finalAttachments.length > 0 ? ` y ${finalAttachments.length} archivo(s) adjunto(s) (incluyendo Kit de Defensa)` : ''}.`,
               details: result
             };
           } else {
