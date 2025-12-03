@@ -45,7 +45,7 @@ export const TestisChat = () => {
   const messageHistoryRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const { data: session } = useSession();
-  const [attachment, setAttachment] = useState<{ name: string; content: string; type: string } | null>(null);
+  const [attachments, setAttachments] = useState<{ name: string; content: string; type: string }[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -131,39 +131,55 @@ export const TestisChat = () => {
   };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const content = e.target?.result as string;
-        setAttachment({
-          name: file.name,
-          content: content, // Data URL complete (e.g. data:application/pdf;base64,...)
-          type: file.type
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const newAttachments: { name: string; content: string; type: string }[] = [];
+
+      // Process all selected files
+      const promises = Array.from(files).map(file => {
+        return new Promise<void>((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const content = e.target?.result as string;
+            newAttachments.push({
+              name: file.name,
+              content: content,
+              type: file.type
+            });
+            resolve();
+          };
+          reader.readAsDataURL(file);
         });
-      };
-      reader.readAsDataURL(file);
+      });
+
+      await Promise.all(promises);
+      setAttachments(prev => [...prev, ...newAttachments]);
     }
+    // Reset input so same files can be selected again if needed
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const removeAttachment = (index: number) => {
+    setAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleFormSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
 
-    // Prepare data payload with attachment if exists
-    const options = attachment ? {
+    // Prepare data payload with attachments if exist
+    const options = attachments.length > 0 ? {
       data: {
-        attachments: [{
-          filename: attachment.name,
-          content: attachment.content.split(',')[1], // Remove data: prefix for nodemailer
+        attachments: attachments.map(att => ({
+          filename: att.name,
+          content: att.content.split(',')[1], // Remove data: prefix
           encoding: 'base64',
-          contentType: attachment.type
-        }]
+          contentType: att.type
+        }))
       }
     } : undefined;
 
     handleSubmit(e, options);
-    setAttachment(null);
-    if (fileInputRef.current) fileInputRef.current.value = '';
+    setAttachments([]);
   };
 
   // Cargar datos de ejemplo al montar el componente
@@ -499,28 +515,33 @@ export const TestisChat = () => {
               {/* Input Form */}
               <form
                 onSubmit={handleFormSubmit}
-                className="max-h-[15vh] py-1 px-5 relative z-20"
+                className="max-h-[25vh] py-1 px-5 relative z-20"
               >
-                {/* File Preview */}
-                {attachment && (
-                  <div className="absolute -top-12 left-5 bg-white border border-usal-green-200 rounded-lg p-2 flex items-center gap-2 shadow-sm">
-                    <IconPaperclip className="h-4 w-4 text-usal-green-600" />
-                    <span className="text-xs text-usal-navy-700 max-w-[150px] truncate">{attachment.name}</span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setAttachment(null);
-                        if (fileInputRef.current) fileInputRef.current.value = '';
-                      }}
-                      className="hover:bg-red-50 rounded-full p-0.5"
-                    >
-                      <IconX className="h-3 w-3 text-red-500" />
-                    </button>
+                {/* File Preview List */}
+                {attachments.length > 0 && (
+                  <div className="absolute bottom-full left-5 mb-2 flex flex-col gap-2 max-h-[150px] overflow-y-auto w-[calc(100%-2.5rem)]">
+                    {attachments.map((att, index) => (
+                      <div key={index} className="bg-white border border-usal-green-200 rounded-lg p-2 flex items-center justify-between shadow-sm animate-in fade-in slide-in-from-bottom-2">
+                        <div className="flex items-center gap-2 overflow-hidden">
+                          <IconPaperclip className="h-4 w-4 text-usal-green-600 flex-shrink-0" />
+                          <span className="text-xs text-usal-navy-700 truncate">{att.name}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeAttachment(index)}
+                          className="hover:bg-red-50 rounded-full p-1 transition-colors"
+                          title="Eliminar archivo"
+                        >
+                          <IconX className="h-3 w-3 text-red-500" />
+                        </button>
+                      </div>
+                    ))}
                   </div>
                 )}
 
                 <input
                   type="file"
+                  multiple
                   ref={fileInputRef}
                   className="hidden"
                   onChange={handleFileSelect}
@@ -549,10 +570,21 @@ export const TestisChat = () => {
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="group bg-gray-100 hover:bg-gray-200 h-8 w-8 rounded-full flex items-center justify-center transition-colors"
-                        title="Adjuntar archivo"
+                        className={cn(
+                          "group h-8 w-8 rounded-full flex items-center justify-center transition-colors relative",
+                          attachments.length > 0 ? "bg-usal-green-100 hover:bg-usal-green-200" : "bg-gray-100 hover:bg-gray-200"
+                        )}
+                        title="Adjuntar archivos"
                       >
-                        <IconPaperclip className="h-4 w-4 text-gray-600 group-hover:text-gray-800 transition duration-200" />
+                        <IconPaperclip className={cn(
+                          "h-4 w-4 transition duration-200",
+                          attachments.length > 0 ? "text-usal-green-600" : "text-gray-600 group-hover:text-gray-800"
+                        )} />
+                        {attachments.length > 0 && (
+                          <span className="absolute -top-1 -right-1 bg-usal-green-600 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center border-2 border-white">
+                            {attachments.length}
+                          </span>
+                        )}
                       </button>
                       <button
                         type="submit"
@@ -566,7 +598,7 @@ export const TestisChat = () => {
                 <textarea
                   ref={inputRef}
                   disabled={isLoading}
-                  className="px-4 w-full pr-10 rounded-lg border-usal-green-200 text-usal-navy-800 border py-[1rem] bg-white text-sm [box-sizing:border-box] overflow-x-auto inline-block focus:outline-none focus:border-usal-green-400 focus:ring-2 focus:ring-usal-green-100 transition duration-100"
+                  className="px-4 w-full pr-20 rounded-lg border-usal-green-200 text-usal-navy-800 border py-[1rem] bg-white text-sm [box-sizing:border-box] overflow-x-auto inline-block focus:outline-none focus:border-usal-green-400 focus:ring-2 focus:ring-usal-green-100 transition duration-100"
                   placeholder={session
                     ? `Hola ${session.user?.name?.split(' ')[0]}, ¿cómo puedo ayudarte con el SIU Guaraní?`
                     : "Pregúntame sobre el SIU Guaraní..."
