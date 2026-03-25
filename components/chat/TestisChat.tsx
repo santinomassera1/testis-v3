@@ -7,19 +7,15 @@ import {
   IconPlus,
   IconX,
   IconMaximize,
-  IconMail,
   IconBook,
   IconCalendar,
   IconCertificate,
-  IconSchool,
   IconRobot,
   IconHistory,
   IconTrash,
   IconMessageDots,
   IconChevronLeft,
-  IconChevronRight,
-  IconStarFilled,
-  IconPaperclip,
+  IconInfoCircle,
 } from "@tabler/icons-react";
 import {
   AnimatePresence,
@@ -29,11 +25,7 @@ import {
 import Markdown from "react-markdown";
 import { cn } from "@/lib/utils";
 import { useTestisChat, ChatMessage as TestisChatMessage } from "@/lib/hooks/useTestisChat";
-import { openMailTo } from "@/lib/skills/makeMailTo";
-import { loadDemoData } from "@/lib/skills/readUserData";
 import { useSession } from "next-auth/react";
-import { useSatisfactionSurvey } from "@/lib/hooks/useSatisfactionSurvey";
-import { SatisfactionSurvey } from "../SatisfactionSurvey";
 
 export const TestisChat = () => {
   const [open, setOpen] = useState(false);
@@ -45,8 +37,6 @@ export const TestisChat = () => {
   const messageHistoryRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const { data: session } = useSession();
-  const [attachments, setAttachments] = useState<{ name: string; content: string; type: string }[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     messages,
@@ -67,47 +57,25 @@ export const TestisChat = () => {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Hook de encuesta de satisfacción
-  const survey = useSatisfactionSurvey();
-
-  // Bloques de acceso rápido específicos para Testis con colores USAL
   const quickAccessBlocks = [
     {
-      icon: <IconBook className="h-6 w-6 text-usal-green-600" />,
-      title: "Inscripción",
-      content: "¿Cómo me inscribo a las materias?",
-      color: "bg-usal-green-50 hover:bg-usal-green-100 border border-usal-green-200"
-    },
-    {
-      icon: <IconCalendar className="h-6 w-6 text-usal-red-600" />,
-      title: "Horarios",
-      content: "Ver mis horarios de cursada",
-      color: "bg-usal-red-50 hover:bg-usal-red-100 border border-usal-red-200"
-    },
-    {
-      icon: <IconSchool className="h-6 w-6 text-usal-gold-600" />,
-      title: "Notas",
-      content: "Consultar mis calificaciones",
+      icon: <IconCertificate className="h-6 w-6 text-usal-gold-600" />,
+      title: "Correlativas",
+      content: "¿Qué correlativas necesito para inscribirme a Sistemas Operativos?",
       color: "bg-usal-gold-50 hover:bg-usal-gold-100 border border-usal-gold-200"
     },
     {
-      icon: <IconCalendar className="h-6 w-6 text-usal-navy-600" />,
-      title: "Parciales",
-      content: "Ver próximos exámenes",
-      color: "bg-usal-navy-50 hover:bg-usal-navy-100 border border-usal-navy-200"
-    },
-    {
-      icon: <IconCertificate className="h-6 w-6 text-usal-green-700" />,
-      title: "Certificados",
-      content: "Generar constancias y certificados",
+      icon: <IconBook className="h-6 w-6 text-usal-green-600" />,
+      title: "Inscripción",
+      content: "Quiero inscribirme a Estructura de Datos, turno Mañana. Mi legajo es SEGUNDO.",
       color: "bg-usal-green-50 hover:bg-usal-green-100 border border-usal-green-200"
     },
     {
-      icon: <IconMail className="h-6 w-6 text-usal-red-700" />,
-      title: "Correos",
-      content: "Enviar mail a docentes",
-      color: "bg-usal-red-50 hover:bg-usal-red-100 border border-usal-red-200"
-    }
+      icon: <IconCalendar className="h-6 w-6 text-usal-navy-600" />,
+      title: "Finales",
+      content: "¿Cuándo son los finales de Programación I en sede Centro?",
+      color: "bg-usal-navy-50 hover:bg-usal-navy-100 border border-usal-navy-200"
+    },
   ];
 
   const handleBlockClick = (content: string) => {
@@ -130,74 +98,11 @@ export const TestisChat = () => {
     }
   };
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      const newAttachments: { name: string; content: string; type: string }[] = [];
-
-      // Process all selected files
-      const promises = Array.from(files).map(file => {
-        return new Promise<void>((resolve) => {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const content = e.target?.result as string;
-            newAttachments.push({
-              name: file.name,
-              content: content,
-              type: file.type
-            });
-            resolve();
-          };
-          reader.readAsDataURL(file);
-        });
-      });
-
-      await Promise.all(promises);
-      setAttachments(prev => [...prev, ...newAttachments]);
-    }
-    // Reset input so same files can be selected again if needed
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  };
-
-  const removeAttachment = (index: number) => {
-    setAttachments(prev => prev.filter((_, i) => i !== index));
-  };
-
   const handleFormSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-
-    // Prepare data payload with attachments if exist
-    const options = attachments.length > 0 ? {
-      data: {
-        attachments: attachments.map(att => ({
-          filename: att.name,
-          content: att.content.split(',')[1], // Remove data: prefix
-          encoding: 'base64',
-          contentType: att.type
-        }))
-      }
-    } : undefined;
-
-    handleSubmit(e, options);
-    setAttachments([]);
+    handleSubmit(e);
   };
 
-  // Cargar datos de ejemplo al montar el componente
-  useEffect(() => {
-    loadDemoData();
-  }, []);
-
-  // Sincronizar contador de mensajes con la encuesta
-  useEffect(() => {
-    survey.setMessageCount(messages.length);
-
-    // Intentar mostrar encuesta si corresponde
-    if (messages.length > 0) {
-      survey.checkAndShowSurvey();
-    }
-  }, [messages.length, survey]);
-
-  // Efectos para el scroll
   useEffect(() => {
     const handleUserScroll = () => {
       if (messageHistoryRef.current) {
@@ -298,15 +203,14 @@ export const TestisChat = () => {
                 backgroundAttachment: 'fixed',
               }}
             >
-              {/* Overlay único para todo el chat */}
+              {/* Overlay */}
               <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-white/85 to-usal-green-50/80 pointer-events-none" />
+
               {/* Header */}
               <div className="h-10 w-full bg-gradient-to-r from-usal-green-600 via-usal-green-500 to-usal-green-700 rounded-tr-lg rounded-tl-lg flex justify-between px-10 md:px-6 py-2 relative z-20">
                 <div className="font-medium text-sm flex items-center gap-2 text-white">
                   <button
-                    onClick={() => {
-                      setIsExpanded(!isExpanded);
-                    }}
+                    onClick={() => setIsExpanded(!isExpanded)}
                     className="hover:bg-white/20 p-1 rounded-full transition-colors"
                   >
                     <IconMaximize className="h-4 w-4 text-white" />
@@ -320,22 +224,10 @@ export const TestisChat = () => {
                   </button>
                   <span className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-usal-gold-400 rounded-full"></div>
-                    Testis{session ? ` - ${session.user?.name?.split(' ')[0] || 'Usuario'}` : ' - Asistente SIU'}
+                    Testis{session ? ` — ${session.user?.name?.split(' ')[0] || 'Usuario'}` : ' — Asistente Académico'}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  {/* Botón de Encuesta de Satisfacción */}
-                  <button
-                    onClick={() => {
-                      console.log('🌟 Botón de encuesta clickeado!');
-                      survey.triggerSurvey();
-                    }}
-                    className="rounded-full bg-yellow-500 hover:bg-yellow-600 text-white p-1.5 transition-colors shadow-lg"
-                    title="Compartir feedback"
-                  >
-                    <IconStarFilled className="h-4 w-4" />
-                  </button>
-
                   <motion.button
                     className="rounded-full bg-white/20 text-white px-2 py-0.5 text-sm flex items-center justify-center gap-1 overflow-hidden"
                     onClick={() => createNewChat()}
@@ -370,7 +262,6 @@ export const TestisChat = () => {
                     transition={{ duration: 0.3 }}
                     className="absolute top-10 left-0 w-80 h-[calc(100%-2.5rem)] bg-white border-r border-usal-green-200 z-30 flex flex-col"
                   >
-                    {/* Sidebar Header */}
                     <div className="p-4 border-b border-usal-green-200 flex items-center justify-between">
                       <h3 className="font-semibold text-usal-navy-900 flex items-center gap-2">
                         <IconHistory className="h-4 w-4" />
@@ -384,7 +275,6 @@ export const TestisChat = () => {
                       </button>
                     </div>
 
-                    {/* Chat List */}
                     <div className="flex-1 overflow-y-auto">
                       {chatSessions.length === 0 ? (
                         <div className="p-4 text-center text-usal-navy-500">
@@ -445,7 +335,6 @@ export const TestisChat = () => {
                       )}
                     </div>
 
-                    {/* Sidebar Footer */}
                     <div className="p-4 border-t border-usal-green-200">
                       <button
                         onClick={() => {
@@ -462,32 +351,42 @@ export const TestisChat = () => {
                 )}
               </AnimatePresence>
 
-              {/* Quick Access Blocks */}
+              {/* Quick Access Blocks — solo 3 core */}
               {!messages.length && (
-                <div className="px-5 py-10 grid grid-cols-1 md:grid-cols-2 gap-2 overflow-y-auto relative z-10">
-                  {quickAccessBlocks.map((block, index) => (
-                    <motion.button
-                      key={block.title}
-                      initial={{ opacity: 0, filter: "blur(10px)" }}
-                      animate={{ opacity: 1, filter: "blur(0px)" }}
-                      transition={{ duration: 0.3, delay: 0.2 * index }}
-                      onClick={() => handleBlockClick(block.content)}
-                      className={cn(
-                        "p-4 flex flex-col text-left justify-between rounded-2xl h-32 md:h-40 w-full transition-colors",
-                        block.color
-                      )}
-                    >
-                      {block.icon}
-                      <div>
-                        <div className="text-base font-bold text-gray-800">
-                          {block.title}
+                <div className="px-5 py-6 relative z-10 flex flex-col gap-4">
+                  {/* Simulation mode banner */}
+                  <div className="flex items-start gap-2 px-3 py-2 bg-usal-gold-50 border border-usal-gold-200 rounded-lg">
+                    <IconInfoCircle className="h-4 w-4 text-usal-gold-600 mt-0.5 flex-shrink-0" />
+                    <p className="text-xs text-usal-gold-800">
+                      <span className="font-semibold">Modo demostración</span> — Datos del Plan 11 de Ingeniería en Informática (USAL). La lógica es representativa de un entorno integrado con SIU Guaraní.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                    {quickAccessBlocks.map((block, index) => (
+                      <motion.button
+                        key={block.title}
+                        initial={{ opacity: 0, filter: "blur(10px)" }}
+                        animate={{ opacity: 1, filter: "blur(0px)" }}
+                        transition={{ duration: 0.3, delay: 0.2 * index }}
+                        onClick={() => handleBlockClick(block.content)}
+                        className={cn(
+                          "p-4 flex flex-col text-left justify-between rounded-2xl h-32 md:h-40 w-full transition-colors",
+                          block.color
+                        )}
+                      >
+                        {block.icon}
+                        <div>
+                          <div className="text-base font-bold text-gray-800">
+                            {block.title}
+                          </div>
+                          <div className="text-xs text-gray-600">
+                            {block.content}
+                          </div>
                         </div>
-                        <div className="text-xs text-gray-600">
-                          {block.content}
-                        </div>
-                      </div>
-                    </motion.button>
-                  ))}
+                      </motion.button>
+                    ))}
+                  </div>
                 </div>
               )}
 
@@ -502,9 +401,7 @@ export const TestisChat = () => {
                       {message.role === "user" ? (
                         <UserMessage content={message.content} />
                       ) : (
-                        <AIMessage
-                          content={message.content}
-                        />
+                        <AIMessage content={message.content} />
                       )}
                     </div>
                   ))}
@@ -517,35 +414,6 @@ export const TestisChat = () => {
                 onSubmit={handleFormSubmit}
                 className="max-h-[25vh] py-1 px-5 relative z-20"
               >
-                {/* File Preview List */}
-                {attachments.length > 0 && (
-                  <div className="absolute bottom-full left-5 mb-2 flex flex-col gap-2 max-h-[150px] overflow-y-auto w-[calc(100%-2.5rem)]">
-                    {attachments.map((att, index) => (
-                      <div key={index} className="bg-white border border-usal-green-200 rounded-lg p-2 flex items-center justify-between shadow-sm animate-in fade-in slide-in-from-bottom-2">
-                        <div className="flex items-center gap-2 overflow-hidden">
-                          <IconPaperclip className="h-4 w-4 text-usal-green-600 flex-shrink-0" />
-                          <span className="text-xs text-usal-navy-700 truncate">{att.name}</span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => removeAttachment(index)}
-                          className="hover:bg-red-50 rounded-full p-1 transition-colors"
-                          title="Eliminar archivo"
-                        >
-                          <IconX className="h-3 w-3 text-red-500" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                <input
-                  type="file"
-                  multiple
-                  ref={fileInputRef}
-                  className="hidden"
-                  onChange={handleFileSelect}
-                />
                 {showScrollButton && (
                   <button
                     onClick={scrollIntoView}
@@ -566,42 +434,21 @@ export const TestisChat = () => {
                       <IconPlayerStopFilled className="h-5 w-5 text-white group-hover:rotate-12 transition duration-200" />
                     </motion.button>
                   ) : (
-                    <div className="absolute top-1/2 right-4 -translate-y-1/2 flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className={cn(
-                          "group h-8 w-8 rounded-full flex items-center justify-center transition-colors relative",
-                          attachments.length > 0 ? "bg-usal-green-100 hover:bg-usal-green-200" : "bg-gray-100 hover:bg-gray-200"
-                        )}
-                        title="Adjuntar archivos"
-                      >
-                        <IconPaperclip className={cn(
-                          "h-4 w-4 transition duration-200",
-                          attachments.length > 0 ? "text-usal-green-600" : "text-gray-600 group-hover:text-gray-800"
-                        )} />
-                        {attachments.length > 0 && (
-                          <span className="absolute -top-1 -right-1 bg-usal-green-600 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center border-2 border-white">
-                            {attachments.length}
-                          </span>
-                        )}
-                      </button>
-                      <button
-                        type="submit"
-                        className="group bg-usal-green-100 hover:bg-usal-green-200 h-8 w-8 rounded-full flex items-center justify-center transition-colors"
-                      >
-                        <IconArrowNarrowUp className="h-5 w-5 text-usal-green-600 group-hover:text-usal-green-700 group-hover:-translate-y-0.5 group-hover:rotate-12 transition duration-200" />
-                      </button>
-                    </div>
+                    <button
+                      type="submit"
+                      className="absolute top-1/2 right-8 -translate-y-1/2 group bg-usal-green-100 hover:bg-usal-green-200 h-8 w-8 rounded-full flex items-center justify-center transition-colors"
+                    >
+                      <IconArrowNarrowUp className="h-5 w-5 text-usal-green-600 group-hover:text-usal-green-700 group-hover:-translate-y-0.5 group-hover:rotate-12 transition duration-200" />
+                    </button>
                   )}
                 </AnimatePresence>
                 <textarea
                   ref={inputRef}
                   disabled={isLoading}
-                  className="px-4 w-full pr-20 rounded-lg border-usal-green-200 text-usal-navy-800 border py-[1rem] bg-white text-sm [box-sizing:border-box] overflow-x-auto inline-block focus:outline-none focus:border-usal-green-400 focus:ring-2 focus:ring-usal-green-100 transition duration-100"
+                  className="px-4 w-full pr-14 rounded-lg border-usal-green-200 text-usal-navy-800 border py-[1rem] bg-white text-sm [box-sizing:border-box] overflow-x-auto inline-block focus:outline-none focus:border-usal-green-400 focus:ring-2 focus:ring-usal-green-100 transition duration-100"
                   placeholder={session
-                    ? `Hola ${session.user?.name?.split(' ')[0]}, ¿cómo puedo ayudarte con el SIU Guaraní?`
-                    : "Pregúntame sobre el SIU Guaraní..."
+                    ? `Hola ${session.user?.name?.split(' ')[0]}, ¿en qué puedo ayudarte?`
+                    : "Preguntá sobre correlativas, inscripción o finales..."
                   }
                   value={input}
                   onChange={handleInputChange}
@@ -620,7 +467,7 @@ export const TestisChat = () => {
         </AnimatePresence>
       </motion.div>
 
-      {/* Chat Toggle Button 3D */}
+      {/* Chat Toggle Button */}
       <motion.button
         onClick={() => setOpen(!open)}
         className={cn(
@@ -658,7 +505,6 @@ export const TestisChat = () => {
           transition: { duration: 0.1 }
         }}
       >
-        {/* Glow effect */}
         <div
           className="absolute inset-0 rounded-full bg-gradient-to-r from-usal-green-400 to-usal-green-300 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
           style={{
@@ -666,29 +512,18 @@ export const TestisChat = () => {
             transform: 'scale(1.2)',
           }}
         />
-
-        {/* Inner glow */}
         <div
           className="absolute inset-1 rounded-full bg-gradient-to-r from-white/20 to-white/10"
           style={{
             background: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), transparent 50%)',
           }}
         />
-
         <motion.div
-          animate={{
-            rotateZ: [0, 360],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "linear",
-          }}
+          animate={{ rotateZ: [0, 360] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
         >
           <IconRobot className="h-6 w-6 text-white relative z-10 drop-shadow-sm" />
         </motion.div>
-
-        {/* Floating particles around button */}
         {[...Array(3)].map((_, i) => (
           <motion.div
             key={i}
@@ -713,23 +548,6 @@ export const TestisChat = () => {
           />
         ))}
       </motion.button>
-
-      {/* Encuesta de Satisfacción */}
-      <SatisfactionSurvey
-        isOpen={survey.showSurvey}
-        onClose={survey.closeSurvey}
-        onSubmit={survey.submitSurvey}
-        messagesCount={messages.length}
-        sessionDuration={survey.metrics.sessionDuration}
-        categoriesUsed={survey.metrics.categoriesUsed}
-      />
-
-      {/* DEBUG: Indicador visual */}
-      {survey.showSurvey && (
-        <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-[9999]">
-          ⚠️ Encuesta abierta!
-        </div>
-      )}
     </div>
   );
 };
@@ -760,9 +578,6 @@ const AIMessage = ({
     </div>
   );
 };
-
-// ToolCallResult ya no es necesario porque el nuevo sistema de chat
-// resuelve todo en el servidor (2-step flow sin tool calls visibles)
 
 let delimiter = "";
 

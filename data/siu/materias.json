@@ -1,41 +1,312 @@
 {
   "sistemas": [
     {
-      "id": "ALG2",
-      "nombre": "Álgebra II",
+      "id": "144",
+      "codigo": 144,
+      "nombre": "Introducción a la Programación",
+      "anio": 1,
       "turno": "Mañana",
       "horario": "Lun/Mié 8:00-10:00",
-      "cupo": 30,
-      "inscriptos": 28,
-      "correlativas": ["ALG1"]
+      "cupo": 40,
+      "inscriptos": 22,
+      "correlativas": []
     },
     {
-      "id": "ALG2_NOCHE",
-      "nombre": "Álgebra II",
+      "id": "144_NOCHE",
+      "codigo": 144,
+      "nombre": "Introducción a la Programación",
+      "anio": 1,
       "turno": "Noche",
       "horario": "Mar/Jue 19:00-21:00",
-      "cupo": 25,
-      "inscriptos": 25,
-      "correlativas": ["ALG1"]
+      "cupo": 35,
+      "inscriptos": 35,
+      "correlativas": []
     },
     {
-      "id": "FIS1",
+      "id": "146",
+      "codigo": 146,
+      "nombre": "Álgebra I",
+      "anio": 1,
+      "turno": "Mañana",
+      "horario": "Mar/Jue 8:00-10:00",
+      "cupo": 40,
+      "inscriptos": 31,
+      "correlativas": []
+    },
+    {
+      "id": "146_TARDE",
+      "codigo": 146,
+      "nombre": "Álgebra I",
+      "anio": 1,
+      "turno": "Tarde",
+      "horario": "Lun/Mié 15:00-17:00",
+      "cupo": 35,
+      "inscriptos": 18,
+      "correlativas": []
+    },
+    {
+      "id": "142",
+      "codigo": 142,
+      "nombre": "Análisis Matemático I",
+      "anio": 1,
+      "turno": "Mañana",
+      "horario": "Lun/Vie 8:00-10:00",
+      "cupo": 40,
+      "inscriptos": 27,
+      "correlativas": []
+    },
+    {
+      "id": "142_TARDE",
+      "codigo": 142,
+      "nombre": "Análisis Matemático I",
+      "anio": 1,
+      "turno": "Tarde",
+      "horario": "Mar/Jue 14:00-16:00",
+      "cupo": 35,
+      "inscriptos": 14,
+      "correlativas": []
+    },
+    {
+      "id": "150",
+      "codigo": 150,
       "nombre": "Física I",
+      "anio": 1,
       "turno": "Tarde",
       "horario": "Lun/Vie 14:00-16:00",
       "cupo": 35,
       "inscriptos": 20,
-      "correlativas": ["MAT1"]
+      "correlativas": []
     },
     {
-      "id": "PROG3",
-      "nombre": "Programación III",
+      "id": "145",
+      "codigo": 145,
+      "nombre": "Arquitectura de Computadoras",
+      "anio": 1,
+      "turno": "Tarde",
+      "horario": "Mar/Jue 14:00-16:00",
+      "cupo": 30,
+      "inscriptos": 16,
+      "correlativas": []
+    },
+    {
+      "id": "153",
+      "codigo": 153,
+      "nombre": "Sistemas de Información I",
+      "anio": 1,
+      "turno": "Mañana",
+      "horario": "Mié/Vie 10:00-12:00",
+      "cupo": 30,
+      "inscriptos": 19,
+      "correlativas": []
+    },
+    {
+      "id": "148",
+      "codigo": 148,
+      "nombre": "Programación I",
+      "anio": 2,
+      "turno": "Mañana",
+      "horario": "Lun/Mié 10:00-12:00",
+      "cupo": 35,
+      "inscriptos": 24,
+      "correlativas": ["144"]
+    },
+    {
+      "id": "148_NOCHE",
+      "codigo": 148,
+      "nombre": "Programación I",
+      "anio": 2,
+      "turno": "Noche",
+      "horario": "Mar/Jue 19:00-21:00",
+      "cupo": 30,
+      "inscriptos": 12,
+      "correlativas": ["144"]
+    },
+    {
+      "id": "152",
+      "codigo": 152,
+      "nombre": "Estructura de Datos y Algoritmos",
+      "anio": 2,
+      "turno": "Tarde",
+      "horario": "Lun/Jue 14:00-16:00",
+      "cupo": 30,
+      "inscriptos": 22,
+      "correlativas": ["144"]
+    },
+    {
+      "id": "154",
+      "codigo": 154,
+      "nombre": "Álgebra II",
+      "anio": 2,
+      "turno": "Mañana",
+      "horario": "Lun/Mié 8:00-10:00",
+      "cupo": 30,
+      "inscriptos": 28,
+      "correlativas": ["146"]
+    },
+    {
+      "id": "154_NOCHE",
+      "codigo": 154,
+      "nombre": "Álgebra II",
+      "anio": 2,
+      "turno": "Noche",
+      "horario": "Mar/Jue 21:00-23:00",
+      "cupo": 25,
+      "inscriptos": 25,
+      "correlativas": ["146"]
+    },
+    {
+      "id": "158",
+      "codigo": 158,
+      "nombre": "Análisis Matemático II",
+      "anio": 2,
+      "turno": "Tarde",
+      "horario": "Mar/Vie 14:00-16:00",
+      "cupo": 30,
+      "inscriptos": 18,
+      "correlativas": ["142"]
+    },
+    {
+      "id": "147",
+      "codigo": 147,
+      "nombre": "Paradigmas de Programación",
+      "anio": 2,
+      "turno": "Noche",
+      "horario": "Lun/Mié 19:00-21:00",
+      "cupo": 25,
+      "inscriptos": 11,
+      "correlativas": ["144"]
+    },
+    {
+      "id": "161",
+      "codigo": 161,
+      "nombre": "Sistemas Operativos",
+      "anio": 3,
       "turno": "Mañana",
       "horario": "Mar/Jue 10:00-12:00",
       "cupo": 30,
       "inscriptos": 15,
-      "correlativas": ["PROG2"]
+      "correlativas": ["152"]
+    },
+    {
+      "id": "161_NOCHE",
+      "codigo": 161,
+      "nombre": "Sistemas Operativos",
+      "anio": 3,
+      "turno": "Noche",
+      "horario": "Mié/Vie 19:00-21:00",
+      "cupo": 25,
+      "inscriptos": 9,
+      "correlativas": ["152"]
+    },
+    {
+      "id": "163",
+      "codigo": 163,
+      "nombre": "Sistemas de Bases de Datos",
+      "anio": 3,
+      "turno": "Tarde",
+      "horario": "Lun/Jue 16:00-18:00",
+      "cupo": 30,
+      "inscriptos": 21,
+      "correlativas": ["152"]
+    },
+    {
+      "id": "162",
+      "codigo": 162,
+      "nombre": "Sistemas de Información II",
+      "anio": 3,
+      "turno": "Mañana",
+      "horario": "Mié/Vie 8:00-10:00",
+      "cupo": 25,
+      "inscriptos": 17,
+      "correlativas": ["153"]
+    },
+    {
+      "id": "166",
+      "codigo": 166,
+      "nombre": "Teleinformática",
+      "anio": 3,
+      "turno": "Tarde",
+      "horario": "Mar/Vie 16:00-18:00",
+      "cupo": 25,
+      "inscriptos": 13,
+      "correlativas": ["145"]
+    },
+    {
+      "id": "164",
+      "codigo": 164,
+      "nombre": "Probabilidad y Estadística",
+      "anio": 3,
+      "turno": "Mañana",
+      "horario": "Lun/Mié 10:00-12:00",
+      "cupo": 25,
+      "inscriptos": 10,
+      "correlativas": ["154"]
+    },
+    {
+      "id": "170",
+      "codigo": 170,
+      "nombre": "Tecnología Informática",
+      "anio": 4,
+      "turno": "Noche",
+      "horario": "Lun/Mié 21:00-23:00",
+      "cupo": 20,
+      "inscriptos": 8,
+      "correlativas": ["161"]
+    },
+    {
+      "id": "171",
+      "codigo": 171,
+      "nombre": "Ingeniería del Software",
+      "anio": 4,
+      "turno": "Tarde",
+      "horario": "Mar/Jue 16:00-18:00",
+      "cupo": 20,
+      "inscriptos": 12,
+      "correlativas": ["162"]
+    },
+    {
+      "id": "174",
+      "codigo": 174,
+      "nombre": "Arquitectura de Redes",
+      "anio": 4,
+      "turno": "Mañana",
+      "horario": "Mar/Jue 8:00-10:00",
+      "cupo": 20,
+      "inscriptos": 7,
+      "correlativas": ["166"]
+    },
+    {
+      "id": "175",
+      "codigo": 175,
+      "nombre": "Dirección de Proyectos Informáticos",
+      "anio": 4,
+      "turno": "Tarde",
+      "horario": "Lun/Vie 14:00-16:00",
+      "cupo": 20,
+      "inscriptos": 14,
+      "correlativas": ["162"]
+    },
+    {
+      "id": "182",
+      "codigo": 182,
+      "nombre": "Sistemas Inteligentes",
+      "anio": 5,
+      "turno": "Noche",
+      "horario": "Mar/Jue 19:00-21:00",
+      "cupo": 20,
+      "inscriptos": 6,
+      "correlativas": ["161", "163"]
+    },
+    {
+      "id": "185",
+      "codigo": 185,
+      "nombre": "Aseguramiento de la Calidad del Software",
+      "anio": 5,
+      "turno": "Mañana",
+      "horario": "Mié/Vie 10:00-12:00",
+      "cupo": 20,
+      "inscriptos": 5,
+      "correlativas": ["171"]
     }
   ]
 }
-

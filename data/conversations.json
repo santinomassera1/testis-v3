@@ -1,0 +1,29 @@
+[
+  {
+    "id": "log-1774452210927-mrjxo",
+    "timestamp": "2026-03-25T15:23:30.927Z",
+    "sessionId": "sess-1774452195353-i11xoj",
+    "intent": "other",
+    "query": "hol",
+    "success": true,
+    "responseTimeMs": 2593
+  },
+  {
+    "id": "log-1774452281670-7m40q",
+    "timestamp": "2026-03-25T15:24:41.670Z",
+    "sessionId": "sess-1774452195353-i11xoj",
+    "intent": "other",
+    "query": "TERCERO",
+    "success": true,
+    "responseTimeMs": 2116
+  },
+  {
+    "id": "log-1774467571243-zyqei",
+    "timestamp": "2026-03-25T19:39:31.243Z",
+    "sessionId": "sess-1774467472620-thvrt4",
+    "intent": "query_correlativas",
+    "query": "¿Qué correlativas necesito para inscribirme a Sistemas Operativos?",
+    "success": true,
+    "responseTimeMs": 1917
+  }
+]

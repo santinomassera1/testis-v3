@@ -20,12 +20,18 @@ export interface Nota {
 
 export interface Materia {
   id: string;
+  codigo?: number;
   nombre: string;
+  anio?: number;
   turno: string;
   horario: string;
   cupo: number;
   inscriptos: number;
   correlativas: string[];
+}
+
+export interface MateriasData {
+  sistemas: Materia[];
 }
 
 export interface ComprobanteInscripcion {

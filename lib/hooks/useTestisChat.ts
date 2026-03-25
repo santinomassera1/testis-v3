@@ -2,7 +2,19 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
+
+// Genera o recupera un session ID persistente por pestaña del navegador
+function getOrCreateSessionId(): string {
+  if (typeof window === 'undefined') return `sess-ssr-${Date.now()}`;
+  const key = 'testis_session_id';
+  let id = sessionStorage.getItem(key);
+  if (!id) {
+    id = `sess-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    sessionStorage.setItem(key, id);
+  }
+  return id;
+}
 
 export interface ChatMessage {
   id: string;
@@ -29,12 +41,16 @@ export function useTestisChat() {
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const sessionIdRef = useRef<string>(getOrCreateSessionId());
 
   const chatResult: any = useChat({
     // @ts-ignore
     api: '/api/chat',
     streamProtocol: 'text',
     keepLastMessageOnError: true,
+    headers: {
+      'x-session-id': sessionIdRef.current,
+    },
     onError: (err: Error) => {
       console.error('Error en chat:', err);
       setError('Error al procesar tu mensaje. Intenta nuevamente.');

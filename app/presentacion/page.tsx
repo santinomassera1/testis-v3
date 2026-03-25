@@ -189,7 +189,7 @@ function Slide1() {
           transition={{ delay: 0.5 }}
           className="text-4xl text-white/95 mb-16 max-w-5xl mx-auto leading-relaxed font-medium drop-shadow-lg"
         >
-          El SIU Guaraní funciona; la experiencia del alumno puede ser <span className="font-bold text-usal-gold-300">más clara, rápida y humana</span>.
+          El SIU Guaraní funciona; la experiencia del alumno puede ser <span className="font-bold text-yellow-400 drop-shadow-md">más clara, rápida y humana</span>.
         </motion.p>
 
         {/* Stats cards translúcidos */}
@@ -378,7 +378,7 @@ function Slide3() {
           className="bg-white/20 backdrop-blur-xl rounded-3xl p-12 mb-16 border border-white/40 shadow-2xl"
         >
           <p className="text-4xl leading-relaxed font-light text-white drop-shadow-md">
-            Un asistente inteligente que <span className="font-bold text-usal-gold-300">elimina la fricción administrativa</span>, permitiendo al alumno enfocarse en su carrera.
+            Un asistente inteligente que <span className="font-bold text-black drop-shadow-none">elimina la fricción administrativa</span>, permitiendo al alumno enfocarse en su carrera.
           </p>
         </motion.div>
 
@@ -1263,9 +1263,9 @@ function Slide10() {
         >
           <div className="text-6xl">💡</div>
           <div>
-            <h4 className="text-2xl font-bold text-usal-gold-300 mb-2">Insight Clave</h4>
+            <h4 className="text-2xl font-bold text-yellow-400 mb-2">Insight Clave</h4>
             <p className="text-2xl font-light italic">
-              "La capacidad de <span className="font-bold text-white">pre-validar correlativas</span> antes de entrar al SIU eliminó la frustración principal de los alumnos de primer año."
+              &ldquo;La capacidad de <span className="font-bold text-white">pre-validar correlativas</span> antes de entrar al SIU eliminó la frustración principal de los alumnos de primer año.&rdquo;
             </p>
           </div>
         </motion.div>
@@ -1299,7 +1299,7 @@ function Slide11() {
           <h1 className="text-9xl font-bold text-white mb-6 drop-shadow-2xl tracking-tight">
             De idea a impacto
           </h1>
-          <p className="text-4xl text-usal-gold-300 font-light max-w-4xl mx-auto leading-relaxed">
+          <p className="text-4xl text-yellow-400 font-light max-w-4xl mx-auto leading-relaxed drop-shadow-md">
             Testis no es solo un chat. Es la evolución de la experiencia académica.
           </p>
         </motion.div>
@@ -1505,14 +1505,14 @@ export default function PresentacionPage() {
       )}
 
       {/* Dots */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex gap-3 bg-white/90 backdrop-blur-sm px-8 py-4 rounded-full shadow-lg z-40">
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex gap-2 bg-black/30 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 z-40">
         {slides.map((slide, index) => (
           <button
             key={slide.id}
             onClick={() => goToSlide(index)}
             className={`transition-all duration-300 rounded-full ${index === currentSlide
-              ? 'w-16 h-4 bg-usal-green-600'
-              : 'w-4 h-4 bg-gray-300 hover:bg-gray-400'
+              ? 'w-8 h-2 bg-usal-green-400'
+              : 'w-2 h-2 bg-white/40 hover:bg-white/80'
               }`}
           />
         ))}
