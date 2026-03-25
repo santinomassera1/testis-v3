@@ -191,8 +191,8 @@ export function formatDate(isoDate: string): string {
  */
 export function getCitation(type: 'finales' | 'correlativas' | 'calendario' | 'horarios'): string {
   const citations = {
-    finales: 'Origen: Finales 2025 (PDF interno USAL)',
-    correlativas: 'Origen: Plan de Estudios (Plan 11, PDF interno)',
+    finales: 'Origen: Finales Nov/Dic 2025 — Feb 2026 (datos demo, fuente: PDF interno USAL)',
+    correlativas: 'Origen: Plan de Estudios — Plan 11, Ingeniería en Informática (fuente: PDF interno USAL)',
     calendario: 'Origen: Calendario Académico 2025 (PDF interno USAL)',
     horarios: 'Origen: Horarios 2025 - ejemplos (datos internos)',
   };

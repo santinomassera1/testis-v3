@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from 'react';
 
-// Mapeo de intent a nombre legible
 const INTENT_LABELS: Record<string, string> = {
   query_finales: '📅 Fechas de finales',
   query_correlativas: '🔗 Correlativas',
   inscribir_materia: '📝 Inscripción a materias',
-  other: '💬 Consulta general',
+  other: '🔘 Fuera de alcance',
 };
 
 const ERROR_LABELS: Record<string, string> = {
@@ -15,6 +14,7 @@ const ERROR_LABELS: Record<string, string> = {
   CUPO_AGOTADO: 'Cupo agotado',
   MATERIA_NO_ENCONTRADA: 'Materia no encontrada',
   MISSING_PARAMS: 'Faltan parámetros',
+  TURNO_REQUERIDO: 'Turno no especificado',
   UNKNOWN: 'Sin datos / fuera de alcance',
 };
 
@@ -204,7 +204,7 @@ export default function AdminDashboard() {
 
           {/* Top intents */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-base font-bold text-gray-800 mb-4">📊 Temas más consultados</h2>
+            <h2 className="text-base font-bold text-gray-800 mb-4">📊 Consultas por flujo</h2>
             {s?.topIntents.length === 0 ? (
               <EmptyState message="Aún no hay consultas registradas" />
             ) : (

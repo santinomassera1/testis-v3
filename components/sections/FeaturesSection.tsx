@@ -1,65 +1,64 @@
 "use client";
 import { motion } from "framer-motion";
 import { 
-  IconRocket, 
   IconShield, 
   IconClock, 
   IconBrain,
-  IconMail,
   IconCalendar,
-  IconCertificate,
   IconBook,
-  IconUsers,
-  IconBolt
+  IconBolt,
+  IconLink,
+  IconChecklist,
+  IconSchool
 } from "@tabler/icons-react";
 import UniversalBackground from "../UniversalBackground";
 
 export const FeaturesSection = () => {
   const features = [
     {
-      icon: <IconRocket className="h-8 w-8 text-usal-green-600" />,
-      title: "Navegación Intuitiva",
-      description: "Olvídate de perderte en el SIU. Testis te guía paso a paso en cada proceso académico."
+      icon: <IconLink className="h-8 w-8 text-usal-green-600" />,
+      title: "Correlativas al Instante",
+      description: "Consultá qué materias necesitás aprobar antes de inscribirte. Con nombres completos, no solo códigos."
     },
     {
-      icon: <IconBolt className="h-8 w-8 text-usal-gold-600" />,
-      title: "Respuestas Instantáneas",
-      description: "Obtén información sobre inscripciones, horarios y notas en segundos, no en minutos."
+      icon: <IconChecklist className="h-8 w-8 text-usal-gold-600" />,
+      title: "Verificación de Inscripción",
+      description: "Verificá si cumplís las condiciones para inscribirte a una materia según tu historial académico."
     },
     {
-      icon: <IconMail className="h-8 w-8 text-usal-red-600" />,
-      title: "Correos Profesionales",
-      description: "Genera automáticamente correos formales para docentes y secretaría con el tono apropiado."
+      icon: <IconCalendar className="h-8 w-8 text-usal-red-600" />,
+      title: "Fechas de Finales",
+      description: "Encontrá las fechas de exámenes finales por materia, sede y turno. Sin buscar en PDFs."
     },
     {
-      icon: <IconCalendar className="h-8 w-8 text-usal-navy-600" />,
-      title: "Gestión de Horarios",
-      description: "Consulta tus horarios de cursada y fechas de exámenes de manera clara y organizada."
+      icon: <IconBolt className="h-8 w-8 text-usal-navy-600" />,
+      title: "Respuestas en Segundos",
+      description: "Lo que antes tardaba minutos navegando el SIU, ahora se resuelve con una pregunta en lenguaje natural."
     },
     {
-      icon: <IconCertificate className="h-8 w-8 text-usal-green-700" />,
-      title: "Certificados Rápidos",
-      description: "Genera constancias de alumno regular, certificados analíticos y más con un solo clic."
+      icon: <IconBook className="h-8 w-8 text-usal-green-700" />,
+      title: "Datos del Plan 11",
+      description: "28 materias de Ingeniería en Informática con cupos, turnos, horarios y correlativas reales."
     },
     {
-      icon: <IconBook className="h-8 w-8 text-usal-red-700" />,
-      title: "Seguimiento Académico",
-      description: "Monitorea tu progreso, notas y estado de regularidad en tiempo real."
+      icon: <IconSchool className="h-8 w-8 text-usal-red-700" />,
+      title: "Pensado para la Institución",
+      description: "Panel de métricas para que la universidad vea qué consultan los alumnos y cuánto resuelve el sistema."
     },
     {
       icon: <IconShield className="h-8 w-8 text-usal-navy-700" />,
       title: "100% Seguro",
-      description: "Tus datos académicos están protegidos. Testis no almacena información sensible."
+      description: "Sin almacenamiento de datos sensibles. La lógica se ejecuta en tiempo real contra datos académicos."
     },
     {
       icon: <IconClock className="h-8 w-8 text-usal-gold-700" />,
       title: "Disponible 24/7",
-      description: "Accede a la asistencia académica en cualquier momento, desde cualquier dispositivo."
+      description: "Asistencia académica en cualquier momento, desde cualquier dispositivo con navegador."
     },
     {
       icon: <IconBrain className="h-8 w-8 text-usal-green-800" />,
       title: "IA Especializada",
-      description: "Entrenado específicamente en procesos de la USAL para brindarte respuestas precisas."
+      description: "Entrenado específicamente con los procesos y datos de la USAL para respuestas precisas y confiables."
     }
   ];
 
@@ -75,11 +74,11 @@ export const FeaturesSection = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-bold text-usal-navy-900 mb-4">
-            Todo lo que Necesitas en un Solo Lugar
+            Tres Consultas, Cero Burocracia
           </h2>
           <p className="text-xl text-usal-navy-600 max-w-3xl mx-auto">
-            Testis combina inteligencia artificial avanzada con un profundo conocimiento 
-            del sistema académico de la USAL para ofrecerte la mejor experiencia.
+            Correlativas, inscripción y finales: las tres consultas más repetitivas de 
+            secretaría, resueltas en segundos con inteligencia artificial.
           </p>
         </motion.div>
 
@@ -118,13 +117,13 @@ export const FeaturesSection = () => {
         >
           <div className="bg-gradient-to-r from-usal-green-600 to-usal-green-500 rounded-2xl p-8 text-white">
             <h3 className="text-2xl font-bold mb-4">
-              ¿Listo para Revolucionar tu Experiencia Académica?
+              ¿Querés verlo en acción?
             </h3>
             <p className="text-usal-green-100 mb-6 text-lg">
-              Únete a miles de estudiantes que ya disfrutan de una gestión académica más eficiente.
+              Probá el chat en esta misma página. Consultá correlativas, verificá inscripción o buscá fechas de finales.
             </p>
             <button className="bg-white text-usal-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-usal-green-50 transition-colors duration-300">
-              Comenzar Ahora - Es Gratis
+              Probar Testis Ahora
             </button>
           </div>
         </motion.div>

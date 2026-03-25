@@ -67,8 +67,8 @@ export function Hero() {
         </Balancer>
       </h2>
       <p className="relative z-30 mx-auto mt-4 max-w-xl px-4 text-center text-base/6 text-usal-navy-600">
-        Tu compañero virtual para navegar el SIU Guaraní de la USAL.
-        Inscripciones, horarios, notas, parciales y más, todo en un solo lugar.
+        Consultá correlativas, verificá si podés inscribirte a una materia y
+        encontrá las fechas de finales de la USAL, en segundos.
       </p>
       <div className="mb-10 mt-8 flex w-full flex-col items-center justify-center gap-4 px-8 sm:flex-row md:mb-20">
         <Link
@@ -390,33 +390,32 @@ const BeamEffect = ({
   );
 };
 
-// Conversaciones predefinidas más dinámicas
 const conversations = [
   {
-    title: "Consulta de Notas",
+    title: "Verificación de Inscripción",
     messages: [
-      { role: 'user', content: '¿Cómo consulto mis notas del parcial?', avatar: '👤' },
-      { role: 'assistant', content: '¡Por supuesto! Te ayudo con eso. Ve a "Académico" → "Notas" → selecciona el período actual.', avatar: '🤖' },
-      { role: 'user', content: '¡Genial! ¿Y si quiero ver el promedio general?', avatar: '👤' },
-      { role: 'assistant', content: 'Perfecto. En la misma sección, haz click en "Ver Historial Completo" y verás tu promedio actualizado.', avatar: '🤖' }
+      { role: 'user', content: 'Quiero inscribirme a Estructura de Datos, turno Tarde. Mi legajo es SEGUNDO', avatar: '👤' },
+      { role: 'assistant', content: '✅ ¡Inscripción exitosa! Quedaste registrado en Estructura de Datos y Algoritmos, turno Tarde. Comprobante generado.', avatar: '🤖' },
+      { role: 'user', content: '¿Y puedo cursar Sistemas Operativos?', avatar: '👤' },
+      { role: 'assistant', content: '❌ Todavía no. Para Sistemas Operativos necesitás tener aprobada Estructura de Datos (código 152). ¡Aprobala este cuatri y ya estás!', avatar: '🤖' }
     ]
   },
   {
-    title: "Inscripción a Materias",
+    title: "Consulta de Correlativas",
     messages: [
-      { role: 'user', content: 'Necesito inscribirme a materias para el próximo cuatrimestre', avatar: '👤' },
-      { role: 'assistant', content: 'Te guío paso a paso: Ve a "Inscripciones" → "Cursar Materias" → selecciona el período 2024-2.', avatar: '🤖' },
-      { role: 'user', content: '¿Qué hago si una materia está llena?', avatar: '👤' },
-      { role: 'assistant', content: 'Puedes anotarte en lista de espera o elegir otro horario. Te mostraré todas las opciones disponibles.', avatar: '🤖' }
+      { role: 'user', content: '¿Qué correlativas tiene Paradigmas de Programación?', avatar: '👤' },
+      { role: 'assistant', content: '🔗 Para cursar Paradigmas de Programación (147) necesitás tener aprobada: Introducción a la Programación (144).', avatar: '🤖' },
+      { role: 'user', content: '¿Y para Bases de Datos?', avatar: '👤' },
+      { role: 'assistant', content: '🔗 Para Sistemas de Bases de Datos (163) necesitás: Estructura de Datos y Algoritmos (152).', avatar: '🤖' }
     ]
   },
   {
-    title: "Horarios de Cursada",
+    title: "Fechas de Finales",
     messages: [
-      { role: 'user', content: 'No encuentro mis horarios de clase', avatar: '👤' },
-      { role: 'assistant', content: '¡No te preocupes! Ve a "Académico" → "Mi Horario Semanal" y verás todas tus clases organizadas.', avatar: '🤖' },
-      { role: 'user', content: '¿Puedo exportar el horario al calendario?', avatar: '👤' },
-      { role: 'assistant', content: '¡Claro! Hay un botón "Exportar a Google Calendar" que sincroniza automáticamente tus horarios.', avatar: '🤖' }
+      { role: 'user', content: '¿Cuándo rindo Programación I en sede Centro?', avatar: '👤' },
+      { role: 'assistant', content: '📅 Programación I (148) — Centro, turno Mañana:\n• 1º llamado: 25/11/2025\n• 2º llamado: 09/12/2025\n• Febrero: 17/02/2026', avatar: '🤖' },
+      { role: 'user', content: '¿Y el turno noche?', avatar: '👤' },
+      { role: 'assistant', content: '📅 Programación I — Centro, turno Noche:\n• 1º llamado: 26/11/2025\n• 2º llamado: 10/12/2025\n• Febrero: 18/02/2026', avatar: '🤖' }
     ]
   }
 ];
@@ -433,10 +432,9 @@ const ChatbotDemo = () => {
 
 
   const quickActions = [
-    { icon: '📚', text: 'Ver Notas', color: 'bg-blue-100 text-blue-700' },
-    { icon: '📝', text: 'Inscripciones', color: 'bg-green-100 text-green-700' },
-    { icon: '📅', text: 'Horarios', color: 'bg-purple-100 text-purple-700' },
-    { icon: '💰', text: 'Pagos', color: 'bg-orange-100 text-orange-700' }
+    { icon: '🔗', text: 'Correlativas', color: 'bg-blue-100 text-blue-700' },
+    { icon: '📝', text: 'Inscripción', color: 'bg-green-100 text-green-700' },
+    { icon: '📅', text: 'Finales', color: 'bg-purple-100 text-purple-700' },
   ];
 
   // Efecto de escritura

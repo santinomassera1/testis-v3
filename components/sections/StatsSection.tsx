@@ -6,28 +6,28 @@ import UniversalBackground from "../UniversalBackground";
 export const StatsSection = () => {
   const stats = [
     {
-      icon: <IconUsers className="h-8 w-8 text-usal-green-600" />,
-      number: "15,000+",
-      label: "Estudiantes Activos",
-      description: "Usuarios registrados en el SIU Guaraní USAL"
+      icon: <IconSchool className="h-8 w-8 text-usal-green-600" />,
+      number: "28",
+      label: "Materias Cargadas",
+      description: "Del Plan 11 de Ingeniería en Informática"
     },
     {
-      icon: <IconClock className="h-8 w-8 text-usal-red-600" />,
-      number: "85%",
-      label: "Reducción de Tiempo",
-      description: "Menos tiempo en trámites administrativos"
+      icon: <IconTrendingUp className="h-8 w-8 text-usal-red-600" />,
+      number: "3",
+      label: "Flujos Core",
+      description: "Correlativas, inscripción y finales"
     },
     {
-      icon: <IconTrendingUp className="h-8 w-8 text-usal-gold-600" />,
-      number: "92%",
-      label: "Satisfacción",
-      description: "De estudiantes recomiendan Testis"
+      icon: <IconClock className="h-8 w-8 text-usal-gold-600" />,
+      number: "<5s",
+      label: "Tiempo de Respuesta",
+      description: "Por consulta, vs minutos en el SIU"
     },
     {
-      icon: <IconSchool className="h-8 w-8 text-usal-navy-600" />,
+      icon: <IconUsers className="h-8 w-8 text-usal-navy-600" />,
       number: "24/7",
       label: "Disponibilidad",
-      description: "Asistencia disponible en todo momento"
+      description: "Sin depender de horarios de secretaría"
     }
   ];
 
@@ -43,11 +43,11 @@ export const StatsSection = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-bold text-usal-navy-900 mb-4">
-            Resultados que Hablan por Sí Solos
+            Datos Reales, Lógica Real
           </h2>
           <p className="text-xl text-usal-navy-600 max-w-3xl mx-auto">
-            Testis ha revolucionado la experiencia académica en la USAL, 
-            reduciendo tiempos de gestión y mejorando la satisfacción estudiantil.
+            Testis opera con datos académicos reales del Plan 11 de Ingeniería en Informática de la USAL,
+            con la lógica de verificación que se aplicaría contra un SIU Guaraní integrado.
           </p>
         </motion.div>
 

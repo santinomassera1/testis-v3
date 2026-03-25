@@ -10,6 +10,8 @@ import {
   getAcademicData,
 } from '@/lib/academic-data';
 import { appendLog } from '@/lib/db/logger';
+import materiasData from '@/data/siu/materias.json';
+import type { Materia } from '@/lib/siu/types';
 
 export const runtime = 'nodejs';
 export const maxDuration = 10;
@@ -23,7 +25,6 @@ const Plan = z.object({
     'other',
   ]),
   legajo: z.string().nullable().optional(),
-  materiaId: z.string().nullable().optional(),
   turno: z.string().nullable().optional(),
   codigo: z.number().nullable().optional(),
   materia: z.string().nullable().optional(),
@@ -31,42 +32,90 @@ const Plan = z.object({
 });
 type Plan = z.infer<typeof Plan>;
 
+const allMaterias: Materia[] = (materiasData as any)['sistemas'] || [];
+
+/**
+ * Resuelve nombre/código de materia a una entrada concreta de materias.json.
+ * Retorna { materia, ambiguousTurnos } o null si no hay match.
+ */
+function resolveMateria(
+  nombre?: string | null,
+  codigo?: number | null,
+  turno?: string | null
+): { materia: Materia } | { ambiguousTurnos: string[]; nombre: string } | null {
+  let matches: Materia[] = [];
+
+  if (codigo) {
+    matches = allMaterias.filter(m => m.codigo === codigo);
+  }
+
+  if (matches.length === 0 && nombre) {
+    const q = nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    matches = allMaterias.filter(m => {
+      const n = m.nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      return n.includes(q) || q.includes(n);
+    });
+  }
+
+  if (matches.length === 0) return null;
+
+  if (turno) {
+    const turnoNorm = turno.toLowerCase();
+    const exact = matches.find(m => m.turno.toLowerCase() === turnoNorm);
+    if (exact) return { materia: exact };
+  }
+
+  const uniqueNames = Array.from(new Set(matches.map(m => m.nombre)));
+  if (uniqueNames.length === 1) {
+    if (matches.length === 1) return { materia: matches[0] };
+    const turnos = matches.map(m => m.turno);
+    if (!turno) return { ambiguousTurnos: turnos, nombre: uniqueNames[0] };
+    return { materia: matches[0] };
+  }
+
+  return { materia: matches[0] };
+}
+
 /** 2) Planner prompt — enfocado en los 3 flujos core */
 const PLANNER_SYS = `Sos un planificador de acciones para un asistente universitario de la USAL (Ingeniería en Informática — Plan 11).
 Tu salida debe ser SOLO JSON MINIFICADO (sin texto extra) siguiendo este schema:
-{"intent":"...","legajo":string|null,"materiaId":string|null,"turno":string|null,"codigo":number|null,"materia":string|null,"sede":"Centro"|"Pilar"|null}
+{"intent":"...","legajo":string|null,"turno":string|null,"codigo":number|null,"materia":string|null,"sede":"Centro"|"Pilar"|null}
 
-IMPORTANTE: Analiza el CONTEXTO COMPLETO de la conversación. Si el usuario menciona información parcial (como sede o turno) en un seguimiento, combínala con la consulta anterior.
+IMPORTANTE: Analiza el CONTEXTO COMPLETO de la conversación. Si el usuario menciona información parcial (como sede, turno o legajo) en un seguimiento, combínala con la consulta anterior.
 
 Intents disponibles (SOLO estos 4):
 - "query_finales": consulta sobre fechas de exámenes finales (nov/dic 2025, feb 2026)
 - "query_correlativas": consulta sobre materias correlativas / requisitos / plan de estudios
-- "inscribir_materia": el usuario quiere verificar si puede inscribirse a una materia, o directamente inscribirse (necesita materiaId y turno)
+- "inscribir_materia": el usuario quiere verificar si puede inscribirse a una materia, o directamente inscribirse
 - "other": cualquier otra cosa (saludos, charla general, preguntas fuera de alcance)
 
 Parámetros:
-- "legajo": si el usuario lo menciona, extraelo; si no, usa null
-- "materiaId": código de materia (ej: "ALG2", "FIS1") para inscripción SIU
-- "codigo": código numérico de materia (ej: 144, 152) para consultas académicas. Si el contexto menciona "Ingeniería en Informática" o "la carrera", usa null
-- "materia": nombre de materia (ej: "Programación", "Álgebra") para búsquedas. Puede ser "Ingeniería en Informática" si pregunta por todas las materias de la carrera
+- "legajo": número o código de legajo del alumno. Extraelo si el usuario lo menciona (ej: "mi legajo es SEGUNDO", "soy 123456"). Si no lo dice, usa null
+- "materia": nombre de la materia tal como lo dice el usuario (ej: "Estructura de Datos", "Programación I", "Álgebra"). Puede ser "Ingeniería en Informática" si pregunta por todas las materias de la carrera. NO necesitás saber el código interno — el backend resuelve el nombre
+- "codigo": código numérico de materia (ej: 144, 152) SOLO si el usuario lo dice explícitamente. Si dice el nombre, dejá codigo en null y poné el nombre en "materia"
 - "turno": turno (ej: "Mañana", "Tarde", "Noche") si el usuario lo menciona
-- "sede": sede ("Centro" o "Pilar") si el usuario lo menciona. Reconoce variantes: "cede", "sede", "campus"
+- "sede": sede ("Centro" o "Pilar") si el usuario lo menciona
 
 Ejemplos:
+- "Quiero inscribirme a Estructura de Datos, turno Mañana. Mi legajo es SEGUNDO" → {"intent":"inscribir_materia","materia":"Estructura de Datos","turno":"Mañana","legajo":"SEGUNDO"}
+- "¿Puedo cursar Paradigmas de Programación? Soy legajo SIN_MATERIAS" → {"intent":"inscribir_materia","materia":"Paradigmas de Programación","legajo":"SIN_MATERIAS"}
+- "Inscribirme a Álgebra II turno Noche" → {"intent":"inscribir_materia","materia":"Álgebra II","turno":"Noche"}
 - "¿Cuándo rindo 144 en Pilar turno Noche?" → {"intent":"query_finales","codigo":144,"sede":"Pilar","turno":"Noche"}
+- "¿Qué correlativas tiene Paradigmas de Programación?" → {"intent":"query_correlativas","materia":"Paradigmas de Programación"}
 - "¿Qué correlativas tiene 147?" → {"intent":"query_correlativas","codigo":147}
-- "¿Puedo inscribirme a Estructura de Datos?" → {"intent":"inscribir_materia","materia":"Estructura de Datos"}
 - "los finales de ingeniería en informática" → {"intent":"query_finales","materia":"Ingeniería en Informática"}
 - "las correlativas de la carrera" → {"intent":"query_correlativas","materia":"Ingeniería en Informática"}
 - "hola" → {"intent":"other"}
 
 Ejemplos con CONTEXTO (seguimientos):
+- Conversación: "Quiero inscribirme a Programación I" → Bot pregunta turno → Usuario: "mañana"
+  → {"intent":"inscribir_materia","materia":"Programación I","turno":"Mañana"}
 - Conversación: "¿finales de ingeniería?" → Bot pide sede → Usuario: "soy de pilar"
   → {"intent":"query_finales","materia":"Ingeniería en Informática","sede":"Pilar"}
-- Conversación: "fechas de 144" → Bot pide sede → Usuario: "centro"
-  → {"intent":"query_finales","codigo":144,"sede":"Centro"}
+- Conversación: "inscribirme a Bases de Datos" → Bot pregunta legajo → Usuario: "TERCERO"
+  → {"intent":"inscribir_materia","materia":"Bases de Datos","legajo":"TERCERO"}
 
-Si el mensaje actual es solo información complementaria (sede, turno, código) sin verbo de acción, INFIERE el intent del contexto anterior.`;
+Si el mensaje actual es solo información complementaria (sede, turno, legajo) sin verbo de acción, INFIERE el intent del contexto anterior.`;
 
 export async function POST(req: Request) {
   const startTime = Date.now();
@@ -115,21 +164,37 @@ Analiza el contexto completo y genera el plan en JSON.`,
 
     try {
       if (plan.intent === 'inscribir_materia') {
-        if (!plan.materiaId || !plan.turno) {
+        if (!plan.materia && !plan.codigo) {
           toolResult = {
             ok: false,
             code: 'MISSING_PARAMS',
-            message: 'Necesito el código de materia y el turno para inscribirte. Ejemplo: "Quiero inscribirme a Programación I, turno Mañana".',
+            message: '¿A qué materia querés inscribirte? Decime el nombre, por ejemplo: "Quiero inscribirme a Programación I, turno Mañana".',
           };
         } else {
-          toolResult = await withTimeout(
-            () => siu.inscribirMateria({
-              legajo: plan.legajo ?? 'default',
-              materiaId: plan.materiaId as string,
-              turno: plan.turno as string,
-            }),
-            4000
-          );
+          const resolved = resolveMateria(plan.materia, plan.codigo, plan.turno);
+
+          if (!resolved) {
+            toolResult = {
+              ok: false,
+              code: 'MATERIA_NO_ENCONTRADA',
+              message: `No encontré una materia que coincida con "${plan.materia || plan.codigo}". Probá con el nombre completo, por ejemplo: "Estructura de Datos y Algoritmos" o "Programación I".`,
+            };
+          } else if ('ambiguousTurnos' in resolved) {
+            toolResult = {
+              ok: false,
+              code: 'TURNO_REQUERIDO',
+              message: `Encontré **${resolved.nombre}**. Está disponible en turno **${resolved.ambiguousTurnos.join('** y **')}**. ¿En cuál querés inscribirte?`,
+            };
+          } else {
+            toolResult = await withTimeout(
+              () => siu.inscribirMateria({
+                legajo: plan.legajo ?? 'default',
+                materiaId: resolved.materia.id,
+                turno: resolved.materia.turno,
+              }),
+              4000
+            );
+          }
         }
       } else if (plan.intent === 'query_finales') {
         const esCarreraCompleta = plan.materia && /ingeniería|informatica|carrera|todas|plan/i.test(plan.materia);
@@ -357,11 +422,14 @@ REGLAS DE RESPUESTA:
 - Error: explica el problema + sugerencia clara de qué hacer
 - Éxito con datos: presentá de forma estructurada y legible
 - Fechas: siempre formato legible + ISO entre paréntesis
+- **Finales**: Los datos corresponden al período **Nov/Dic 2025 — Febrero 2026** (dataset de demostración). Si el usuario pregunta por otros períodos, aclará que solo tenés ese rango cargado.
 - **Finales de toda la carrera**: Si hay muchos resultados (>10), mencioná el total y mostrá los primeros 5-8 organizados por año. Formato: "**[Código] Materia**: 1º llamado [fecha], 2º llamado [fecha], Febrero [fecha]"
 - **Correlativas**: Usá siempre el campo "requisitosConNombres" si está disponible. Mostrá NOMBRE COMPLETO de cada materia, no solo código.
+- **Inscripción — TURNO_REQUERIDO**: La materia existe pero hay varios turnos. Preguntá cuál prefiere de forma natural.
 - **Inscripción — CORRELATIVA_PENDIENTE**: Explicá qué materia falta: "Para inscribirte a [X] primero necesitás aprobar [Y]. ¿Querés que te cuente las correlativas de [Y]?"
 - **Inscripción — CUPO_AGOTADO**: Si hay turno alternativo, mencionalo: "No hay cupos en [turno], pero [alternativa] tiene lugar."
 - **Inscripción — éxito**: Confirmá con el comprobante.
+- **Inscripción — MISSING_PARAMS**: Pedí la info que falta de forma conversacional, sin jerga técnica.
 - Seguimientos: si el usuario da info parcial (sede, turno), úsala para completar la consulta anterior
 - Citación: SIEMPRE incluir "📚 Origen: ..." al final si hay datos
 
