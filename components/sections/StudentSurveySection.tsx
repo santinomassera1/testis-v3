@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   IconMail, 
@@ -15,6 +15,11 @@ import {
 export const StudentSurveySection = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <section className="relative bg-gradient-to-br from-usal-navy-50 via-white to-usal-green-50 py-20 overflow-hidden">
@@ -106,23 +111,32 @@ export const StudentSurveySection = () => {
 
             {/* Embedded Form */}
             <div className="relative">
-              <iframe 
-                src="https://docs.google.com/forms/d/e/1FAIpQLSfaL-K7G0tFnQz2-1ZvF1tpdCvvcR7uCnu8QdMEiMXb-4gXCg/viewform?embedded=true" 
-                width="100%" 
-                height={isExpanded ? "1200" : "800"}
-                frameBorder="0" 
-                marginHeight={0} 
-                marginWidth={0}
-                className="transition-all duration-300"
-                title="Encuesta de investigación - Experiencia SIU Guaraní USAL"
-              >
-                <div className="flex items-center justify-center h-64 text-usal-navy-600">
+              {isMounted ? (
+                <iframe 
+                  src="https://docs.google.com/forms/d/e/1FAIpQLSfaL-K7G0tFnQz2-1ZvF1tpdCvvcR7uCnu8QdMEiMXb-4gXCg/viewform?embedded=true" 
+                  width="100%" 
+                  height={isExpanded ? "1200" : "800"}
+                  frameBorder="0" 
+                  marginHeight={0} 
+                  marginWidth={0}
+                  className="transition-all duration-300"
+                  title="Encuesta de investigación - Experiencia SIU Guaraní USAL"
+                >
+                  <div className="flex items-center justify-center h-64 text-usal-navy-600">
+                    <div className="text-center">
+                      <IconMessageDots className="h-12 w-12 mx-auto mb-4 text-usal-green-500" />
+                      <p>Cargando encuesta...</p>
+                    </div>
+                  </div>
+                </iframe>
+              ) : (
+                <div className="flex items-center justify-center h-64 text-usal-navy-600 bg-gradient-to-br from-usal-green-50 to-usal-gold-50">
                   <div className="text-center">
                     <IconMessageDots className="h-12 w-12 mx-auto mb-4 text-usal-green-500" />
                     <p>Cargando encuesta...</p>
                   </div>
                 </div>
-              </iframe>
+              )}
               
               {/* Loading overlay */}
               <div className="absolute inset-0 bg-gradient-to-br from-usal-green-50 to-usal-gold-50 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
@@ -216,17 +230,26 @@ export const StudentSurveySection = () => {
             
             {/* Modal Content */}
             <div className="h-[calc(90vh-80px)]">
-              <iframe 
-                src="https://docs.google.com/forms/d/e/1FAIpQLSfaL-K7G0tFnQz2-1ZvF1tpdCvvcR7uCnu8QdMEiMXb-4gXCg/viewform?embedded=true" 
-                width="100%" 
-                height="100%"
-                frameBorder="0" 
-                marginHeight={0} 
-                marginWidth={0}
-                title="Encuesta de investigación - Experiencia SIU Guaraní USAL - Modal"
-              >
-                Cargando encuesta...
-              </iframe>
+              {isMounted ? (
+                <iframe 
+                  src="https://docs.google.com/forms/d/e/1FAIpQLSfaL-K7G0tFnQz2-1ZvF1tpdCvvcR7uCnu8QdMEiMXb-4gXCg/viewform?embedded=true" 
+                  width="100%" 
+                  height="100%"
+                  frameBorder="0" 
+                  marginHeight={0} 
+                  marginWidth={0}
+                  title="Encuesta de investigación - Experiencia SIU Guaraní USAL - Modal"
+                >
+                  Cargando encuesta...
+                </iframe>
+              ) : (
+                <div className="flex items-center justify-center h-full text-usal-navy-600 bg-gradient-to-br from-usal-green-50 to-usal-gold-50">
+                  <div className="text-center">
+                    <IconMessageDots className="h-12 w-12 mx-auto mb-4 text-usal-green-500" />
+                    <p>Cargando encuesta...</p>
+                  </div>
+                </div>
+              )}
             </div>
           </motion.div>
         </motion.div>

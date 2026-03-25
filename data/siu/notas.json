@@ -1,0 +1,49 @@
+{
+  "123456": [
+    {
+      "materia": "Álgebra I",
+      "instancia": "Parcial",
+      "nota": 8,
+      "fecha": "2024-05-15",
+      "estado": "Aprobado"
+    },
+    {
+      "materia": "Álgebra I",
+      "instancia": "Final",
+      "nota": 7,
+      "fecha": "2024-07-20",
+      "estado": "Aprobado"
+    },
+    {
+      "materia": "Física I",
+      "instancia": "Parcial",
+      "nota": 6,
+      "fecha": "2024-05-22",
+      "estado": "Aprobado"
+    },
+    {
+      "materia": "Programación I",
+      "instancia": "TP",
+      "nota": 9,
+      "fecha": "2024-06-10",
+      "estado": "Aprobado"
+    }
+  ],
+  "default": [
+    {
+      "materia": "Introducción a la Programación",
+      "instancia": "Parcial",
+      "nota": 7,
+      "fecha": "2024-04-10",
+      "estado": "Aprobado"
+    },
+    {
+      "materia": "Matemática I",
+      "instancia": "Parcial",
+      "nota": 6,
+      "fecha": "2024-04-15",
+      "estado": "Aprobado"
+    }
+  ]
+}
+

@@ -1,0 +1,24 @@
+[
+  {
+    "fecha_inicio": "2025-02-10",
+    "fecha_fin": "2025-02-28",
+    "evento": "Exámenes Finales - Turno Febrero"
+  },
+  {
+    "fecha": "2025-03-03",
+    "evento": "Feriado Nacional - Carnaval (también 2025-03-04)"
+  },
+  {
+    "fecha": "2025-03-10",
+    "evento": "Inicio de clases (1º a 5º año)"
+  },
+  {
+    "fecha": "2025-07-28",
+    "evento": "Comienzo del segundo cuatrimestre"
+  },
+  {
+    "fecha_inicio": "2025-11-25",
+    "fecha_fin": "2025-12-20",
+    "evento": "Exámenes Finales - Turno Noviembre/Diciembre"
+  }
+]

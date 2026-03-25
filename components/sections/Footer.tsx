@@ -1,14 +1,15 @@
 "use client";
 import { motion } from "framer-motion";
-import { 
-  IconMail, 
-  IconPhone, 
-  IconMapPin, 
-  IconBrandLinkedin, 
+import {
+  IconMail,
+  IconPhone,
+  IconMapPin,
+  IconBrandLinkedin,
   IconBrandTwitter,
   IconBrandGithub
 } from "@tabler/icons-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export const Footer = () => {
   const footerSections = [
@@ -68,11 +69,12 @@ export const Footer = () => {
               viewport={{ once: true }}
             >
               <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mr-4 p-2">
-                  <img 
-                    src="/usal-logo.jpg" 
-                    alt="Universidad del Salvador" 
-                    className="w-full h-full object-contain"
+                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mr-4 p-2 relative">
+                  <Image
+                    src="/usal-logo.jpg"
+                    alt="Universidad del Salvador"
+                    fill
+                    className="object-contain p-1"
                   />
                 </div>
                 <div>
@@ -80,9 +82,9 @@ export const Footer = () => {
                   <div className="text-usal-navy-300 text-sm">Asistente SIU Guaraní</div>
                 </div>
               </div>
-              
+
               <p className="text-usal-navy-300 mb-6 leading-relaxed">
-                Revolucionamos la experiencia académica universitaria con inteligencia artificial, 
+                Revolucionamos la experiencia académica universitaria con inteligencia artificial,
                 haciendo que la gestión educativa sea más eficiente y accesible para todos.
               </p>
 
@@ -174,7 +176,7 @@ export const Footer = () => {
             <div className="text-usal-navy-300 mb-4 md:mb-0">
               © 2025 Testis. Todos los derechos reservados. Desarrollado con ❤️ para la comunidad universitaria.
             </div>
-            
+
             {/* Social Links */}
             <div className="flex space-x-4">
               <Link
@@ -203,24 +205,21 @@ export const Footer = () => {
         <div className="mt-8 pt-6 border-t border-usal-navy-700 text-center">
           <div className="flex items-center justify-center space-x-4">
             <div style={{
-              width: '36px', 
-              height: '36px', 
-              backgroundColor: 'rgba(255,255,255,0.9)', 
+              width: '36px',
+              height: '36px',
+              backgroundColor: 'rgba(255,255,255,0.9)',
               borderRadius: '4px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0
             }}>
-              <img 
-                src="/usal-logo.jpg" 
-                alt="Universidad del Salvador" 
-                style={{
-                  width: '28px',
-                  height: 'auto',
-                  maxHeight: '28px',
-                  objectFit: 'contain'
-                }}
+              <Image
+                src="/usal-logo.jpg"
+                alt="Universidad del Salvador"
+                width={28}
+                height={28}
+                className="object-contain"
               />
             </div>
             <span className="text-usal-navy-400 text-sm">

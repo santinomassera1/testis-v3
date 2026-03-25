@@ -1,0 +1,72 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0fdf4;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fefce8;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#16a34a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#22c55e;stop-opacity:1" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e5e7eb" stroke-width="0.5" opacity="0.3"/>
+    </pattern>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1600" height="900" fill="url(#bgGradient)"/>
+  <rect width="1600" height="900" fill="url(#grid)" opacity="0.3"/>
+  
+  <!-- Decorative elements -->
+  <circle cx="200" cy="150" r="80" fill="#16a34a" opacity="0.05"/>
+  <circle cx="1400" cy="750" r="120" fill="#ca8a04" opacity="0.05"/>
+  <circle cx="800" cy="450" r="200" fill="#0f172a" opacity="0.03"/>
+  
+  <!-- Subtle stripes -->
+  <line x1="0" y1="200" x2="1600" y2="200" stroke="#16a34a" stroke-width="1" opacity="0.1"/>
+  <line x1="0" y1="400" x2="1600" y2="400" stroke="#16a34a" stroke-width="1" opacity="0.1"/>
+  <line x1="0" y1="600" x2="1600" y2="600" stroke="#16a34a" stroke-width="1" opacity="0.1"/>
+  <line x1="0" y1="800" x2="1600" y2="800" stroke="#16a34a" stroke-width="1" opacity="0.1"/>
+  
+  <!-- Center icon (image/chart hybrid) -->
+  <g transform="translate(700, 350)">
+    <!-- Frame -->
+    <rect x="0" y="0" width="200" height="200" rx="12" fill="#ffffff" stroke="#e5e7eb" stroke-width="2"/>
+    
+    <!-- Chart bars -->
+    <rect x="30" y="120" width="30" height="50" rx="4" fill="url(#iconGradient)" opacity="0.6"/>
+    <rect x="70" y="90" width="30" height="80" rx="4" fill="url(#iconGradient)" opacity="0.7"/>
+    <rect x="110" y="70" width="30" height="100" rx="4" fill="url(#iconGradient)" opacity="0.8"/>
+    <rect x="150" y="100" width="30" height="70" rx="4" fill="url(#iconGradient)" opacity="0.6"/>
+    
+    <!-- Decorative dots -->
+    <circle cx="40" cy="40" r="4" fill="#16a34a" opacity="0.4"/>
+    <circle cx="60" cy="35" r="4" fill="#16a34a" opacity="0.3"/>
+    <circle cx="80" cy="45" r="4" fill="#16a34a" opacity="0.5"/>
+  </g>
+  
+  <!-- Text container -->
+  <g transform="translate(800, 600)">
+    <!-- Main text -->
+    <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="700" fill="#0f172a" text-anchor="middle">
+      Imagen pendiente
+    </text>
+    <text x="0" y="40" font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="#64748b" text-anchor="middle" opacity="0.7">
+      Placeholder para diagrama o captura de pantalla
+    </text>
+  </g>
+  
+  <!-- Corner badge -->
+  <g transform="translate(1420, 40)">
+    <rect x="0" y="0" width="140" height="40" rx="8" fill="#16a34a" opacity="0.1"/>
+    <text x="70" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#16a34a" text-anchor="middle">
+      USAL • Testis
+    </text>
+  </g>
+  
+  <!-- Bottom decorative line -->
+  <line x1="600" y1="880" x2="1000" y2="880" stroke="#16a34a" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
+</svg>
+

@@ -1,0 +1,296 @@
+[
+  {
+    "codigo": 140,
+    "nombre": "Introd. A La Administr. De Empresas ",
+    "requisitos": []
+  },
+  {
+    "codigo": 141,
+    "nombre": "Sistemas Numéricos ",
+    "requisitos": []
+  },
+  {
+    "codigo": 142,
+    "nombre": "Análisis Matemático I ",
+    "requisitos": []
+  },
+  {
+    "codigo": 143,
+    "nombre": "Metodología De La Investigación ",
+    "requisitos": []
+  },
+  {
+    "codigo": 144,
+    "nombre": "Introducción A La Programación ",
+    "requisitos": []
+  },
+  {
+    "codigo": 145,
+    "nombre": "Arquitectura De Computadoras ",
+    "requisitos": []
+  },
+  {
+    "codigo": 146,
+    "nombre": "Algebra I ",
+    "requisitos": []
+  },
+  {
+    "codigo": 147,
+    "nombre": "Paradigmas De Programación ",
+    "requisitos": [
+      144
+    ]
+  },
+  {
+    "codigo": 148,
+    "nombre": "Programación I ",
+    "requisitos": [
+      144
+    ]
+  },
+  {
+    "codigo": 149,
+    "nombre": "Sistemas De Representación ",
+    "requisitos": []
+  },
+  {
+    "codigo": 150,
+    "nombre": "Física I ",
+    "requisitos": []
+  },
+  {
+    "codigo": 151,
+    "nombre": "Cálculo Numérico ",
+    "requisitos": [
+      142
+    ]
+  },
+  {
+    "codigo": 152,
+    "nombre": "Estructura De Datos Y Algoritmos ",
+    "requisitos": [
+      144
+    ]
+  },
+  {
+    "codigo": 153,
+    "nombre": "Sistemas De Información I ",
+    "requisitos": []
+  },
+  {
+    "codigo": 154,
+    "nombre": "Álgebra Ii ",
+    "requisitos": [
+      146
+    ]
+  },
+  {
+    "codigo": 155,
+    "nombre": "Filosofía ",
+    "requisitos": []
+  },
+  {
+    "codigo": 158,
+    "nombre": "Análisis Matemático Ii ",
+    "requisitos": [
+      142
+    ]
+  },
+  {
+    "codigo": 159,
+    "nombre": "Química General ",
+    "requisitos": []
+  },
+  {
+    "codigo": 160,
+    "nombre": "Física Ii ",
+    "requisitos": [
+      150
+    ]
+  },
+  {
+    "codigo": 161,
+    "nombre": "Sistemas Operativos ",
+    "requisitos": [
+      152
+    ]
+  },
+  {
+    "codigo": 162,
+    "nombre": "Sistemas De Información Ii ",
+    "requisitos": [
+      153
+    ]
+  },
+  {
+    "codigo": 163,
+    "nombre": "Sistemas De Bases De Datos ",
+    "requisitos": [
+      152
+    ]
+  },
+  {
+    "codigo": 164,
+    "nombre": "Probabilidad Y Estadística ",
+    "requisitos": [
+      154
+    ]
+  },
+  {
+    "codigo": 165,
+    "nombre": "Programación Avanzada ",
+    "requisitos": [
+      156
+    ]
+  },
+  {
+    "codigo": 166,
+    "nombre": "Teleinformática ",
+    "requisitos": [
+      145
+    ]
+  },
+  {
+    "codigo": 167,
+    "nombre": "Física Iii ",
+    "requisitos": [
+      160
+    ]
+  },
+  {
+    "codigo": 168,
+    "nombre": "Ingles I ",
+    "requisitos": []
+  },
+  {
+    "codigo": 169,
+    "nombre": "Ingles Ii ",
+    "requisitos": []
+  },
+  {
+    "codigo": 170,
+    "nombre": "Tecnología Informática ",
+    "requisitos": [
+      161
+    ]
+  },
+  {
+    "codigo": 171,
+    "nombre": "Ingeniería Del Software ",
+    "requisitos": [
+      162
+    ]
+  },
+  {
+    "codigo": 172,
+    "nombre": "Seminario De Integración Profes. ",
+    "requisitos": [
+      156,
+      162
+    ]
+  },
+  {
+    "codigo": 173,
+    "nombre": "Investigación Operativa ",
+    "requisitos": [
+      164
+    ]
+  },
+  {
+    "codigo": 174,
+    "nombre": "Arquitectura De Redes ",
+    "requisitos": [
+      166
+    ]
+  },
+  {
+    "codigo": 175,
+    "nombre": "Dirección De Proyectos Informáticos ",
+    "requisitos": [
+      162
+    ]
+  },
+  {
+    "codigo": 176,
+    "nombre": "Auditoria De Sistemas ",
+    "requisitos": [
+      162
+    ]
+  },
+  {
+    "codigo": 177,
+    "nombre": "Teología ",
+    "requisitos": []
+  },
+  {
+    "codigo": 178,
+    "nombre": "Modelos Y Simulación ",
+    "requisitos": [
+      164
+    ]
+  },
+  {
+    "codigo": 179,
+    "nombre": "Derecho Informático ",
+    "requisitos": []
+  },
+  {
+    "codigo": 180,
+    "nombre": "Ética Profesional ",
+    "requisitos": []
+  },
+  {
+    "codigo": 181,
+    "nombre": "Tecnologías Emergentes ",
+    "requisitos": [
+      170
+    ]
+  },
+  {
+    "codigo": 182,
+    "nombre": "Sistemas Inteligentes ",
+    "requisitos": [
+      165
+    ]
+  },
+  {
+    "codigo": 183,
+    "nombre": "Proyecto Final De Ing. Informática ",
+    "requisitos": [
+      172,
+      175
+    ]
+  },
+  {
+    "codigo": 184,
+    "nombre": "Gestión Ambiental ",
+    "requisitos": []
+  },
+  {
+    "codigo": 185,
+    "nombre": "Aseg. De La Calidad Del Software ",
+    "requisitos": [
+      171
+    ]
+  },
+  {
+    "codigo": 186,
+    "nombre": "Seguridad Informática ",
+    "requisitos": [
+      176
+    ]
+  },
+  {
+    "codigo": 187,
+    "nombre": "Elementos De Economía ",
+    "requisitos": []
+  },
+  {
+    "codigo": 641,
+    "nombre": "Práctica Profesional Supervisada ",
+    "requisitos": [
+      156,
+      162
+    ]
+  }
+]

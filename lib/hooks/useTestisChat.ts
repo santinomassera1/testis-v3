@@ -1,17 +1,25 @@
-import { useState, useCallback, useEffect } from 'react';
-import { MockProvider } from '../llm/MockProvider';
-import { OpenAIProvider } from '../llm/OpenAIProvider';
-import { LLMProvider } from '../llm/LLMProvider';
+// lib/hooks/useTestisChat.ts
+'use client';
+
+import { useChat } from '@ai-sdk/react';
+import { useState, useCallback, useRef } from 'react';
+
+// Genera o recupera un session ID persistente por pestaña del navegador
+function getOrCreateSessionId(): string {
+  if (typeof window === 'undefined') return `sess-ssr-${Date.now()}`;
+  const key = 'testis_session_id';
+  let id = sessionStorage.getItem(key);
+  if (!id) {
+    id = `sess-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    sessionStorage.setItem(key, id);
+  }
+  return id;
+}
 
 export interface ChatMessage {
   id: string;
   role: 'user' | 'assistant';
   content: string;
-  toolCalls?: Array<{
-    name: string;
-    arguments: Record<string, any>;
-    result?: any;
-  }>;
 }
 
 export interface ChatSession {
@@ -22,246 +30,141 @@ export interface ChatSession {
   updatedAt: Date;
 }
 
+const textFrom = (m: any) =>
+  typeof m?.content === 'string'
+    ? m.content
+    : Array.isArray(m?.parts)
+      ? m.parts.filter((p: any) => p?.type === 'text').map((p: any) => p.text).join('')
+      : '';
+
 export function useTestisChat() {
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const sessionIdRef = useRef<string>(getOrCreateSessionId());
 
-  // Determinar qué provider usar basado en la variable de entorno
-  const useMock = process.env.NEXT_PUBLIC_USE_MOCK !== 'false';
-  const provider: LLMProvider = useMock ? new MockProvider() : new OpenAIProvider();
+  const chatResult: any = useChat({
+    // @ts-ignore
+    api: '/api/chat',
+    streamProtocol: 'text',
+    keepLastMessageOnError: true,
+    headers: {
+      'x-session-id': sessionIdRef.current,
+    },
+    onError: (err: Error) => {
+      console.error('Error en chat:', err);
+      setError('Error al procesar tu mensaje. Intenta nuevamente.');
+    },
+  } as any);
 
-  // Obtener chat actual
-  const currentChat = chatSessions.find(chat => chat.id === currentChatId);
-  const messages = currentChat?.messages || [];
+  // @ts-ignore - propiedades existen en runtime
+  const {
+    messages: uiMessages,
+    input,
+    handleInputChange: sdkHandleInputChange,
+    handleSubmit: sdkHandleSubmit,
+    isLoading,
+    append: sdkAppend,
+    stop: sdkStop,
+    setMessages: sdkSetMessages,
+  } = chatResult;
 
-  // Persistir en localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem('testis-chat-sessions');
-    if (saved) {
-      try {
-        const sessions = JSON.parse(saved).map((session: any) => ({
-          ...session,
-          createdAt: new Date(session.createdAt),
-          updatedAt: new Date(session.updatedAt),
-        }));
-        setChatSessions(sessions);
-        // Si no hay chat actual pero hay sesiones, usar la primera
-        if (!currentChatId && sessions.length > 0) {
-          setCurrentChatId(sessions[0].id);
-        }
-      } catch (e) {
-        console.error('Error cargando chats:', e);
-      }
+  // Adaptamos al tipo que usa tu UI
+  const messages: ChatMessage[] = (uiMessages || []).map((m: any) => ({
+    id: m?.id ?? crypto.randomUUID(),
+    role: m?.role === 'assistant' ? 'assistant' : 'user',
+    content: textFrom(m),
+  }));
+
+  // Wrapper para handleSubmit que funciona tanto con eventos como sin ellos
+  const handleSubmit = useCallback((e?: React.FormEvent, options?: any) => {
+    if (e) {
+      e.preventDefault();
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (chatSessions.length > 0) {
-      localStorage.setItem('testis-chat-sessions', JSON.stringify(chatSessions));
+    // Llamar al handleSubmit del SDK
+    if (sdkHandleSubmit) {
+      sdkHandleSubmit(e as any, options);
     }
-  }, [chatSessions]);
+  }, [sdkHandleSubmit]);
 
-  // Generar título automático del chat basado en el primer mensaje
-  const generateChatTitle = (firstMessage: string): string => {
-    if (firstMessage.length <= 30) return firstMessage;
-    return firstMessage.substring(0, 27) + '...';
-  };
+  // Wrapper para handleInputChange
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (sdkHandleInputChange) {
+      sdkHandleInputChange(e);
+    }
+  }, [sdkHandleInputChange]);
 
-  // Crear nuevo chat
+  // Wrapper para append
+  const append = useCallback((message: { role: 'user' | 'assistant'; content: string }) => {
+    if (sdkAppend) {
+      return sdkAppend(message as any);
+    }
+    return Promise.resolve(null);
+  }, [sdkAppend]);
+
+  // Wrapper para stop
+  const stop = useCallback(() => {
+    if (sdkStop) {
+      sdkStop();
+    }
+  }, [sdkStop]);
+
+  // Wrapper para setMessages
+  const setMessages = useCallback((messages: ChatMessage[] | ((prev: ChatMessage[]) => ChatMessage[])) => {
+    if (sdkSetMessages) {
+      // Convertir de ChatMessage a UIMessage format
+      const converted = typeof messages === 'function' ? messages : messages.map(m => ({
+        id: m.id,
+        role: m.role,
+        content: m.content,
+      }));
+      sdkSetMessages(converted as any);
+    }
+  }, [sdkSetMessages]);
+
+  // Funciones de gestión de sesiones (stubs por ahora, pueden implementarse después)
   const createNewChat = useCallback(() => {
-    const newChatId = Date.now().toString();
-    const newChat: ChatSession = {
-      id: newChatId,
+    const newId = crypto.randomUUID();
+    const newSession: ChatSession = {
+      id: newId,
       title: 'Nueva conversación',
       messages: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    
-    setChatSessions(prev => [newChat, ...prev]);
-    setCurrentChatId(newChatId);
-    setInput('');
-    setError(null);
-    
-    return newChatId;
-  }, []);
+    setChatSessions(prev => [...prev, newSession]);
+    setCurrentChatId(newId);
+    setMessages([]);
+  }, [setMessages]);
 
-  // Cambiar chat actual
   const switchToChat = useCallback((chatId: string) => {
-    setCurrentChatId(chatId);
-    setInput('');
-    setError(null);
-  }, []);
+    const session = chatSessions.find(s => s.id === chatId);
+    if (session) {
+      setCurrentChatId(chatId);
+      setMessages(session.messages);
+    }
+  }, [chatSessions, setMessages]);
 
-  // Eliminar chat
   const deleteChat = useCallback((chatId: string) => {
-    setChatSessions(prev => prev.filter(chat => chat.id !== chatId));
+    setChatSessions(prev => prev.filter(s => s.id !== chatId));
     if (currentChatId === chatId) {
-      const remaining = chatSessions.filter(chat => chat.id !== chatId);
-      if (remaining.length > 0) {
-        setCurrentChatId(remaining[0].id);
-      } else {
-        setCurrentChatId(null);
-      }
+      setCurrentChatId(null);
+      setMessages([]);
     }
-  }, [currentChatId, chatSessions]);
-
-  // Actualizar mensajes del chat actual
-  const updateCurrentChatMessages = useCallback((newMessages: ChatMessage[]) => {
-    if (!currentChatId) return;
-    
-    setChatSessions(prev => prev.map(chat => {
-      if (chat.id === currentChatId) {
-        // Actualizar título si es el primer mensaje del usuario
-        let title = chat.title;
-        if (chat.title === 'Nueva conversación' && newMessages.length > 0) {
-          const firstUserMessage = newMessages.find(m => m.role === 'user');
-          if (firstUserMessage) {
-            title = generateChatTitle(firstUserMessage.content);
-          }
-        }
-        
-        return {
-          ...chat,
-          title,
-          messages: newMessages,
-          updatedAt: new Date(),
-        };
-      }
-      return chat;
-    }));
-  }, [currentChatId]);
-
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInput(e.target.value);
-  }, []);
-
-  // Función interna para procesar mensajes y generar respuestas
-  const processMessage = useCallback(async (messageContent: string) => {
-    if (!messageContent.trim() || isLoading) return;
-    
-    // Si no hay chat actual, crear uno nuevo
-    let chatId = currentChatId;
-    if (!chatId) {
-      chatId = createNewChat();
-    }
-
-    const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      role: 'user',
-      content: messageContent.trim()
-    };
-
-    // Agregar mensaje del usuario
-    const updatedMessages = [...messages, userMessage];
-    updateCurrentChatMessages(updatedMessages);
-    
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      // Generar respuesta usando el provider
-      const response = await provider.generateWithTools(
-        userMessage.content,
-        {}, // tools se manejan internamente en el provider
-        {
-          messages: messages.map(msg => ({
-            role: msg.role,
-            content: msg.content
-          }))
-        }
-      );
-
-      const assistantMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: response.text,
-        toolCalls: response.toolCalls?.map((tc: any) => ({
-          name: tc.name,
-          arguments: tc.arguments,
-          result: response.toolResults?.find((tr: any) => tr.toolCallId === tc.name)?.result
-        }))
-      };
-
-      // Agregar respuesta del asistente
-      const finalMessages = [...updatedMessages, assistantMessage];
-      updateCurrentChatMessages(finalMessages);
-    } catch (err) {
-      console.error('Error generando respuesta:', err);
-      setError('Error al generar respuesta. Intenta nuevamente.');
-      
-      const errorMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: 'Lo siento, hubo un error al procesar tu consulta. Por favor, intenta nuevamente.'
-      };
-      
-      const finalMessages = [...updatedMessages, errorMessage];
-      updateCurrentChatMessages(finalMessages);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [isLoading, messages, provider, currentChatId, createNewChat, updateCurrentChatMessages]);
-
-  const handleSubmit = useCallback(async (e?: React.FormEvent) => {
-    e?.preventDefault();
-    if (!input.trim()) return;
-    
-    const messageContent = input.trim();
-    setInput('');
-    await processMessage(messageContent);
-  }, [input, processMessage]);
-
-  // Nueva función append que también genera respuesta automática
-  const append = useCallback(async (message: Omit<ChatMessage, 'id'>) => {
-    if (message.role === 'user') {
-      // Para mensajes de usuario, procesarlos automáticamente para generar respuesta
-      await processMessage(message.content);
-    } else {
-      // Para mensajes del asistente, solo agregarlos
-      const newMessage: ChatMessage = {
-        ...message,
-        id: Date.now().toString()
-      };
-      const updatedMessages = [...messages, newMessage];
-      updateCurrentChatMessages(updatedMessages);
-    }
-  }, [messages, processMessage, updateCurrentChatMessages]);
-
-  const stop = useCallback(() => {
-    setIsLoading(false);
-  }, []);
-
-  const clearCurrentChat = useCallback(() => {
-    if (currentChatId) {
-      updateCurrentChatMessages([]);
-    }
-    setError(null);
-  }, [currentChatId, updateCurrentChatMessages]);
+  }, [currentChatId, setMessages]);
 
   return {
-    // Mensajes del chat actual
     messages,
-    
-    // Input y manejo básico
     input,
     handleInputChange,
     handleSubmit,
-    append,
     isLoading,
+    append,
     stop,
+    setMessages,
     error,
-    
-    // Funciones de historial de chats (para compatibilidad con componente actual)
-    setMessages: clearCurrentChat,
-    
-    // Nuevas funciones para manejo de múltiples chats
     chatSessions,
     currentChatId,
-    currentChat,
     createNewChat,
     switchToChat,
     deleteChat,

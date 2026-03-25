@@ -5,7 +5,7 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { SessionProvider } from "@/components/SessionProvider";
 import ScrollEffects3D from "@/components/ScrollEffects3D";
-import { TestisChat } from "@/components/chat/TestisChat";
+import { ConditionalChat } from "@/components/ConditionalChat";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -43,7 +43,7 @@ export default function RootLayout({
         <SessionProvider>
           <ScrollEffects3D />
           <Header />
-          <TestisChat />
+          <ConditionalChat />
           <main className="pt-16">
             {children}
           </main>

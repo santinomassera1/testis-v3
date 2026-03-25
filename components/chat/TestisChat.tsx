@@ -7,17 +7,15 @@ import {
   IconPlus,
   IconX,
   IconMaximize,
-  IconMail,
   IconBook,
   IconCalendar,
   IconCertificate,
-  IconSchool,
   IconRobot,
   IconHistory,
   IconTrash,
   IconMessageDots,
   IconChevronLeft,
-  IconChevronRight,
+  IconInfoCircle,
 } from "@tabler/icons-react";
 import {
   AnimatePresence,
@@ -27,8 +25,6 @@ import {
 import Markdown from "react-markdown";
 import { cn } from "@/lib/utils";
 import { useTestisChat, ChatMessage as TestisChatMessage } from "@/lib/hooks/useTestisChat";
-import { openMailTo } from "@/lib/skills/makeMailTo";
-import { loadDemoData } from "@/lib/skills/readUserData";
 import { useSession } from "next-auth/react";
 
 export const TestisChat = () => {
@@ -61,44 +57,25 @@ export const TestisChat = () => {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Bloques de acceso rápido específicos para Testis con colores USAL
   const quickAccessBlocks = [
     {
-      icon: <IconBook className="h-6 w-6 text-usal-green-600" />,
-      title: "Inscripción",
-      content: "¿Cómo me inscribo a las materias?",
-      color: "bg-usal-green-50 hover:bg-usal-green-100 border border-usal-green-200"
-    },
-    {
-      icon: <IconCalendar className="h-6 w-6 text-usal-red-600" />,
-      title: "Horarios",
-      content: "Ver mis horarios de cursada",
-      color: "bg-usal-red-50 hover:bg-usal-red-100 border border-usal-red-200"
-    },
-    {
-      icon: <IconSchool className="h-6 w-6 text-usal-gold-600" />,
-      title: "Notas",
-      content: "Consultar mis calificaciones",
+      icon: <IconCertificate className="h-6 w-6 text-usal-gold-600" />,
+      title: "Correlativas",
+      content: "¿Qué correlativas necesito para inscribirme a Sistemas Operativos?",
       color: "bg-usal-gold-50 hover:bg-usal-gold-100 border border-usal-gold-200"
     },
     {
-      icon: <IconCalendar className="h-6 w-6 text-usal-navy-600" />,
-      title: "Parciales",
-      content: "Ver próximos exámenes",
-      color: "bg-usal-navy-50 hover:bg-usal-navy-100 border border-usal-navy-200"
-    },
-    {
-      icon: <IconCertificate className="h-6 w-6 text-usal-green-700" />,
-      title: "Certificados",
-      content: "Generar constancias y certificados",
+      icon: <IconBook className="h-6 w-6 text-usal-green-600" />,
+      title: "Inscripción",
+      content: "Quiero inscribirme a Estructura de Datos, turno Mañana. Mi legajo es SEGUNDO.",
       color: "bg-usal-green-50 hover:bg-usal-green-100 border border-usal-green-200"
     },
     {
-      icon: <IconMail className="h-6 w-6 text-usal-red-700" />,
-      title: "Correos",
-      content: "Enviar mail a docentes",
-      color: "bg-usal-red-50 hover:bg-usal-red-100 border border-usal-red-200"
-    }
+      icon: <IconCalendar className="h-6 w-6 text-usal-navy-600" />,
+      title: "Finales",
+      content: "¿Cuándo son los finales de Programación I en sede Centro?",
+      color: "bg-usal-navy-50 hover:bg-usal-navy-100 border border-usal-navy-200"
+    },
   ];
 
   const handleBlockClick = (content: string) => {
@@ -121,18 +98,17 @@ export const TestisChat = () => {
     }
   };
 
-  // Cargar datos de ejemplo al montar el componente
-  useEffect(() => {
-    loadDemoData();
-  }, []);
+  const handleFormSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    handleSubmit(e);
+  };
 
-  // Efectos para el scroll
   useEffect(() => {
     const handleUserScroll = () => {
       if (messageHistoryRef.current) {
         const isAtBottom =
           messageHistoryRef.current.scrollHeight -
-            messageHistoryRef.current.scrollTop ===
+          messageHistoryRef.current.scrollTop ===
           messageHistoryRef.current.clientHeight;
         setIsUserScrolledUp(!isAtBottom);
       }
@@ -191,7 +167,7 @@ export const TestisChat = () => {
           y: 0,
           rotateX: 0
         }}
-        transition={{ 
+        transition={{
           duration: 0.3,
           times: [0, 0.4, 1]
         }}
@@ -216,22 +192,30 @@ export const TestisChat = () => {
               exit={{ opacity: 0, y: 20, rotateX: -10 }}
               transition={{ duration: 0.2 }}
               className={cn(
-                "mb-4 h-screen md:h-[46vh] min-h-[76vh] w-full md:w-[30rem] bg-gradient-to-br from-usal-green-50 to-white rounded-lg flex flex-col justify-between overflow-hidden border border-usal-green-200",
+                "mb-4 h-screen md:h-[46vh] min-h-[76vh] w-full md:w-[30rem] bg-gradient-to-br from-usal-green-50 to-white rounded-lg flex flex-col justify-between overflow-hidden border border-usal-green-200 relative",
                 isExpanded && "w-full h-full md:h-full md:w-full min-h-0 mb-0"
               )}
+              style={{
+                backgroundImage: 'url(/usal-logo.jpg)',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center center',
+                backgroundSize: isExpanded ? 'auto 35%' : 'auto 30%',
+                backgroundAttachment: 'fixed',
+              }}
             >
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/90 via-white/85 to-usal-green-50/80 pointer-events-none" />
+
               {/* Header */}
-              <div className="h-10 w-full bg-gradient-to-r from-usal-green-600 via-usal-green-500 to-usal-green-700 rounded-tr-lg rounded-tl-lg flex justify-between px-10 md:px-6 py-2">
+              <div className="h-10 w-full bg-gradient-to-r from-usal-green-600 via-usal-green-500 to-usal-green-700 rounded-tr-lg rounded-tl-lg flex justify-between px-10 md:px-6 py-2 relative z-20">
                 <div className="font-medium text-sm flex items-center gap-2 text-white">
-                  <button 
-                    onClick={() => {
-                      setIsExpanded(!isExpanded);
-                    }}
+                  <button
+                    onClick={() => setIsExpanded(!isExpanded)}
                     className="hover:bg-white/20 p-1 rounded-full transition-colors"
                   >
                     <IconMaximize className="h-4 w-4 text-white" />
                   </button>
-                  <button 
+                  <button
                     onClick={() => setShowChatHistory(!showChatHistory)}
                     className="hover:bg-white/20 p-1 rounded-full transition-colors"
                     title="Historial de chats"
@@ -240,7 +224,7 @@ export const TestisChat = () => {
                   </button>
                   <span className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-usal-gold-400 rounded-full"></div>
-                    Testis{session ? ` - ${session.user?.name?.split(' ')[0] || 'Usuario'}` : ' - Asistente SIU'}
+                    Testis{session ? ` — ${session.user?.name?.split(' ')[0] || 'Usuario'}` : ' — Asistente Académico'}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -278,7 +262,6 @@ export const TestisChat = () => {
                     transition={{ duration: 0.3 }}
                     className="absolute top-10 left-0 w-80 h-[calc(100%-2.5rem)] bg-white border-r border-usal-green-200 z-30 flex flex-col"
                   >
-                    {/* Sidebar Header */}
                     <div className="p-4 border-b border-usal-green-200 flex items-center justify-between">
                       <h3 className="font-semibold text-usal-navy-900 flex items-center gap-2">
                         <IconHistory className="h-4 w-4" />
@@ -292,7 +275,6 @@ export const TestisChat = () => {
                       </button>
                     </div>
 
-                    {/* Chat List */}
                     <div className="flex-1 overflow-y-auto">
                       {chatSessions.length === 0 ? (
                         <div className="p-4 text-center text-usal-navy-500">
@@ -353,7 +335,6 @@ export const TestisChat = () => {
                       )}
                     </div>
 
-                    {/* Sidebar Footer */}
                     <div className="p-4 border-t border-usal-green-200">
                       <button
                         onClick={() => {
@@ -370,39 +351,49 @@ export const TestisChat = () => {
                 )}
               </AnimatePresence>
 
-              {/* Quick Access Blocks */}
+              {/* Quick Access Blocks — solo 3 core */}
               {!messages.length && (
-                <div className="px-5 py-10 grid grid-cols-1 md:grid-cols-2 gap-2 overflow-y-auto">
-                  {quickAccessBlocks.map((block, index) => (
-                    <motion.button
-                      key={block.title}
-                      initial={{ opacity: 0, filter: "blur(10px)" }}
-                      animate={{ opacity: 1, filter: "blur(0px)" }}
-                      transition={{ duration: 0.3, delay: 0.2 * index }}
-                      onClick={() => handleBlockClick(block.content)}
-                      className={cn(
-                        "p-4 flex flex-col text-left justify-between rounded-2xl h-32 md:h-40 w-full transition-colors",
-                        block.color
-                      )}
-                    >
-                      {block.icon}
-                      <div>
-                        <div className="text-base font-bold text-gray-800">
-                          {block.title}
+                <div className="px-5 py-6 relative z-10 flex flex-col gap-4">
+                  {/* Simulation mode banner */}
+                  <div className="flex items-start gap-2 px-3 py-2 bg-usal-gold-50 border border-usal-gold-200 rounded-lg">
+                    <IconInfoCircle className="h-4 w-4 text-usal-gold-600 mt-0.5 flex-shrink-0" />
+                    <p className="text-xs text-usal-gold-800">
+                      <span className="font-semibold">Modo demostración</span> — Datos del Plan 11 de Ingeniería en Informática (USAL). La lógica es representativa de un entorno integrado con SIU Guaraní.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                    {quickAccessBlocks.map((block, index) => (
+                      <motion.button
+                        key={block.title}
+                        initial={{ opacity: 0, filter: "blur(10px)" }}
+                        animate={{ opacity: 1, filter: "blur(0px)" }}
+                        transition={{ duration: 0.3, delay: 0.2 * index }}
+                        onClick={() => handleBlockClick(block.content)}
+                        className={cn(
+                          "p-4 flex flex-col text-left justify-between rounded-2xl h-32 md:h-40 w-full transition-colors",
+                          block.color
+                        )}
+                      >
+                        {block.icon}
+                        <div>
+                          <div className="text-base font-bold text-gray-800">
+                            {block.title}
+                          </div>
+                          <div className="text-xs text-gray-600">
+                            {block.content}
+                          </div>
                         </div>
-                        <div className="text-xs text-gray-600">
-                          {block.content}
-                        </div>
-                      </div>
-                    </motion.button>
-                  ))}
+                      </motion.button>
+                    ))}
+                  </div>
                 </div>
               )}
 
               {/* Messages */}
               <div
                 ref={messageHistoryRef}
-                className="p-2 flex flex-1 overflow-y-auto"
+                className="p-2 flex flex-1 overflow-y-auto relative z-10"
               >
                 <div className="flex flex-1 flex-col">
                   {messages.map((message) => (
@@ -410,10 +401,7 @@ export const TestisChat = () => {
                       {message.role === "user" ? (
                         <UserMessage content={message.content} />
                       ) : (
-                        <AIMessage 
-                          content={message.content} 
-                          toolCalls={message.toolCalls}
-                        />
+                        <AIMessage content={message.content} />
                       )}
                     </div>
                   ))}
@@ -423,8 +411,8 @@ export const TestisChat = () => {
 
               {/* Input Form */}
               <form
-                onSubmit={handleSubmit}
-                className="max-h-[10vh] py-1 px-5 relative"
+                onSubmit={handleFormSubmit}
+                className="max-h-[25vh] py-1 px-5 relative z-20"
               >
                 {showScrollButton && (
                   <button
@@ -448,7 +436,7 @@ export const TestisChat = () => {
                   ) : (
                     <button
                       type="submit"
-                      className="absolute top-1/2 right-8 group -translate-y-1/2 bg-usal-green-100 hover:bg-usal-green-200 h-8 w-8 rounded-full flex items-center justify-center transition-colors"
+                      className="absolute top-1/2 right-8 -translate-y-1/2 group bg-usal-green-100 hover:bg-usal-green-200 h-8 w-8 rounded-full flex items-center justify-center transition-colors"
                     >
                       <IconArrowNarrowUp className="h-5 w-5 text-usal-green-600 group-hover:text-usal-green-700 group-hover:-translate-y-0.5 group-hover:rotate-12 transition duration-200" />
                     </button>
@@ -457,17 +445,17 @@ export const TestisChat = () => {
                 <textarea
                   ref={inputRef}
                   disabled={isLoading}
-                  className="px-4 w-full pr-10 rounded-lg border-usal-green-200 text-usal-navy-800 border py-[1rem] bg-white text-sm [box-sizing:border-box] overflow-x-auto inline-block focus:outline-none focus:border-usal-green-400 focus:ring-2 focus:ring-usal-green-100 transition duration-100"
-                  placeholder={session 
-                    ? `Hola ${session.user?.name?.split(' ')[0]}, ¿cómo puedo ayudarte con el SIU Guaraní?`
-                    : "Pregúntame sobre el SIU Guaraní..."
+                  className="px-4 w-full pr-14 rounded-lg border-usal-green-200 text-usal-navy-800 border py-[1rem] bg-white text-sm [box-sizing:border-box] overflow-x-auto inline-block focus:outline-none focus:border-usal-green-400 focus:ring-2 focus:ring-usal-green-100 transition duration-100"
+                  placeholder={session
+                    ? `Hola ${session.user?.name?.split(' ')[0]}, ¿en qué puedo ayudarte?`
+                    : "Preguntá sobre correlativas, inscripción o finales..."
                   }
                   value={input}
                   onChange={handleInputChange}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" && !event.shiftKey) {
                       event.preventDefault();
-                      handleSubmit();
+                      handleFormSubmit();
                     }
                   }}
                   style={{ resize: "none" }}
@@ -478,15 +466,15 @@ export const TestisChat = () => {
           )}
         </AnimatePresence>
       </motion.div>
-      
-      {/* Chat Toggle Button 3D */}
+
+      {/* Chat Toggle Button */}
       <motion.button
         onClick={() => setOpen(!open)}
-          className={cn(
-            "h-14 w-14 relative z-10 group bg-gradient-to-r from-usal-green-600 to-usal-green-500 flex hover:from-usal-green-700 hover:to-usal-green-600 cursor-pointer items-center justify-center rounded-full shadow-xl transition duration-200",
-            open ? "z-10" : "z-50",
-            isExpanded && "hidden"
-          )}
+        className={cn(
+          "h-14 w-14 relative z-10 group bg-gradient-to-r from-usal-green-600 to-usal-green-500 flex hover:from-usal-green-700 hover:to-usal-green-600 cursor-pointer items-center justify-center rounded-full shadow-xl transition duration-200",
+          open ? "z-10" : "z-50",
+          isExpanded && "hidden"
+        )}
         style={{
           transform: 'perspective(1000px)',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)',
@@ -517,37 +505,25 @@ export const TestisChat = () => {
           transition: { duration: 0.1 }
         }}
       >
-        {/* Glow effect */}
-        <div 
+        <div
           className="absolute inset-0 rounded-full bg-gradient-to-r from-usal-green-400 to-usal-green-300 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
           style={{
             filter: 'blur(8px)',
             transform: 'scale(1.2)',
           }}
         />
-        
-        {/* Inner glow */}
-        <div 
+        <div
           className="absolute inset-1 rounded-full bg-gradient-to-r from-white/20 to-white/10"
           style={{
             background: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), transparent 50%)',
           }}
         />
-        
         <motion.div
-          animate={{
-            rotateZ: [0, 360],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "linear",
-          }}
+          animate={{ rotateZ: [0, 360] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
         >
           <IconRobot className="h-6 w-6 text-white relative z-10 drop-shadow-sm" />
         </motion.div>
-        
-        {/* Floating particles around button */}
         {[...Array(3)].map((_, i) => (
           <motion.div
             key={i}
@@ -586,12 +562,10 @@ const UserMessage = ({ content }: { content: string }) => {
   );
 };
 
-const AIMessage = ({ 
-  content, 
-  toolCalls 
-}: { 
-  content: string; 
-  toolCalls?: TestisChatMessage['toolCalls'];
+const AIMessage = ({
+  content
+}: {
+  content: string;
 }) => {
   return (
     <div className="p-2 rounded-lg flex gap-2 items-start">
@@ -600,81 +574,9 @@ const AIMessage = ({
       </div>
       <div className="text-sm px-3 py-2 rounded-lg shadow-md w-fit bg-white text-usal-navy-800 border border-usal-green-100">
         <Markdown>{useAnimatedText(content)}</Markdown>
-        {toolCalls && toolCalls.length > 0 && (
-          <div className="mt-2 space-y-2">
-            {toolCalls.map((toolCall, index) => (
-              <ToolCallResult 
-                key={index} 
-                toolCall={toolCall} 
-              />
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );
-};
-
-const ToolCallResult = ({ 
-  toolCall 
-}: { 
-  toolCall: {
-    name: string;
-    arguments: Record<string, any>;
-    result?: any;
-  };
-}) => {
-  const handleMailClick = () => {
-    if (toolCall.result?.url) {
-      if (toolCall.result.type === 'gmail') {
-        window.open(toolCall.result.url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
-      } else {
-        window.location.href = toolCall.result.url;
-      }
-    }
-  };
-
-  if (toolCall.name === 'makeMailTo' && toolCall.result) {
-    return (
-      <div className="bg-usal-red-50 border border-usal-red-200 rounded-lg p-3">
-        <div className="flex items-center gap-2 mb-2">
-          <IconMail className="h-4 w-4 text-usal-red-600" />
-          <span className="text-sm font-medium text-usal-red-800">Correo generado</span>
-        </div>
-        <div className="text-xs text-usal-navy-600 mb-2">
-          <strong>Para:</strong> {toolCall.arguments.to}<br/>
-          <strong>Asunto:</strong> {toolCall.arguments.subject}
-        </div>
-        <button
-          onClick={handleMailClick}
-          className="text-xs bg-usal-red-600 text-white px-3 py-1 rounded hover:bg-usal-red-700 transition-colors"
-        >
-          {toolCall.result.type === 'gmail' ? 'Abrir en Gmail' : 'Abrir Correo'}
-        </button>
-      </div>
-    );
-  }
-
-  if (toolCall.name === 'readUserData' && toolCall.result) {
-    return (
-      <div className="bg-usal-green-50 border border-usal-green-200 rounded-lg p-3">
-        <div className="flex items-center gap-2 mb-2">
-          <IconBook className="h-4 w-4 text-usal-green-600" />
-          <span className="text-sm font-medium text-usal-green-800">
-            {toolCall.arguments.dataType === 'grades' && 'Notas cargadas'}
-            {toolCall.arguments.dataType === 'exams' && 'Parciales cargados'}
-            {toolCall.arguments.dataType === 'attendance' && 'Asistencia cargada'}
-            {toolCall.arguments.dataType === 'schedule' && 'Horarios cargados'}
-          </span>
-        </div>
-        <div className="text-xs text-usal-navy-600">
-          Datos actualizados desde localStorage
-        </div>
-      </div>
-    );
-  }
-
-  return null;
 };
 
 let delimiter = "";

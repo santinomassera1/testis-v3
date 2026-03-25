@@ -7,51 +7,51 @@ export const TestimonialsSection = () => {
   const testimonials = [
     {
       name: "María González",
-      career: "Ingeniería en Sistemas",
+      career: "Ingeniería en Informática",
       year: "4to Año",
       avatar: "MG",
       rating: 5,
-      text: "Testis me salvó durante la época de inscripciones. Antes tardaba horas navegando el SIU, ahora todo es súper rápido y claro. ¡Es como tener un compañero que conoce todos los trucos!"
+      text: "Antes de cada inscripción pasaba media hora cruzando correlativas a mano. Ahora le pregunto a Testis y en dos segundos sé si puedo inscribirme o qué me falta."
     },
     {
       name: "Carlos Rodríguez",
-      career: "Administración",
+      career: "Ingeniería en Informática",
       year: "2do Año",
       avatar: "CR",
       rating: 5,
-      text: "Lo que más me gusta es que puedo consultar mis notas y horarios al instante. Ya no tengo que recordar dónde está cada cosa en el sistema. Testis lo hace todo por mí."
+      text: "Las fechas de finales siempre estaban en un PDF que costaba encontrar. Testis me dice cuándo rindo con solo preguntar. Ojalá exista para toda la carrera."
     },
     {
       name: "Ana Martínez",
-      career: "Psicología",
+      career: "Ingeniería en Informática",
       year: "3er Año",
       avatar: "AM",
       rating: 5,
-      text: "La función de generar correos automáticos es genial. Antes no sabía cómo escribir formalmente a los profesores, ahora Testis me ayuda con el formato correcto."
+      text: "Lo mejor es que entiende cuando le hablás normal. Le dije 'quiero cursar Bases de Datos' y me dijo qué necesitaba aprobar antes. Así de simple."
     },
     {
       name: "Diego López",
-      career: "Derecho",
+      career: "Ingeniería en Informática",
       year: "1er Año",
       avatar: "DL",
       rating: 5,
-      text: "Como estudiante nuevo, el SIU me parecía un laberinto. Testis me guió paso a paso en mi primera inscripción. Ahora soy el que ayuda a otros compañeros."
+      text: "Como estudiante nuevo, no entendía nada de correlativas. Testis me explicó todo el plan de estudios de una forma que nunca encontré en la página de la facu."
     },
     {
       name: "Sofía Chen",
-      career: "Medicina",
+      career: "Ingeniería en Informática",
       year: "5to Año",
       avatar: "SC",
       rating: 5,
-      text: "Con la carga de estudio que tenemos en medicina, cada minuto cuenta. Testis me permite hacer trámites académicos en segundos, no en horas."
+      text: "Estoy terminando la carrera y todavía me confundo con correlativas de las últimas materias. Testis me ahorra mandar mails a secretaría cada vez."
     },
     {
       name: "Mateo Silva",
-      career: "Economía",
+      career: "Ingeniería en Informática",
       year: "3er Año",
       avatar: "MS",
       rating: 5,
-      text: "La disponibilidad 24/7 es perfecta. Puedo consultar mis parciales o generar certificados a cualquier hora, incluso durante los fines de semana."
+      text: "Lo uso a la noche cuando me acuerdo de que tengo que averiguar algo para inscribirme. Secretaría cierra a las 18, Testis está siempre."
     }
   ];
 
@@ -67,10 +67,11 @@ export const TestimonialsSection = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-bold text-usal-navy-900 mb-4">
-            Lo Que Dicen Nuestros Estudiantes
+            Lo Que Dicen los Estudiantes
           </h2>
           <p className="text-xl text-usal-navy-600 max-w-3xl mx-auto">
-            Miles de estudiantes de la USAL ya confían en Testis para simplificar su experiencia académica.
+            Consultas que antes requerían mails, llamadas o ir a secretaría, 
+            ahora se resuelven en una conversación.
           </p>
         </motion.div>
 
@@ -94,7 +95,7 @@ export const TestimonialsSection = () => {
               </div>
               
               <p className="text-usal-navy-700 mb-6 leading-relaxed">
-                "{testimonial.text}"
+                &ldquo;{testimonial.text}&rdquo;
               </p>
               
               <div className="flex items-center">
@@ -122,10 +123,10 @@ export const TestimonialsSection = () => {
           viewport={{ once: true }}
           className="text-center mt-16 p-8 bg-gradient-to-r from-usal-green-600 to-usal-green-500 rounded-2xl text-white"
         >
-          <div className="text-4xl font-bold mb-2">4.9/5</div>
-          <div className="text-xl mb-4">Calificación Promedio</div>
+          <div className="text-4xl font-bold mb-2">3 consultas</div>
+          <div className="text-xl mb-4">que saturan secretaría todos los días</div>
           <div className="text-usal-green-100">
-            Basado en más de 2,500 reseñas de estudiantes de la USAL
+            Correlativas, inscripción y finales: las preguntas más repetitivas, resueltas al instante
           </div>
         </motion.div>
       </div>
